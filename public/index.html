@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>U360 Admin</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/eva-icons"></script>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <!--  <link rel="icon" type="image/x-icon" href="favicon.ico" /> -->
+<link rel="stylesheet" href="styles.a6b7cd1ca142223c62db.css"></head>
+
+<body>
+    <ngx-app>Loading...</ngx-app>
+    <style>
+        @-webkit-keyframes spin {
+            0% {
+                transform: rotate(0);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @-moz-keyframes spin {
+            0% {
+                -moz-transform: rotate(0);
+            }
+            100% {
+                -moz-transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1003;
+            background: #ffffff;
+            overflow: hidden;
+        }
+        
+        .spinner div:first-child {
+            display: block;
+            position: relative;
+            left: 43%;
+            top: 35%;
+            width: 350px;
+            height: 350px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            box-shadow: 0 3px 3px 0 #123DA8;
+            transform: translate3d(0, 0, 0);
+            animation: spin 2s linear infinite;
+            text-align: center;
+            align-self: center;
+        }
+        
+        .spinner div:first-child:after,
+        .spinner div:first-child:before {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+        }
+        
+        .spinner div:first-child:before {
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            box-shadow: 0 3px 3px 0 #4B7EDB;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        
+        .spinner div:first-child:after {
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            box-shadow: 0 3px 3px 0 #04155E;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        #open-loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 15%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -80px;
+            text-align: center;
+            align-content: center;
+            align-self: center;
+        }
+    </style>
+
+    <div id="nb-global-spinner" class="spinner">
+        <div class="blob blob-0"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
+    </div>
+<script src="runtime-es2015.a923c3af1a90a38c4586.js" type="module"></script><script src="runtime-es5.a923c3af1a90a38c4586.js" nomodule defer></script><script src="polyfills-es5.f578ef82986b2277d5b9.js" nomodule defer></script><script src="polyfills-es2015.fb334ca02a703701ef8e.js" type="module"></script><script src="scripts.f855c3940a5f66391594.js" defer></script><script src="main-es2015.9f09dfed93680b3fed1d.js" type="module"></script><script src="main-es5.9f09dfed93680b3fed1d.js" nomodule defer></script></body>
+
+</html>
