@@ -13,6 +13,17 @@ exports.get = function (req, res) {
   });
 };
 
+/** get function to get Recompensa by id. */
+exports.getByUsuario = function (req, res) {
+    Recompensa.get({ usuario: req.params.usuario }, function (err, result) {
+      if (!err) {
+        return res.json(result);
+      } else {
+        return res.send(err); // 500 error
+      }
+    });
+  };
+
 /** get function to get all Recompensa. */
 exports.getAll = function (req, res) {
     Recompensa.getAll({}, function (err, result) {

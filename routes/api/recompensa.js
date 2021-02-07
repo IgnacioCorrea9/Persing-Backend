@@ -14,14 +14,14 @@ module.exports = function (router) {
     router.get(
       "/recompensa/usuario/:usuario",
       passport.authenticate("jwt", { session: false }),
-      RecompensaController.getByEmail
+      RecompensaController.getByUsuario
     );
   
     /** Gets recompensa by id */
     router.get(
       "/recompensa/:id",
       passport.authenticate("jwt", { session: false }),
-      RecompensaController.getById
+      RecompensaController.get
     );
   
     /** Actualiza una recompensa por id */
