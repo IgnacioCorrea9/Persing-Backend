@@ -4,124 +4,36 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = mongoose.Schema({
   nombre: { type: String, required: true },
-  apellido: { type: String, required: true },
-  telefono: { type: String, required: false },
-  fechaNacimiento: { type: String, required: false },
-  ciudad: { type: String, required: false },
-  pais: { type: String, required: false },
-  direccion: {type: String, required: false},
-  sexo: {type: String, required: false},
-  lead: { type: String, required: false },
-  advisor: {
+  email: { type: String, required: true },
+  empresa: { type: mongoose.Schema.Types.ObjectId, ref:"Empresa", required: false },
+  genero: { type: String, required: false },
+  estrato: { type: Number, required: false },
+  nivelEducativo: { type: String, required: false },
+  profesion: {type: String, required: false},
+  hijos: {type: Number, required: false},
+  creditos: { type: Number, required: false },
+  intereses: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Sector",
     required: false,
-  },
-  favoritos: [
+  }],
+  tipo: 
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Programa",
+      type: String,
       required: false,
     },
-  ],
-  serviciosMedicos: [
-    {
-      servicio: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ServicioMedico",
-        required: false,
-      },
-      semanas: { type: Number, required: false },
-      valor: { type: Number, required: false },
-      pagado: { type: Boolean, required: false },
-      fechaCompra: { type: String, required: false },
-    },
-  ],
-  respuestasTermometro: [
-    {
-      numero: { type: Number, required: false },
-      respuesta: { type: Boolean, required: false },
-    },
-  ],
-  comercial: {type: Number, required: false},
-  puntajeTermometro: { type: Number, required: false },
-  pasaporte: { type: String, required: false },
-  numeroPasaporte: {type: String, required: false},
-  paisPasaporte: {type: String, required: false},
-  vencimientoPasaporte: {type: String, required: false},
-  leHanNegadoVisas: {type: Boolean, required: false, default: false},
-  negaciones: [{
-    pais: {type: String, required: false},
-    motivo: {type: String, required: false},
-    fecha: {type: String, required: false},
-  }],
-  diploma: { type: String, required: false },
-  notas: { type: String, required: false },
-  diplomaPregrado: {type: String, required: false},
-  notasPregrado: {type: String, required: false},
-  foto: { type: String, required: false },
-  programasVisitados: { type: Number, required: false, default: 0 },
-  tipoDocumento: { type: String, required: false },
-  numeroDocumento: { type: String, required: false, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  fechaAceptacionTerminos: { type: Date, required: false },
-  ipAceptacionTerminos: { type: String, required: false },
-  activo: { type: Boolean, required: false, default: true },
-  tipo: {
-    type: String,
-    required: false,
-    enum: ["Estudiante", "Recruitment", "Advisor", "Administrador"],
-    default: "Estudiante",
-  },
-  documentosAdicionales: [
-    {
-    nombre: {type: String, required: true},
-    archivo: {type: String, required: true}
-    },
-  ],
-  presupuestoMinimo: {type: Number, required: false},
-  presupuestoMaximo: {type: Number, required: false},
-  tipoFinanciacion: {type: String, required: false},
-  comentarios: {type: String, required: false},
-  interesesAcademicos: [{
-    disciplina: {type: String, required: false},
-    pais: {type: String, required: false},
-    nivelDeEstudios: {type: String, required: false},
-  }],
-  idiomas: [
-    {
-        nombre: {type: String, required: false},
-        nivel: {type: String, required: false},
-        certificados: [
-            {
-                nombre: {type: String, required: false},
-                calificacion: {type: Number, required: false},
-                archivo: {type: String, required: false}
-            }
-        ]
-    }
-  ],
-  lastLogin: {type: Date, required: false},
-  vistas: { type: Number, required: false },
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
 UserSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 })
-      .populate("advisor serviciosMedicos.servicio terminos.termino")
-      .populate({
-        path: 'favoritos',
-        populate: {
-          path: 'universidad',
-        }
-      })
+      .populate("intereses empresa")
       .exec(callback);
   },
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
-      .populate("advisor favoritos serviciosMedicos.servicio terminos.termino")
+      .populate("intereses empresa")
       .exec(callback);
   },
   updateById: function (id, updateData, callback) {
@@ -132,6 +44,7 @@ UserSchema.statics = {
       callback
     );
   },
+  
   removeById: function (removeData, callback) {
     this.findOneAndRemove(removeData, callback);
   },
@@ -139,6 +52,7 @@ UserSchema.statics = {
     const user = new this(data);
     user.save(callback);
   },
+
   getNoPopulate: function(query, callback) {
     this.findOne(query, { password: 0 })
     .exec(callback);
