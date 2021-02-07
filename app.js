@@ -14,7 +14,7 @@ const passport = require("passport");
 
 const database =
   process.env.MONGODB_URI ||
-  "mongodb+srv://u360:c7oClp9BtIFZG89X@u360.oxfbq.mongodb.net/u360?retryWrites=true&w=majority";
+  "mongodb+srv://persing:persing2021@persing.nsfrd.mongodb.net/persing?retryWrites=true&w=majority";
 
 // Connect to database
 mongoose.connect(database, {
