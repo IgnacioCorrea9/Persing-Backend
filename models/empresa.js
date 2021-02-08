@@ -1,21 +1,23 @@
 const mongoose = require("mongoose");
 
-const RecompensaSchema = mongoose.Schema({
-    usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    sector: { type: mongoose.Schema.Types.ObjectId, ref: "Sector", required: true },
-    ranking: { type: String, required: false },
-    creditos: { type: Number, required: false, default: 0 }
+const EmpresaSchema = mongoose.Schema({
+    nombre: { type: String, required: false },
+    sectores: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sector", required: false }],
+    nit: { type: String, required: false },
+    logo: { type: String, required: false },
+    email: { type: String, required: false },
+    descripcion: { type: String, required: false },
 });
 
-RecompensaSchema.statics = {
+EmpresaSchema.statics = {
     get: function (query, callback) {
       this.findOne(query, { password: 0 })
-        .populate("usuario sector")
+        .populate("sectores")
         .exec(callback);
     },
     getAll: function (query, callback) {
       this.find(query, { password: 0 })
-        .populate("usuario sector")
+        .populate("sectores")
         .exec(callback);
     },
     updateById: function (id, updateData, callback) {
@@ -41,5 +43,5 @@ RecompensaSchema.statics = {
     }
   };
   
-  const Recompensa = (module.exports = mongoose.model("Recompensa", RecompensaSchema));
+  const Empresa = (module.exports = mongoose.model("Empresa", EmpresaSchema));
   
