@@ -63,6 +63,10 @@ require("./routes/api/user")(router);
 require("./routes/api/empresa")(router);
 require("./routes/api/recompensa")(router);
 require("./routes/api/publicacion")(router);
+require("./routes/api/like")(router);
+require("./routes/api/comentario")(router);
+require("./routes/api/compartir")(router);
+require("./routes/api/click")(router);
 
 // Import other routes and paths
 const users = require("./routes/users");
