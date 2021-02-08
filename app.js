@@ -60,6 +60,8 @@ require("./config/passport")(passport);
 var router = express.Router();
 app.use("/api", router);
 require("./routes/api/user")(router);
+require("./routes/api/empresa")(router);
+require("./routes/api/recompensa")(router);
 
 // Import other routes and paths
 const users = require("./routes/users");
