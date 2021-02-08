@@ -1,22 +1,18 @@
 const mongoose = require("mongoose");
 
-const LikeSchema = mongoose.Schema({
-    publicacion: { type: mongoose.Schema.Types.ObjectId, ref: "Publicacion", required: true },
-    usuario: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
-    
-
+const SectorSchema = mongoose.Schema({
+    nombre: { type: String, required: true },
+    descripcion: [{ type: String, required: true }],
 });
 
-LikeSchema.statics = {
+SectorSchema.statics = {
     get: function (query, callback) {
       this.findOne(query, { password: 0 })
-        .populate("publicacion usuario")
         .exec(callback);
     },
     getAll: function (query, callback) {
       this.find(query, { password: 0 })
-      .populate("publicacion usuario")
-      .exec(callback);
+        .exec(callback);
     },
     updateById: function (id, updateData, callback) {
       this.findOneAndUpdate(
@@ -41,5 +37,5 @@ LikeSchema.statics = {
     }
   };
   
-  const Like = (module.exports = mongoose.model("Like", LikeSchema));
+  const Sector = (module.exports = mongoose.model("Sector", SectorSchema));
   

@@ -67,6 +67,7 @@ require("./routes/api/like")(router);
 require("./routes/api/comentario")(router);
 require("./routes/api/compartir")(router);
 require("./routes/api/click")(router);
+require("./routes/api/sector")(router);
 
 // Import other routes and paths
 const users = require("./routes/users");
