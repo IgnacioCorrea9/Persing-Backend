@@ -145,10 +145,11 @@ router.post("/reset-password", (req, res, next) => {
 router.post("/authenticate", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log(req);
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.json({ success: false, msg: "Usuario no encontrado" });
+      return res.json({ success: false, message: "Usuario no encontrado" });
     }
 
     User.comparePassword(password, user.password, (err, isMatch) => {
@@ -161,19 +162,14 @@ router.post("/authenticate", (req, res, next) => {
             expiresIn: 604800, // 1 week
           }
         );
-        // Update the last login date
-        const now = new Date();
-        User.findByIdAndUpdate(user._id, {lastLogin: now}, (err, response) => {
-          //Empty
-        });
 
-        res.json({
+        res.status(200).json({
           success: true,
           token: "JWT " + token,
           user: user,
         });
       } else {
-        return res.json({ success: false, msg: "Contraseña incorrecta" });
+        return res.status(400).json({ success: false, msg: "Contraseña incorrecta" });
       }
     });
   });
