@@ -10,13 +10,13 @@ const ClickSchema = mongoose.Schema({
 ClickSchema.statics = {
     get: function (query, callback) {
       this.findOne(query, { password: 0 })
-        .populate("sector empresa")
+        .populate("publicacion usuario")
         .exec(callback);
     },
     getAll: function (query, callback) {
       this.find(query, { password: 0 })
-        .populate("sector empresa")
-        .exec(callback);
+      .populate("publicacion usuario")
+      .exec(callback);
     },
     updateById: function (id, updateData, callback) {
       this.findOneAndUpdate(
