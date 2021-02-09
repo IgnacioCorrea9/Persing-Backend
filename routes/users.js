@@ -16,7 +16,6 @@ sendgrid.setApiKey(sendGridCredentials.apiKey);
 router.post(
   "/register",
   (req, res, next) => {
-
       if (
         req.body.password &&
         req.body.nombre &&
@@ -26,14 +25,16 @@ router.post(
           nombre: req.body.nombre,
           email: req.body.email,
           password: req.body.password,
-          tipo: req.body.tipo || '',
-          genero: req.body.genero  || '',
-          estrato: req.body.estrato  || '',
-          nivelEducativo: req.body.nivelEducativo  || '',
-          profesion: req.body.profesion  || '',
-          hijos: req.body.hijos  || 0,
-          intereses: req.body.intereses  || []
+          empresa: req.body.empresa || undefined,
+          genero: req.body.genero || '',
+          estrato:req.body.estrato || -1,
+          nivelEducativo:req.body.nivelEducativo || '',
+          profesion: req.body.profesion || '',
+          hijos: req.body.hijos || 0,
+          creditos: req.body.creditos || 0,
+          intereses: req.body.intereses || [],
         });
+        console.log(newUser);
         User.addUser(newUser, (err, user) => {
           if (err) {
             console.log(err);
@@ -48,7 +49,7 @@ router.post(
               {
                 expiresIn: 604800, // 1 week
               }
-            ); 
+            );
             res.status(201).json({
               success: true,
               token: "JWT " + token,
