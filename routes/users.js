@@ -15,49 +15,51 @@ sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 router.post(
   "/register",
-  passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    if (
-      req.body.tipo != "Estudiante" &&
-      req.user &&
-      req.user.tipo != "Administrador"
-    ) {
-      res.json({ success: false, msg: "No autorizado" });
-    } else {
+
       if (
         req.body.password &&
         req.body.nombre &&
-        req.body.apellido &&
-        req.body.email &&
-        req.body.tipo
+        req.body.email
       ) {
         let newUser = new User({
           nombre: req.body.nombre,
-          apellido: req.body.apellido,
           email: req.body.email,
           password: req.body.password,
-          tipo: req.body.tipo,
+          tipo: req.body.tipo || '',
+          genero: req.body.genero  || '',
+          estrato: req.body.estrato  || '',
+          nivelEducativo: req.body.nivelEducativo  || '',
+          profesion: req.body.profesion  || '',
+          hijos: req.body.hijos  || 0,
+          intereses: req.body.intereses  || []
         });
         User.addUser(newUser, (err, user) => {
           if (err) {
             console.log(err);
-            res.json({
+            res.status(400).json({
               success: false,
               msg: "El usuario ya existe en el sistema.",
             });
           } else {
-            res.json({
+            const token = jwt.sign(
+              { user },
+              process.env.JWT_SECRET || "u3608956789",
+              {
+                expiresIn: 604800, // 1 week
+              }
+            ); 
+            res.status(201).json({
               success: true,
-              msg: "usuario registrado: ",
-              user: newUser,
+              token: "JWT " + token,
+              user: user,
             });
           }
         });
       } else {
-        res.json({ success: false, msg: "Información incompleta" });
+        res.status(400).json({ success: false, msg: "Información incompleta" });
       }
     }
-  }
 );
 
 router.post("/forgot-password", (req, res, next) => {

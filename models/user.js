@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const UserSchema = mongoose.Schema({
   nombre: { type: String, required: true },
   email: { type: String, required: true },
+  password: { type: String, required: true },
   empresa: { type: mongoose.Schema.Types.ObjectId, ref:"Empresa", required: false },
   genero: { type: String, required: false },
   estrato: { type: Number, required: false },
@@ -73,12 +74,14 @@ module.exports.getUserByEmail = function (email, callback) {
 };
 
 module.exports.addUser = function (newUser, callback) {
+  console.log(newUser);
   bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err;
+    if( err) throw err;
+    bcrypt.hash(newUser.password, salt, (err2, hash) => {
+      if (err2) throw err2;
       newUser.password = hash;
       var UserSchema = mongoose.model("User");
-      UserSchema.find({ email: newUser.email }, (err, res) => {
+      UserSchema.find({ email: newUser.email }, (err3, res) => {
         if (res.length == 0) {
           newUser.save(callback);
         } else {
