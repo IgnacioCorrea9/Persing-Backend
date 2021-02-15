@@ -10,6 +10,13 @@ module.exports = function (router) {
       SectorController.getAll
     );
   
+    /** Trae todos los usuarios por tipo */
+    router.post(
+      "/sector",
+      // passport.authenticate("jwt", { session: false }),
+      SectorController.create
+    );
+
     /** Gets sector by id */
     router.get(
       "/sector/:id",

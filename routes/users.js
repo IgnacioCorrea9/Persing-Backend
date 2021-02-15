@@ -14,6 +14,7 @@ const sendgrid = require("@sendgrid/mail");
 sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 router.post("/register", (req, res, next) => {
+  console.log(req)
   if (req.body.password && req.body.nombre && req.body.email) {
     let newUser = new User({
       nombre: req.body.nombre,
@@ -28,31 +29,22 @@ router.post("/register", (req, res, next) => {
       creditos: req.body.creditos || 0,
       intereses: req.body.intereses || [],
     });
-    console.log(newUser);
     User.addUser(newUser, (err, user) => {
       if (err) {
         console.log(err);
         res.status(400).json({
           success: false,
-          msg: "El usuario ya existe en el sistema.",
+          error: "El usuario ya existe en el sistema.",
         });
       } else {
-        const token = jwt.sign(
-          { user },
-          process.env.JWT_SECRET || "u3608956789",
-          {
-            expiresIn: 604800, // 1 week
-          }
-        );
         res.status(201).json({
           success: true,
-          token: "JWT " + token,
           user: user,
         });
       }
     });
   } else {
-    res.status(400).json({ success: false, msg: "Información incompleta" });
+    res.status(400).json({ success: false, error: "Información incompleta" });
   }
 });
 
@@ -61,7 +53,7 @@ router.post("/forgot-password", (req, res, next) => {
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.json({ success: false, msg: "Usuario no encontrado" });
+      return res.status(400).json({ success: false, error: "Usuario no encontrado" });
     }
 
     let pass = randomstring.generate(7);
@@ -139,15 +131,15 @@ router.post("/reset-password", (req, res, next) => {
 router.post("/authenticate", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log(req);
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.json({ success: false, message: "Usuario no encontrado" });
+      return res.status(400).json({ success: false, error: "Usuario no encontrado" });
     }
 
     User.comparePassword(password, user.password, (err, isMatch) => {
       if (err) throw err;
+      console.log(isMatch)
       if (isMatch) {
         const token = jwt.sign(
           { user },
@@ -156,7 +148,8 @@ router.post("/authenticate", (req, res, next) => {
             expiresIn: 604800, // 1 week
           }
         );
-
+        console.log('sending true')
+        console.log(user);
         res.status(200).json({
           success: true,
           token: "JWT " + token,
@@ -165,7 +158,7 @@ router.post("/authenticate", (req, res, next) => {
       } else {
         return res
           .status(400)
-          .json({ success: false, msg: "Contraseña incorrecta" });
+          .json({ success: false, error: "Contraseña incorrecta" });
       }
     });
   });

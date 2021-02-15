@@ -35,6 +35,17 @@ exports.update = function (req, res) {
   });
 };
 
+/** update function to update Sector by id. */
+exports.create = function (req, res) {
+  Sector.create(req.body, function (err, result) {
+    if (!err) {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).send(err); // 500 error
+    }
+  });
+};
+
 /** remove function to remove Sector by id. */
 exports.delete = function (req, res) {
   Sector.removeById({ _id: req.params.id }, function (err, result) {
