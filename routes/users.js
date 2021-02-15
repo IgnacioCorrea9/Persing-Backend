@@ -37,16 +37,8 @@ router.post("/register", (req, res, next) => {
           error: "El usuario ya existe en el sistema.",
         });
       } else {
-        const token = jwt.sign(
-          { user },
-          process.env.JWT_SECRET || "u3608956789",
-          {
-            expiresIn: 604800, // 1 week
-          }
-        );
         res.status(201).json({
           success: true,
-          token: "JWT " + token,
           user: user,
         });
       }
@@ -157,6 +149,7 @@ router.post("/authenticate", (req, res, next) => {
           }
         );
         console.log('sending true')
+        console.log(user);
         res.status(200).json({
           success: true,
           token: "JWT " + token,

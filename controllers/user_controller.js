@@ -28,9 +28,9 @@ exports.getByEmail = function (req, res) {
 exports.getById = function (req, res) {
   User.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-        return res.json(result);
+        return res.status(200).json(result);
     } else {
-      return res.send(err); // 500 error
+      return res.status(400).send(err); // 500 error
     }
   });
 };
