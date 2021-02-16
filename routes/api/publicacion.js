@@ -5,9 +5,21 @@ const PublicacionController = require("../../controllers/publicacion_controller"
 module.exports = function (router) {
     /** Trae todos los usuarios por tipo */
     router.get(
+      "/publicacion/user/:user",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.getAllLikedUser
+    );
+
+    router.get(
       "/publicacion",
       // passport.authenticate("jwt", { session: false }),
       PublicacionController.getAll
+    );
+
+    router.put(
+      "/publicacion/toggle-like/:id",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.toggleLike
     );
 
     router.post(

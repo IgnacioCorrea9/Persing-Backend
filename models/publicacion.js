@@ -8,7 +8,7 @@ const PublicacionSchema = mongoose.Schema({
     texto: { type: String, required: false },
     foto: { type: String, required: false },
     video: { type: String, required: false },
-    likes: { type: Number, required: false, default: 0 },
+    likes: [{ type:mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
     comentarios: { type: Number, required: false, default: 0 },
     alcanzados: { type: Number, required: false, default: 0 },
     inversion: { type: Number, required: false },
