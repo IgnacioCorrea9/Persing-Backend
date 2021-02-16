@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = mongoose.Schema({
   nombre: { type: String, required: true },
+  apellido: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
   empresa: { type: mongoose.Schema.Types.ObjectId, ref:"Empresa", required: false },
@@ -29,7 +30,7 @@ const UserSchema = mongoose.Schema({
 UserSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 })
-      .populate("intereses empresa")
+      .populate("empresa")
       .exec(callback);
   },
   getAll: function (query, callback) {

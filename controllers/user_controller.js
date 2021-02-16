@@ -50,9 +50,10 @@ exports.getAll = function (req, res) {
 exports.update = function (req, res) {
     User.updateById(req.params.id, req.body, function (err, result) {
       if (!err) {
-        return res.json(result);
+        console.log(result);
+        return res.status(200).json(result);
       } else {
-        return res.send(err); // 500 error
+        return res.status(400).send({error:err}); // 500 error
       }
     });
 };
