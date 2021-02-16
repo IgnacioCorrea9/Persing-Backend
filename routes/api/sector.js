@@ -6,7 +6,7 @@ module.exports = function (router) {
     /** Trae todos los usuarios por tipo */
     router.get(
       "/sector",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       SectorController.getAll
     );
   
@@ -20,21 +20,21 @@ module.exports = function (router) {
     /** Gets sector by id */
     router.get(
       "/sector/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       SectorController.get
     );
   
     /** Actualiza una sector por id */
     router.put(
       "/sector/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       SectorController.update
     );
   
     /** Elimina una sector */
     router.delete(
       "/sector/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       SectorController.delete
     );
   };

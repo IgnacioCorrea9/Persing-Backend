@@ -6,8 +6,14 @@ module.exports = function (router) {
     /** Trae todos los usuarios por tipo */
     router.get(
       "/publicacion",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       PublicacionController.getAll
+    );
+
+    router.post(
+      "/publicacion",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.create
     );
   
     /** Gets publicacion by id */
@@ -27,7 +33,7 @@ module.exports = function (router) {
     /** Elimina una publicacion */
     router.delete(
       "/publicacion/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       PublicacionController.delete
     );
   };

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const SectorSchema = mongoose.Schema({
     nombre: { type: String, required: true },
     descripcion: [{ type: String, required: true }],
+  createdAt: { type: Date, required: false, default: Date.now },
+
 });
 
 SectorSchema.statics = {
