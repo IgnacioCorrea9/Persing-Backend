@@ -23,7 +23,6 @@ exports.getAllLikedUser = function (req, res) {
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
       });
-      console.log(result);
       return res.status(200).json(result);
     } else {
       return res.status(400).send(err); // 500 error
@@ -37,7 +36,6 @@ exports.toggleLike = function (req, res) {
       const userId = req.body.user;
       const type = req.body.type;
       const arrayLikes = result._doc.likes;
-      console.log(arrayLikes);
       if (type === "add") {
         if(!arrayLikes.includes(userId)){
           arrayLikes.push(userId);
@@ -63,6 +61,7 @@ exports.toggleLike = function (req, res) {
     }
   });
 };
+
 
 /** get function to get all Publicacion. */
 exports.getAll = function (req, res) {

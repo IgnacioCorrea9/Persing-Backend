@@ -1,6 +1,7 @@
 "use strict";
 
 const Comentario = require("../models/comentario");
+const Publicacion = require("../models/publicacion");
 
 /** get function to get Comentario by id. */
 exports.get = function (req, res) {
@@ -9,6 +10,48 @@ exports.get = function (req, res) {
       return res.json(result);
     } else {
       return res.send(err); // 500 error
+    }
+  });
+};
+
+/** get function to get Comentario by id. */
+exports.getAllByPublicacion = function (req, res) {
+  Comentario.getAll(
+    { publicacion: req.params.publicacion },
+    function (err, result) {
+      if (!err) {
+        console.log(result);
+        return res.status(200).json(result);
+      } else {
+        return res.status(400).send({ error: err }); // 500 error
+      }
+    }
+  );
+};
+
+/** get function to get Comentario by id. */
+exports.create = function (req, res) {
+  Comentario.create(req.body, function (err, result) {
+    if (!err) {
+      Publicacion.get({ _id: req.body.publicacion }, function (err2, result2) {
+        if (!err2) {
+          Publicacion.updateById(
+            req.body.publicacion,
+            { comentarios: result2._doc.comentarios + 1 },
+            function (err3, result3) {
+              if (!err3) {
+                return res.status(201).json(result);
+              } else {
+                return res.status(400).send({ error: err3 }); // 500 error
+              }
+            }
+          );
+        } else {
+          return res.status(400).send({ error: er2 }); // 500 error
+        }
+      });
+    } else {
+      return res.status(400).send({ error: err }); // 500 error
     }
   });
 };
