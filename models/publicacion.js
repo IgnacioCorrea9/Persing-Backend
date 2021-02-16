@@ -2,21 +2,21 @@ const mongoose = require("mongoose");
 
 const PublicacionSchema = mongoose.Schema({
     empresa: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: false },
-    sector: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sector", required: false }],
+    sector: { type: mongoose.Schema.Types.ObjectId, ref: "Sector", required: false },
     titulo: { type: String, required: false },
     link: { type: String, required: false },
     texto: { type: String, required: false },
     foto: { type: String, required: false },
     video: { type: String, required: false },
-    likes: { type: Number, required: false },
-    comentarios: { type: Number, required: false },
-    alcanzados: { type: Number, required: false },
+    likes: { type: Number, required: false, default: 0 },
+    comentarios: { type: Number, required: false, default: 0 },
+    alcanzados: { type: Number, required: false, default: 0 },
     inversion: { type: Number, required: false },
     vtr: { type: String, required: false },
     engagement: { type: String, required: false },
     cpc: { type: String, required: false },
     cpm: { type: String, required: false },
-
+    createdAt: { type: Date, required: false, default: Date.now },
 });
 
 PublicacionSchema.statics = {

@@ -17,6 +17,7 @@ exports.get = function (req, res) {
 exports.getAll = function (req, res) {
   Publicacion.getAll({}, function (err, result) {
     if (!err) {
+      console.log(result);
       return res.json(result);
     } else {
       return res.send(err); // 500 error
@@ -31,6 +32,17 @@ exports.update = function (req, res) {
       return res.json(result);
     } else {
       return res.send(err); // 500 error
+    }
+  });
+};
+
+/** update function to update Publicacion by id. */
+exports.create = function (req, res) {
+  Publicacion.create(req.body, function (err, result) {
+    if (!err) {
+      return res.status(201).json({success: true, data: result});
+    } else {
+      return res.status(400).send({success: false, error: err}); // 500 error
     }
   });
 };

@@ -17,9 +17,9 @@ exports.get = function (req, res) {
 exports.getAll = function (req, res) {
   Empresa.getAll({}, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(201).json({success: true, data: result});
     } else {
-      return res.send(err); // 500 error
+      return res.status(400).send({success: true, error: err}); // 500 error
     }
   });
 };
@@ -28,9 +28,20 @@ exports.getAll = function (req, res) {
 exports.update = function (req, res) {
   Empresa.updateById(req.params.id, req.body, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(200).json({success: true, data: result});
     } else {
-      return res.send(err); // 500 error
+      return res.send({success: false, error: err}); // 500 error
+    }
+  });
+};
+
+/** update function to update Empresa by id. */
+exports.create = function (req, res) {
+  Empresa.create(req.body, function (err, result) {
+    if (!err) {
+      return res.status(200).json({success: true, data: result});
+    } else {
+      return res.status(400).send(err); // 500 error
     }
   });
 };
