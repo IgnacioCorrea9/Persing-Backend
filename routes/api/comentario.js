@@ -9,12 +9,26 @@ module.exports = function (router) {
       passport.authenticate("jwt", { session: false }),
       ComentarioController.getAll
     );
+
+    /** Trae todos los usuarios por tipo */
+    router.get(
+      "/comentario/publicacion/:publicacion",
+      // passport.authenticate("jwt", { session: false }),
+      ComentarioController.getAllByPublicacion
+    );
   
     /** Gets comentario by id */
     router.get(
       "/comentario/:id",
       passport.authenticate("jwt", { session: false }),
       ComentarioController.get
+    );
+
+    /** Gets comentario by id */
+    router.post(
+      "/comentario",
+      // passport.authenticate("jwt", { session: false }),
+      ComentarioController.create
     );
   
     /** Actualiza una comentario por id */
