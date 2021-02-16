@@ -22,6 +22,12 @@ module.exports = function (router) {
       PublicacionController.toggleLike
     );
 
+    router.put(
+      "/publicacion/toggle-save/:id",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.toggleSave
+    );
+
     router.post(
       "/publicacion",
       // passport.authenticate("jwt", { session: false }),

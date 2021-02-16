@@ -22,10 +22,44 @@ exports.getAllLikedUser = function (req, res) {
         var liked = element.likes.includes(userId);
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
+        var saved = element.guardados.includes(userId);
+        element._doc["saved"] = saved;
       });
       return res.status(200).json(result);
     } else {
       return res.status(400).send(err); // 500 error
+    }
+  });
+};
+
+exports.toggleSave = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const userId = req.body.user;
+      const type = req.body.type;
+      const arraySaves = result._doc.guardados;
+      if (type === "add") {
+        if(!arraySaves.includes(userId)){
+          arraySaves.push(userId);
+        }
+      } else {
+        const index = arraySaves.indexOf(userId);
+        if (index > -1) {
+          arraySaves.splice(index, 1);
+        }
+      }
+      var toSave = {
+        guardados: arraySaves,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json(result);
+        } else {
+          return res.status(400).send({ error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(400).send({ error: err }); // 500 error
     }
   });
 };
