@@ -1,6 +1,7 @@
 "use strict";
 
 const Publicacion = require("../models/publicacion");
+const Like = require("../models/like");
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -39,7 +40,7 @@ exports.toggleSave = function (req, res) {
       const type = req.body.type;
       const arraySaves = result._doc.guardados;
       if (type === "add") {
-        if(!arraySaves.includes(userId)){
+        if (!arraySaves.includes(userId)) {
           arraySaves.push(userId);
         }
       } else {
@@ -64,6 +65,27 @@ exports.toggleSave = function (req, res) {
   });
 };
 
+exports.getAllSavedByUser = function (req, res) {
+  Publicacion.getAll(
+    { guardados: { $in: [req.params.user] } },
+    function (err, result) {
+      if (!err) {
+        const userId = req.params.user;
+        result.forEach((element) => {
+          var liked = element.likes.includes(userId);
+          element._doc["liked"] = liked;
+          element._doc["likes"] = element.likes.length;
+          var saved = element.guardados.includes(userId);
+          element._doc["saved"] = saved;
+        });
+        return res.status(200).json(result);
+      } else {
+        return res.status(400).send({ error: err }); // 500 error
+      }
+    }
+  );
+};
+
 exports.toggleLike = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
@@ -71,7 +93,7 @@ exports.toggleLike = function (req, res) {
       const type = req.body.type;
       const arrayLikes = result._doc.likes;
       if (type === "add") {
-        if(!arrayLikes.includes(userId)){
+        if (!arrayLikes.includes(userId)) {
           arrayLikes.push(userId);
         }
       } else {
@@ -85,6 +107,15 @@ exports.toggleLike = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
+          const like = {
+            publicacion: req.params.id,
+            usuario: userId,
+          };
+          Like.create(like, function (err2, result2) {
+            if (!err2) {
+              console.log("created like");
+            }
+          });
           return res.status(200).json(result);
         } else {
           return res.status(400).send({ error: err }); // 500 error
@@ -95,7 +126,6 @@ exports.toggleLike = function (req, res) {
     }
   });
 };
-
 
 /** get function to get all Publicacion. */
 exports.getAll = function (req, res) {

@@ -16,6 +16,12 @@ module.exports = function (router) {
       PublicacionController.getAll
     );
 
+    router.get(
+      "/publicacion/guardado/:user",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.getAllSavedByUser
+    );
+
     router.put(
       "/publicacion/toggle-like/:id",
       // passport.authenticate("jwt", { session: false }),
