@@ -7,13 +7,19 @@ module.exports = function (router) {
     router.get(
       "/publicacion/user/:user",
       // passport.authenticate("jwt", { session: false }),
-      PublicacionController.getAllLikedUser
+      PublicacionController.getAllForUser
     );
 
     router.get(
       "/publicacion",
       // passport.authenticate("jwt", { session: false }),
       PublicacionController.getAll
+    );
+
+    router.get(
+      "/publicacion/guardado/:user",
+      // passport.authenticate("jwt", { session: false }),
+      PublicacionController.getAllSavedByUser
     );
 
     router.put(

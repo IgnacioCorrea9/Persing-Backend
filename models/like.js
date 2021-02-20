@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 const LikeSchema = mongoose.Schema({
     publicacion: { type: mongoose.Schema.Types.ObjectId, ref: "Publicacion", required: true },
-    usuario: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
-    
-
+    usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 LikeSchema.statics = {
