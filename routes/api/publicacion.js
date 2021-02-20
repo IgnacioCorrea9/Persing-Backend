@@ -7,7 +7,7 @@ module.exports = function (router) {
     router.get(
       "/publicacion/user/:user",
       // passport.authenticate("jwt", { session: false }),
-      PublicacionController.getAllLikedUser
+      PublicacionController.getAllForUser
     );
 
     router.get(
