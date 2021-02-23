@@ -15,11 +15,11 @@ exports.get = function (req, res) {
 
 /** get function to get Recompensa by id. */
 exports.getByUsuario = function (req, res) {
-    Recompensa.get({ usuario: req.params.usuario }, function (err, result) {
+    Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
       if (!err) {
-        return res.json(result);
+        return res.status(200).json(result);
       } else {
-        return res.send(err); // 500 error
+        return res.status(400).send({error:err}); // 500 error
       }
     });
   };
@@ -45,6 +45,17 @@ exports.getAll = function (req, res) {
         }
       });
   };
+
+  /** Creates function to update Recompensa by id. */
+  exports.create = function (req, res) {
+    Recompensa.create(req.body, function (err, result) {
+      if (!err) {
+        return res.status(201).json(result);
+      } else {
+        return res.status(400).send({error:err}); // 500 error
+      }
+    });
+};
   
   /** remove function to remove Recompensa by id. */
   exports.delete = function (req, res) {
