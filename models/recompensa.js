@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const RecompensaSchema = mongoose.Schema({
     usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     sector: { type: mongoose.Schema.Types.ObjectId, ref: "Sector", required: true },
-    ranking: { type: String, required: false },
+    ranking: { type: Number, required: false, default: 0 },
     creditos: { type: Number, required: false, default: 0 }
 });
 
