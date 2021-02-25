@@ -16,6 +16,19 @@ module.exports = function (router) {
       // passport.authenticate("jwt", { session: false }),
       RecompensaController.create
     );
+
+    /** Trae todos los usuarios por tipo */
+    router.post(
+      "/recompensa/watch-time",
+      // passport.authenticate("jwt", { session: false }),
+      RecompensaController.sumWatchTime
+    );
+
+    router.post(
+      "/recompensa/interaction",
+      // passport.authenticate("jwt", { session: false }),
+      RecompensaController.sumInteractions
+    );
   
     /** Trae recompensas por usuario */
     router.get(
