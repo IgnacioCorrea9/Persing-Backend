@@ -4,39 +4,39 @@ const Recompensa = require("../models/Recompensa");
 const User = require("../models/user");
 
 const viewsValues = [
-  ["na"          , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["0-2.99"      , 0.2     , 0       , 0       , 0       , 0     ],
-  ["3-5.99"      , 0.4     , 0.2     , 0       , 0       , 0     ],
-  ["6-9.99"      , 0.6     , 0.4     , 0.2     , 0       , 0     ],
-  ["10-14.99"    , 0.8     , 0.6     , 0.4     , 0.2     , 0     ],
-  ["15-19.99"    , 1.0     , 0.8     , 0.6     , 0.4     , 0.2   ],
-  ["20-29.99"    , 1.2     , 1.0     , 0.8     , 0.6     , 0.4   ],
-  ["30-100000000", 1.5     , 1.2     , 1.0     , 0.8     , 0.6   ],
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["0-2.99", 0.2, 0, 0, 0, 0],
+  ["3-5.99", 0.4, 0.2, 0, 0, 0],
+  ["6-9.99", 0.6, 0.4, 0.2, 0, 0],
+  ["10-14.99", 0.8, 0.6, 0.4, 0.2, 0],
+  ["15-19.99", 1.0, 0.8, 0.6, 0.4, 0.2],
+  ["20-29.99", 1.2, 1.0, 0.8, 0.6, 0.4],
+  ["30-100000000", 1.5, 1.2, 1.0, 0.8, 0.6],
 ];
 
 const likeValues = [
-  ["na"   , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["like" , 0.3     , 0.2     , 0.1     , 0       , 0     ]
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["like", 0.3, 0.2, 0.1, 0, 0],
 ];
 
 const shareValues = [
-  ["na"   , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["share", 1.5     , 1.2     , 1.0     , 0.8     , 0.6   ]
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["share", 1.5, 1.2, 1.0, 0.8, 0.6],
 ];
 
 const commentValues = [
-  ["na"     , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["comment", 0.6     , 0.4     , 0.2     , 0       , 0     ]
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["comment", 0.6, 0.4, 0.2, 0, 0],
 ];
 
 const clickValues = [
-  ["na"   , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["click", 1.2    , 1.0     , 0.8     , 0.6       , 0.4  ]
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["click", 1.2, 1.0, 0.8, 0.6, 0.4],
 ];
 
 const saveValues = [
-  ["na"  , "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
-  ["save", 1.0     , 0.8     , 0.6     , 0.4     , 0.2   ]
+  ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+  ["save", 1.0, 0.8, 0.6, 0.4, 0.2],
 ];
 
 /** get function to get Recompensa by id. */
@@ -50,164 +50,235 @@ exports.get = function (req, res) {
   });
 };
 
-exports.sumInteractions = function (req, res) {
-  Recompensa.get({ usuario: req.body.usuario, sector: req.body.sector}, async function (err, result) {
-    if (!err) {
-        var recompensa = result;
-        if (result == null) {
-          await Recompensa.create({
-            usuario: req.body.usuario,
-            sector: req.body.sector,
-            ranking: 0,
-            creditos: 0
-          }, function (err2,result2) {
-            if (!err2) {
-              recompensa = result2;
-            }
-          });
-        }
-        let currentRank = recompensa.ranking;
-        console.log('current rank: '+currentRank);
-        let interaccion = req.body.interaccion;
-        console.log('interaction to evaluate: '+interaccion);
-        var points;
-        switch (interaccion) {
-          case "like":
-            for(var i = 1; i < likeValues[0].length; i++) {
-              console.log('evaluating column index...')
-              var split = likeValues[0][i].split('-');
-              console.log(split);
-              let lower = parseFloat(split[0]);
-              console.log(lower);
-              let higher = parseFloat(split[1]);
-              console.log(higher);
-              if (currentRank >= lower && currentRank <= higher){
-                console.log('found index: '+i);
-                points = likeValues[1][i];
-                break;
-              }
-            }
-            break;
-          case "comentario":
-            for(var i = 1; i < commentValues[0].length; i++) {
-              console.log('evaluating column index...')
-              var split = commentValues[0][i].split('-');
-              console.log(split);
-              let lower = parseFloat(split[0]);
-              console.log(lower);
-              let higher = parseFloat(split[1]);
-              console.log(higher);
-              if (currentRank >= lower && currentRank <= higher){
-                console.log('found index: '+i);
-                points = commentValues[1][i];
-                break;
-              }
-            }
-            break;
-          case "guardar":
-            for(var i = 1; i < saveValues[0].length; i++) {
-              console.log('evaluating column index...')
-              var split = saveValues[0][i].split('-');
-              console.log(split);
-              let lower = parseFloat(split[0]);
-              console.log(lower);
-              let higher = parseFloat(split[1]);
-              console.log(higher);
-              if (currentRank >= lower && currentRank <= higher){
-                console.log('found index: '+i);
-                points = saveValues[1][i];
-                break;
-              }
-            }
-            break;
-          case "compartir":
-            for(var i = 1; i < shareValues[0].length; i++) {
-              console.log('evaluating column index...')
-              var split = shareValues[0][i].split('-');
-              console.log(split);
-              let lower = parseFloat(split[0]);
-              console.log(lower);
-              let higher = parseFloat(split[1]);
-              console.log(higher);
-              if (currentRank >= lower && currentRank <= higher){
-                console.log('found index: '+i);
-                points = shareValues[1][i];
-                break;
-              }
-            }
-            break;
-          }
-          
-          console.log('points summed for '+interaccion+': '+points);
-
-        return res.status(200).json("saved interaction");
-    } else {
-      return res.status(400).send({error: err}); // 500 error
-    }
-  })
+function getEarningsFromInteraction(factor) {
+  return 0.6 - 0.006 * Math.pow(factor, 2);
 }
+
+exports.sumInteractions = function (req, res) {
+  User.get({ _id: req.body.usuario }, function (err, result) {
+    if (!err) {
+      Recompensa.get(
+        { usuario: req.body.usuario, sector: req.body.sector },
+        async function (err2, result2) {
+          if (!err2) {
+            var recompensa = result2;
+            if (result == null) {
+              await Recompensa.create(
+                {
+                  usuario: req.body.usuario,
+                  sector: req.body.sector,
+                  ranking: 0,
+                  creditos: 0,
+                },
+                function (err3, result3) {
+                  if (!err3) {
+                    recompensa = result3;
+                  }
+                }
+              );
+            }
+            let currentRank = recompensa.ranking;
+            console.log("current rank: " + currentRank);
+            let interaccion = req.body.interaccion;
+            console.log("interaction to evaluate: " + interaccion);
+            var points;
+            switch (interaccion) {
+              case "like":
+                for (var i = 1; i < likeValues[0].length; i++) {
+                  console.log("evaluating column index...");
+                  var split = likeValues[0][i].split("-");
+                  console.log(split);
+                  let lower = parseFloat(split[0]);
+                  console.log(lower);
+                  let higher = parseFloat(split[1]);
+                  console.log(higher);
+                  if (currentRank >= lower && currentRank <= higher) {
+                    console.log("found index: " + i);
+                    points = likeValues[1][i];
+                    break;
+                  }
+                }
+                break;
+              case "comentario":
+                for (var i = 1; i < commentValues[0].length; i++) {
+                  console.log("evaluating column index...");
+                  var split = commentValues[0][i].split("-");
+                  console.log(split);
+                  let lower = parseFloat(split[0]);
+                  console.log(lower);
+                  let higher = parseFloat(split[1]);
+                  console.log(higher);
+                  if (currentRank >= lower && currentRank <= higher) {
+                    console.log("found index: " + i);
+                    points = commentValues[1][i];
+                    break;
+                  }
+                }
+                break;
+              case "guardar":
+                for (var i = 1; i < saveValues[0].length; i++) {
+                  console.log("evaluating column index...");
+                  var split = saveValues[0][i].split("-");
+                  console.log(split);
+                  let lower = parseFloat(split[0]);
+                  console.log(lower);
+                  let higher = parseFloat(split[1]);
+                  console.log(higher);
+                  if (currentRank >= lower && currentRank <= higher) {
+                    console.log("found index: " + i);
+                    points = saveValues[1][i];
+                    break;
+                  }
+                }
+                break;
+              case "compartir":
+                for (var i = 1; i < shareValues[0].length; i++) {
+                  console.log("evaluating column index...");
+                  var split = shareValues[0][i].split("-");
+                  console.log(split);
+                  let lower = parseFloat(split[0]);
+                  console.log(lower);
+                  let higher = parseFloat(split[1]);
+                  console.log(higher);
+                  if (currentRank >= lower && currentRank <= higher) {
+                    console.log("found index: " + i);
+                    points = shareValues[1][i];
+                    break;
+                  }
+                }
+                break;
+            }
+
+            console.log("points summed for " + interaccion + ": " + points);
+            let newCreditsUser = (
+              result.creditos + getEarningsFromInteraction(points)
+            ).toFixed(2);
+            let newCreditsRecompensa = (
+              recompensa.creditos + getEarningsFromInteraction(points)
+            ).toFixed(2);
+            console.log(newCreditsUser);
+            console.log(newCreditsRecompensa);
+            User.updateById(
+              req.body.usuario,
+              { creditos: newCreditsUser },
+              await function (error, resultUser) {
+                console.log(resultUser);
+              }
+            );
+            Recompensa.updateById(
+              recompensa._id,
+              { creditos: newCreditsRecompensa },
+              await function (error, resultRecompensa) {
+                console.log(resultRecompensa);
+              }
+            );
+            return res.status(200).json("saved interaction");
+          } else {
+            return res.status(400).send({ error: err }); // 500 error
+          }
+        }
+      );
+    } else {
+      return res.status(400).send({ error: err }); // 500 error
+    }
+  });
+};
 
 exports.sumWatchTime = function (req, res) {
-  Recompensa.get({ usuario: req.body.usuario, sector: req.body.sector}, async function (err, result) {
+  User.get({ _id: req.body.usuario }, function (err, result) {
     if (!err) {
-        var recompensa = result;
-        if (result == null) {
-          await Recompensa.create({
-            usuario: req.body.usuario,
-            sector: req.body.sector,
-            ranking: 0,
-            creditos: 0
-          }, function (err2,result2) {
-            if (!err2) {
-              recompensa = result2;
+      Recompensa.get(
+        { usuario: req.body.usuario, sector: req.body.sector },
+        async function (err2, result2) {
+          if (!err2) {
+            var recompensa = result2;
+            if (result == null) {
+              await Recompensa.create(
+                {
+                  usuario: req.body.usuario,
+                  sector: req.body.sector,
+                  ranking: 0,
+                  creditos: 0,
+                },
+                function (err3, result3) {
+                  if (!err3) {
+                    recompensa = result3;
+                  }
+                }
+              );
             }
-          });
-        }
-        let currentRank = recompensa.ranking;
-        console.log('current rank: '+currentRank);
-        let time = req.body.tiempo;
-        console.log('time to evaluate: '+time);
-        var colIndex;
-        var rowIndex;
+            let currentRank = recompensa.ranking;
+            console.log("current rank: " + currentRank);
+            let time = req.body.tiempo;
+            console.log("time to evaluate: " + time);
+            var colIndex;
+            var rowIndex;
 
-        for(var i = 1; i < viewsValues[0].length; i++) {
-          console.log('evaluating column index...')
-          var split = viewsValues[0][i].split('-');
-          console.log(split);
-          let lower = parseFloat(split[0]);
-          console.log(lower);
-          let higher = parseFloat(split[1]);
-          console.log(higher);
-          if (currentRank >= lower && currentRank <= higher){
-            console.log('found index: '+i);
-            colIndex = i;
-            break;
+            for (var i = 1; i < viewsValues[0].length; i++) {
+              console.log("evaluating column index...");
+              var split = viewsValues[0][i].split("-");
+              console.log(split);
+              let lower = parseFloat(split[0]);
+              console.log(lower);
+              let higher = parseFloat(split[1]);
+              console.log(higher);
+              if (currentRank >= lower && currentRank <= higher) {
+                console.log("found index: " + i);
+                colIndex = i;
+                break;
+              }
+            }
+
+            for (var i = 1; i < viewsValues.length; i++) {
+              console.log("evaluating row index...");
+              var split = viewsValues[i][0].split("-");
+              console.log(split);
+              let lower = parseFloat(split[0]);
+              console.log(lower);
+              let higher = parseFloat(split[1]);
+              console.log(higher);
+              if (time >= lower && time <= higher) {
+                console.log("found index: " + i);
+                rowIndex = i;
+                break;
+              }
+            }
+            const points = viewsValues[rowIndex][colIndex];
+            console.log(
+              "points summed for view time: " + points
+            );
+            let newCreditsUser = (
+              result.creditos + getEarningsFromInteraction(points)
+            ).toFixed(2);
+            let newCreditsRecompensa = (
+              recompensa.creditos + getEarningsFromInteraction(points)
+            ).toFixed(2);
+            console.log(newCreditsUser);
+            console.log(newCreditsRecompensa);
+            User.updateById(
+              req.body.usuario,
+              { creditos: newCreditsUser },
+              await function (error, resultUser) {
+                console.log(resultUser);
+              }
+            );
+            Recompensa.updateById(
+              recompensa._id,
+              { creditos: newCreditsRecompensa },
+              await function (error, resultRecompensa) {
+                console.log(resultRecompensa);
+              }
+            );
+
+            return res.status(200).json("saved watch time");
+          } else {
+            return res.status(400).send({ error: err }); // 500 error
           }
         }
-
-        for(var i = 1; i < viewsValues.length; i++) {
-          console.log('evaluating row index...')
-          var split = viewsValues[i][0].split('-');
-          console.log(split);
-          let lower = parseFloat(split[0]);
-          console.log(lower);
-          let higher = parseFloat(split[1]);
-          console.log(higher);
-          if (time >= lower && time <= higher){
-            console.log('found index: '+i);
-            rowIndex = i;
-            break;
-          }
-        }
-
-        console.log('points summed for view time: '+viewsValues[rowIndex][colIndex]);
-
-        return res.status(200).json("saved watch time");
-    } else {
-      return res.status(400).send({error: err}); // 500 error
+      );
     }
-  })
-}
+  });
+};
 
 /** get function to get Recompensa by id. */
 exports.getByUsuario = function (req, res) {
