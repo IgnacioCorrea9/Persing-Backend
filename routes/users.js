@@ -107,6 +107,7 @@ router.post("/forgot-password", (req, res, next) => {
                 return res.status(200).json({
                   success: true,
                   msg: "Contraseña actualizada correctamente",
+                  user
                 });
               })
               .catch(function () {});
