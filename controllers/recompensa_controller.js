@@ -51,18 +51,17 @@ exports.get = function (req, res) {
 };
 
 function getEarningsFromInteraction(factor) {
-  return 0.6 - 0.006 * Math.pow(factor, 2);
+  return 0.6 -( 0.006 * Math.pow(factor, 2));
 }
 
 exports.sumInteractions = function (req, res) {
-  User.get({ _id: req.body.usuario }, function (err, result) {
-    if (!err) {
+
       Recompensa.get(
         { usuario: req.body.usuario, sector: req.body.sector },
         async function (err2, result2) {
           if (!err2) {
             var recompensa = result2;
-            if (result == null) {
+            if (result2 == null) {
               await Recompensa.create(
                 {
                   usuario: req.body.usuario,
@@ -150,24 +149,17 @@ exports.sumInteractions = function (req, res) {
             }
 
             console.log("points summed for " + interaccion + ": " + points);
-            let newCreditsUser = (
-              result.creditos + getEarningsFromInteraction(points)
+
+            let newRankRecompensa = (
+              currentRank + getEarningsFromInteraction(points)
             ).toFixed(2);
-            let newCreditsRecompensa = (
-              recompensa.creditos + getEarningsFromInteraction(points)
-            ).toFixed(2);
-            console.log(newCreditsUser);
-            console.log(newCreditsRecompensa);
-            User.updateById(
-              req.body.usuario,
-              { creditos: newCreditsUser },
-              await function (error, resultUser) {
-                console.log(resultUser);
-              }
-            );
+            console.log(newRankRecompensa);
+            if(newRankRecompensa > 10) {
+              newRankRecompensa = 10;
+            }
             Recompensa.updateById(
               recompensa._id,
-              { creditos: newCreditsRecompensa },
+              { ranking: newRankRecompensa },
               await function (error, resultRecompensa) {
                 console.log(resultRecompensa);
               }
@@ -177,22 +169,16 @@ exports.sumInteractions = function (req, res) {
             return res.status(400).send({ error: err }); // 500 error
           }
         }
-      );
-    } else {
-      return res.status(400).send({ error: err }); // 500 error
-    }
-  });
+      );  
 };
 
 exports.sumWatchTime = function (req, res) {
-  User.get({ _id: req.body.usuario }, function (err, result) {
-    if (!err) {
       Recompensa.get(
         { usuario: req.body.usuario, sector: req.body.sector },
         async function (err2, result2) {
           if (!err2) {
             var recompensa = result2;
-            if (result == null) {
+            if (result2 == null) {
               await Recompensa.create(
                 {
                   usuario: req.body.usuario,
@@ -208,6 +194,9 @@ exports.sumWatchTime = function (req, res) {
               );
             }
             let currentRank = recompensa.ranking;
+            if (currentRank > 10){
+              currentRank = 10;
+            }
             console.log("current rank: " + currentRank);
             let time = req.body.tiempo;
             console.log("time to evaluate: " + time);
@@ -247,24 +236,16 @@ exports.sumWatchTime = function (req, res) {
             console.log(
               "points summed for view time: " + points
             );
-            let newCreditsUser = (
-              result.creditos + getEarningsFromInteraction(points)
+            let newRankRecompensa = (
+              currentRank + getEarningsFromInteraction(points)
             ).toFixed(2);
-            let newCreditsRecompensa = (
-              recompensa.creditos + getEarningsFromInteraction(points)
-            ).toFixed(2);
-            console.log(newCreditsUser);
-            console.log(newCreditsRecompensa);
-            User.updateById(
-              req.body.usuario,
-              { creditos: newCreditsUser },
-              await function (error, resultUser) {
-                console.log(resultUser);
-              }
-            );
+            console.log(newRankRecompensa);
+            if(newRankRecompensa > 10) {
+              newRankRecompensa = 10;
+            }
             Recompensa.updateById(
               recompensa._id,
-              { creditos: newCreditsRecompensa },
+              { ranking: newRankRecompensa },
               await function (error, resultRecompensa) {
                 console.log(resultRecompensa);
               }
@@ -276,8 +257,6 @@ exports.sumWatchTime = function (req, res) {
           }
         }
       );
-    }
-  });
 };
 
 /** get function to get Recompensa by id. */
