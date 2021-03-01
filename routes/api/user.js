@@ -33,7 +33,7 @@ module.exports = function (router) {
   /** Elimina un usuario por id del usuario */
   router.delete(
     "/user/:id",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     UserController.delete
   );
 };

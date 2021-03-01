@@ -21,15 +21,33 @@ router.post("/register", (req, res, next) => {
       apellido: req.body.apellido,
       email: req.body.email,
       password: req.body.password,
-      empresa: req.body.empresa || undefined,
-      genero: req.body.genero || "",
-      estrato: req.body.estrato || -1,
-      nivelEducativo: req.body.nivelEducativo || "",
-      profesion: req.body.profesion || "",
-      hijos: req.body.hijos || 0,
-      creditos: req.body.creditos || 0,
-      intereses: req.body.intereses || [],
+      tipo:req.body.tipo,
     });
+    if(req.body.empresa) {
+      newUser["empresa"] = req.body.empresa;
+    }
+    if(req.body.genero) {
+      newUser["genero"] = req.body.genero
+    }
+    if(req.body.estrato) {
+      newUser["estrato"] = req.body.estrato
+    }
+    if(req.body.nivelEducativo) {
+      newUser["nivelEducativo"] = req.body.nivelEducativo
+    }
+    if(req.body.profesion) {
+      newUser["profesion"] = req.body.profesion
+    }
+    if(req.body.hijos) {
+      newUser["hijos"] = req.body.hijos
+    }
+    if(req.body.creditos) {
+      newUser["creditos"] = req.body.creditos
+    }
+    if(req.body.intereses) {
+      newUser["intereses"] = rreq.body.intereses || []
+    }
+
     User.addUser(newUser, (err, user) => {
       if (err) {
         console.log(err);
