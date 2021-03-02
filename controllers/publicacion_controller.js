@@ -144,6 +144,17 @@ exports.getAll = function (req, res) {
   });
 };
 
+/** get function to get all Publicacion. */
+exports.getAllByEmpresa = function (req, res) {
+  Publicacion.getAll({empresa: req.params.empresa}, function (err, result) {
+    if (!err) {
+      return res.status(200).json({data: result});
+    } else {
+      return res.status(400).send(err); // 500 error
+    }
+  });
+};
+
 /** update function to update Publicacion by id. */
 exports.update = function (req, res) {
   Publicacion.updateById(req.params.id, req.body, function (err, result) {
