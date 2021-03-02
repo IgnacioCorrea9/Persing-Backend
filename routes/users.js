@@ -178,7 +178,7 @@ router.post("/authenticate", (req, res, next) => {
       } else {
         return res
           .status(400)
-          .json({ success: false, error: "Contraseña incorrecta" });
+          .json({ success: false, error: "Credenciales incorrectas" });
       }
     });
   });

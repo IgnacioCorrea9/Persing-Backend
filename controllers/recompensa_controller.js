@@ -263,7 +263,7 @@ exports.sumWatchTime = function (req, res) {
 exports.getByUsuario = function (req, res) {
   Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
     if (!err) {
-      return res.status(200).json(result);
+      return res.status(200).json({data: result});
     } else {
       return res.status(400).send({ error: err }); // 500 error
     }
