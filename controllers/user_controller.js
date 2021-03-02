@@ -39,9 +39,9 @@ exports.getById = function (req, res) {
 exports.getAll = function (req, res) {
   User.getAll({}, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(200).json({data: result});
     } else {
-      return res.send(err); // 500 error
+      return res.status(400).send(err); // 500 error
     }
   });
 };
