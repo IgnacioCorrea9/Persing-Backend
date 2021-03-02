@@ -7,7 +7,7 @@ const Like = require("../models/like");
 exports.get = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.json({data: result});
     } else {
       return res.send(err); // 500 error
     }

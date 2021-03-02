@@ -23,12 +23,12 @@ const PublicacionSchema = mongoose.Schema({
 PublicacionSchema.statics = {
     get: function (query, callback) {
       this.findOne(query, { password: 0 })
-        .populate("empresa")
+        .populate("empresa sector")
         .exec(callback);
     },
     getAll: function (query, callback) {
       this.find(query, { password: 0 })
-        .populate("empresa")
+        .populate("empresa sector")
         .exec(callback);
     },
     updateById: function (id, updateData, callback) {

@@ -49,7 +49,7 @@ module.exports = function (router) {
     /** Gets publicacion by id */
     router.get(
       "/publicacion/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       PublicacionController.get
     );
   
