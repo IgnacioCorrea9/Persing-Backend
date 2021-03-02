@@ -6,7 +6,7 @@ const Empresa = require("../models/empresa");
 exports.get = function (req, res) {
   Empresa.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(200).json(result);
     } else {
       return res.send(err); // 500 error
     }
@@ -17,7 +17,7 @@ exports.get = function (req, res) {
 exports.getAll = function (req, res) {
   Empresa.getAll({}, function (err, result) {
     if (!err) {
-      return res.status(201).json({success: true, data: result});
+      return res.status(200).json({success: true, data: result});
     } else {
       return res.status(400).send({success: true, error: err}); // 500 error
     }
@@ -30,7 +30,7 @@ exports.update = function (req, res) {
     if (!err) {
       return res.status(200).json({success: true, data: result});
     } else {
-      return res.send({success: false, error: err}); // 500 error
+      return res.status(400).send({success: false, error: err}); // 500 error
     }
   });
 };
@@ -50,9 +50,9 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
   Empresa.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(200).json(result);
     } else {
-      return res.send(err); // 500 error
+      return res.status(400).send(err); // 500 error
     }
   });
 };

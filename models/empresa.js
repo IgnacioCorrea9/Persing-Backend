@@ -7,6 +7,7 @@ const EmpresaSchema = mongoose.Schema({
     logo: { type: String, required: false },
     email: { type: String, required: false },
     descripcion: { type: String, required: false },
+    aprobado: {type:Boolean, required: true, default: false},
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
