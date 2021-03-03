@@ -1,6 +1,6 @@
 "use strict";
 
-const Recompensa = require("../models/Recompensa");
+const Recompensa = require("../models/recompensa");
 const User = require("../models/user");
 
 const viewsValues = [
