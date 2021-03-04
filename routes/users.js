@@ -41,12 +41,8 @@ router.post("/register", (req, res, next) => {
     if(req.body.hijos) {
       newUser["hijos"] = req.body.hijos
     }
-    if(req.body.creditos) {
-      newUser["creditos"] = req.body.creditos
-    }
-    if(req.body.intereses) {
-      newUser["intereses"] = req.body.intereses || []
-    }
+    newUser["creditos"] = req.body.creditos
+    newUser["intereses"] = req.body.intereses || []
 
     User.addUser(newUser, (err, user) => {
       if (err) {
