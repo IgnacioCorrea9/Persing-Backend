@@ -61,7 +61,7 @@ exports.sumInteractions = function (req, res) {
         async function (err2, result2) {
           if (!err2) {
             var recompensa = result2;
-            if (result2 == null) {
+            if (result2 == null || result2 == undefined || result2 == {}) {
               await Recompensa.create(
                 {
                   usuario: req.body.usuario,
