@@ -22,6 +22,8 @@ router.post("/register", (req, res, next) => {
       email: req.body.email,
       password: req.body.password,
       tipo:req.body.tipo,
+      creditos: req.body.creditos || 0,
+      intereses: req.body.intereses || []
     });
     if(req.body.empresa) {
       newUser["empresa"] = req.body.empresa;
@@ -41,8 +43,6 @@ router.post("/register", (req, res, next) => {
     if(req.body.hijos) {
       newUser["hijos"] = req.body.hijos
     }
-    newUser["creditos"] = req.body.creditos
-    newUser["intereses"] = req.body.intereses || []
 
     User.addUser(newUser, (err, user) => {
       if (err) {
