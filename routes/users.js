@@ -14,34 +14,39 @@ const sendgrid = require("@sendgrid/mail");
 sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 router.post("/register", (req, res, next) => {
-  console.log(req)
-  if (req.body.password && req.body.nombre && req.body.email && req.body.apellido) {
+  console.log(req);
+  if (
+    req.body.password &&
+    req.body.nombre &&
+    req.body.email &&
+    req.body.apellido
+  ) {
     let newUser = new User({
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       email: req.body.email,
       password: req.body.password,
-      tipo:req.body.tipo,
+      tipo: req.body.tipo,
       creditos: req.body.creditos || 0,
-      intereses: req.body.intereses || []
+      intereses: req.body.intereses || [],
     });
-    if(req.body.empresa) {
+    if (req.body.empresa) {
       newUser["empresa"] = req.body.empresa;
     }
-    if(req.body.genero) {
-      newUser["genero"] = req.body.genero
+    if (req.body.genero) {
+      newUser["genero"] = req.body.genero;
     }
-    if(req.body.estrato) {
-      newUser["estrato"] = req.body.estrato
+    if (req.body.estrato) {
+      newUser["estrato"] = req.body.estrato;
     }
-    if(req.body.nivelEducativo) {
-      newUser["nivelEducativo"] = req.body.nivelEducativo
+    if (req.body.nivelEducativo) {
+      newUser["nivelEducativo"] = req.body.nivelEducativo;
     }
-    if(req.body.profesion) {
-      newUser["profesion"] = req.body.profesion
+    if (req.body.profesion) {
+      newUser["profesion"] = req.body.profesion;
     }
-    if(req.body.hijos) {
-      newUser["hijos"] = req.body.hijos
+    if (req.body.hijos) {
+      newUser["hijos"] = req.body.hijos;
     }
 
     User.addUser(newUser, (err, user) => {
@@ -68,7 +73,9 @@ router.post("/forgot-password", (req, res, next) => {
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.status(400).json({ success: false, error: "Usuario no encontrado" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Usuario no encontrado" });
     }
 
     let pass = randomstring.generate(7);
@@ -103,7 +110,7 @@ router.post("/forgot-password", (req, res, next) => {
                 return res.status(200).json({
                   success: true,
                   msg: "Contraseña actualizada correctamente",
-                  user
+                  user,
                 });
               })
               .catch(function () {});
@@ -150,12 +157,14 @@ router.post("/authenticate", (req, res, next) => {
   User.getUserByEmail(email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.status(400).json({ success: false, error: "Usuario no encontrado" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Usuario no encontrado" });
     }
 
     User.comparePassword(password, user.password, (err, isMatch) => {
       if (err) throw err;
-      console.log(isMatch)
+      console.log(isMatch);
       if (isMatch) {
         const token = jwt.sign(
           { user },
@@ -164,7 +173,7 @@ router.post("/authenticate", (req, res, next) => {
             expiresIn: 604800, // 1 week
           }
         );
-        console.log('sending true')
+        console.log("sending true");
         console.log(user);
         res.status(200).json({
           success: true,
@@ -228,6 +237,33 @@ router.post(
           });
         }
       });
+    });
+  }
+);
+
+router.post(
+  "/verify-email",
+  // passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    User.getUserByEmail(req.body.email, (error, result) => {
+      if (!error) {
+        if (result !== null) {
+          res.status(200).json({
+            success: false,
+            message: "Email ya registrado"
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            message: "Available"
+          });
+        }
+      } else {
+        res.status(400).json({
+          success: false,
+          message: error.toString()
+        });
+      }
     });
   }
 );
