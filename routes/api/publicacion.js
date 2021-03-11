@@ -56,7 +56,7 @@ module.exports = function (router) {
     /** Actualiza una publicacion por id */
     router.put(
       "/publicacion/:id",
-      passport.authenticate("jwt", { session: false }),
+      // passport.authenticate("jwt", { session: false }),
       PublicacionController.update
     );
   

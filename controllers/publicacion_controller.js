@@ -159,9 +159,9 @@ exports.getAllByEmpresa = function (req, res) {
 exports.update = function (req, res) {
   Publicacion.updateById(req.params.id, req.body, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.json({success: true, data: result});
     } else {
-      return res.send(err); // 500 error
+      return res.send({success: true, error: err}); // 500 error
     }
   });
 };
