@@ -23,7 +23,7 @@ const UserSchema = mongoose.Schema({
     {
       type: String,
       required: true,
-      enum: ["cliente","administrador","superadministrador"]
+      enum: ["consumidor","administrador","superadministrador"]
     },
   createdAt: { type: Date, required: false, default: Date.now },
 });
