@@ -71,9 +71,9 @@ require("./routes/api/sector")(router);
 
 // Import other routes and paths
 const users = require("./routes/users");
+const credentials = require("./routes/credentials");
 // const pagos = require("./routes/pagos");
 // const email = require("./routes/email");
-// const credentials = require("./routes/credentials");
 // app.use("/credentials", credentials);
 
 app.use("/users", users);

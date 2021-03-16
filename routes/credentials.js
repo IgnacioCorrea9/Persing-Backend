@@ -1,17 +1,17 @@
-// const express = require("express");
-// const router = express.Router();
-// const passport = require("passport");
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
 
-// //variables
-// const accessKeyId = process.env.ACCESS_KEY_ID;
-// const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+//variables
+const accessKeyId = process.env.ACCESS_KEY_ID;
+const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
-// router.get(
-//   "/s3-credentials",
-//   passport.authenticate("jwt", { session: false }),
-//   (req, res) => {
-//     res.json({ accessKeyId: accessKeyId, secretAccessKey: secretAccessKey });
-//   }
-// );
+router.get(
+  "/s3-credentials",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({ accessKeyId: accessKeyId, secretAccessKey: secretAccessKey });
+  }
+);
 
-// module.exports = router;
+module.exports = router;
