@@ -77,6 +77,7 @@ const credentials = require("./routes/credentials");
 // app.use("/credentials", credentials);
 
 app.use("/users", users);
+app.use("/credentials", credentials);
 // app.use("/pagos", pagos);
 // app.use("/email", email);
 
