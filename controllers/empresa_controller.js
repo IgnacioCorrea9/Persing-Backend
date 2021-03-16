@@ -38,11 +38,12 @@ exports.update = function (req, res) {
 
 /** update function to update Empresa by id. */
 exports.create = function (req, res) {
+  console.log(req.body);
   Empresa.create(req.body, function (err, result) {
     if (!err) {
       return res.status(200).json({success: true, data: result});
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(400).send({error: err}); // 500 error
     }
   });
 };
@@ -51,7 +52,7 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
   Empresa.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.status(200).json(result);
+      return res.status(200).json({success:true, data: result});
     } else {
       return res.status(400).send(err); // 500 error
     }

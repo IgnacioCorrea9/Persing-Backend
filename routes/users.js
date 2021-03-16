@@ -14,14 +14,12 @@ const sendgrid = require("@sendgrid/mail");
 sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 router.post("/register", (req, res, next) => {
-  console.log(req);
   if (
     req.body.password &&
     req.body.nombre &&
     req.body.email &&
     req.body.apellido
   ) {
-    console.log(req.body);
     let newUser = new User({
       nombre: req.body.nombre,
       apellido: req.body.apellido,
@@ -49,10 +47,8 @@ router.post("/register", (req, res, next) => {
     if (req.body.hijos) {
       newUser["hijos"] = req.body.hijos;
     }
-
     User.addUser(newUser, (err, user) => {
       if (err) {
-        console.log(err);
         res.status(400).json({
           success: false,
           error: "El usuario ya existe en el sistema.",
@@ -90,7 +86,6 @@ router.post("/forgot-password", (req, res, next) => {
           { password: hash },
           { upsert: true },
           function (err, doc) {
-            console.log(email);
             if (err) throw err;
             const msg = {
               to: req.body.email,
@@ -165,7 +160,6 @@ router.post("/authenticate", (req, res, next) => {
 
     User.comparePassword(password, user.password, (err, isMatch) => {
       if (err) throw err;
-      console.log(isMatch);
       if (isMatch) {
         const token = jwt.sign(
           { user },
@@ -174,8 +168,6 @@ router.post("/authenticate", (req, res, next) => {
             expiresIn: 604800, // 1 week
           }
         );
-        console.log("sending true");
-        console.log(user);
         res.status(200).json({
           success: true,
           token: "JWT " + token,
@@ -210,7 +202,6 @@ router.post(
             if (err) throw err;
             bcrypt.hash(passwordNueva, salt, (err, hash) => {
               if (err) {
-                console.log(err);
                 return res.json({
                   success: false,
                   msg:
@@ -251,17 +242,20 @@ router.post(
         if (result !== null) {
           res.status(200).json({
             success: false,
+            data: {message: "Email ya registrado"},
             message: "Email ya registrado"
           });
         } else {
           res.status(200).json({
             success: true,
+            data: {message: "Available"},
             message: "Available"
           });
         }
       } else {
         res.status(400).json({
           success: false,
+          data: {error: error.toString()},
           message: error.toString()
         });
       }

@@ -72,11 +72,10 @@ module.exports.getUserById = function (id, callback) {
 
 module.exports.getUserByEmail = function (email, callback) {
   const query = { email: email };
-  User.findOne(query, callback);
+  User.findOne(query).populate("empresa").exec(callback);
 };
 
 module.exports.addUser = function (newUser, callback) {
-  console.log(newUser);
   bcrypt.genSalt(10, (err, salt) => {
     if( err) throw err;
     bcrypt.hash(newUser.password, salt, (err2, hash) => {
@@ -84,6 +83,8 @@ module.exports.addUser = function (newUser, callback) {
       newUser.password = hash;
       var UserSchema = mongoose.model("User");
       UserSchema.find({ email: newUser.email }, (err3, res) => {
+        console.log('printing resp of find');
+        console.log(res);
         if (res.length == 0) {
           newUser.save(callback);
         } else {
