@@ -17,7 +17,7 @@ exports.get = function (req, res) {
 exports.getAll = function (req, res) {
   Sector.getAll({}, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.json({data:result, success: true});
     } else {
       return res.send(err); // 500 error
     }
