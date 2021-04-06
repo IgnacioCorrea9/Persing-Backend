@@ -13,7 +13,7 @@ module.exports = function (router) {
     /** Trae todos los usuarios por tipo */
     router.get(
       "/comentario/publicacion/:publicacion",
-      // passport.authenticate("jwt", { session: false }),
+      passport.authenticate("jwt", { session: false }),
       ComentarioController.getAllByPublicacion
     );
   
@@ -27,7 +27,7 @@ module.exports = function (router) {
     /** Gets comentario by id */
     router.post(
       "/comentario",
-      // passport.authenticate("jwt", { session: false }),
+      passport.authenticate("jwt", { session: false }),
       ComentarioController.create
     );
   

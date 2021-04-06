@@ -235,7 +235,6 @@ router.post(
 
 router.post(
   "/verify-email",
-  // passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
     User.getUserByEmail(req.body.email, (error, result) => {
       if (!error) {

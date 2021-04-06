@@ -19,21 +19,21 @@ module.exports = function (router) {
   /** Trae los estudiantes de un advisor */
   router.get(
     "/user/:id",
-    // passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", { session: false }),
     UserController.getById
   );
 
   /** Actualiza un usuario por id del usuario */
   router.put(
     "/user/:id",
-    // passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", { session: false }),
     UserController.update
   );
 
   /** Elimina un usuario por id del usuario */
   router.delete(
     "/user/:id",
-    // passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", { session: false }),
     UserController.delete
   );
 };
