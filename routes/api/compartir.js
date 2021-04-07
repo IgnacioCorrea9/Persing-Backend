@@ -9,6 +9,13 @@ module.exports = function (router) {
       passport.authenticate("jwt", { session: false }),
       CompartirController.getAll
     );
+
+    /** Trae todos los usuarios por tipo */
+    router.post(
+      "/compartir",
+      passport.authenticate("jwt", { session: false }),
+      CompartirController.create
+    );
   
     /** Gets compartir by id */
     router.get(

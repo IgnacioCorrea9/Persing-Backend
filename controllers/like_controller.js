@@ -13,6 +13,17 @@ exports.get = function (req, res) {
   });
 };
 
+/** get function to get Like by id. */
+exports.create = function (req, res) {
+  Like.create(req.body, function (err, result) {
+    if (!err) {
+      return res.json(result);
+    } else {
+      return res.send(err); // 500 error
+    }
+  });
+};
+
 /** get function to get all Like. */
 exports.getAll = function (req, res) {
   Like.getAll({}, function (err, result) {

@@ -13,6 +13,17 @@ exports.get = function (req, res) {
   });
 };
 
+/** get function to get Compartir by id. */
+exports.create = function (req, res) {
+  Compartir.create(req.body, function (err, result) {
+    if (!err) {
+      return res.json(result);
+    } else {
+      return res.send(err); // 500 error
+    }
+  });
+};
+
 /** get function to get all Compartir. */
 exports.getAll = function (req, res) {
   Compartir.getAll({}, function (err, result) {

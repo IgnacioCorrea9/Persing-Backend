@@ -9,7 +9,14 @@ module.exports = function (router) {
       passport.authenticate("jwt", { session: false }),
       LikeController.getAll
     );
-  
+
+      /** Trae todos los usuarios por tipo */
+    router.post(
+      "/like",
+      passport.authenticate("jwt", { session: false }),
+      LikeController.create
+    );
+
     /** Gets like by id */
     router.get(
       "/like/:id",
