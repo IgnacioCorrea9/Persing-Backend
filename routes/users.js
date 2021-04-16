@@ -164,7 +164,7 @@ router.post("/authenticate", (req, res, next) => {
       if (isMatch) {
         const token = jwt.sign(
           { user },
-          process.env.JWT_SECRET || "u3608956789",
+          process.env.JWT_SECRET || "persing8956789",
           {
             expiresIn: 604800, // 1 week
           }
