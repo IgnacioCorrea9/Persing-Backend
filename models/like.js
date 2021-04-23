@@ -40,4 +40,8 @@ LikeSchema.statics = {
   };
   
   const Like = (module.exports = mongoose.model("Like", LikeSchema));
+
+  module.exports.count = function (query,callback) {
+    Like.countDocuments(query,callback);
+  }
   

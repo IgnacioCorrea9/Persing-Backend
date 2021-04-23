@@ -43,3 +43,6 @@ ClickSchema.statics = {
   
   const Click = (module.exports = mongoose.model("Click", ClickSchema));
   
+  module.exports.count = function (query,callback) {
+    Click.countDocuments(query,callback);
+  }

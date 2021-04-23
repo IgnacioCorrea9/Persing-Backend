@@ -24,6 +24,12 @@ module.exports = function (router) {
       ComentarioController.get
     );
 
+    router.get(
+      "/comentario/publicacion-contar/:publicacion",
+      passport.authenticate("jwt", { session: false }),
+      ComentarioController.countByPublicacion
+    );
+
     /** Gets comentario by id */
     router.post(
       "/comentario",

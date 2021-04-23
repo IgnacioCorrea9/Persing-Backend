@@ -43,3 +43,6 @@ CompartirSchema.statics = {
   
   const Compartir = (module.exports = mongoose.model("Compartir", CompartirSchema));
   
+  module.exports.count = function (query,callback) {
+    Compartir.countDocuments(query,callback);
+  }

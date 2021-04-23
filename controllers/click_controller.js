@@ -24,6 +24,17 @@ exports.getAll = function (req, res) {
   });
 };
 
+/** get function to count click by publicacion. */
+exports.countByPublicacion = function (req, res) {
+  Click.count({publicacion:req.params.publicacion}, function (err, result) {
+    if (!err) {
+      return res.status(200).json({data: result});
+    } else {
+      return res.send(err); // 500 error
+    }
+  });
+};
+
 /** update function to update Click by id. */
 exports.update = function (req, res) {
   Click.updateById(req.params.id, req.body, function (err, result) {

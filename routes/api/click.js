@@ -16,6 +16,12 @@ module.exports = function (router) {
       passport.authenticate("jwt", { session: false }),
       ClickController.get
     );
+
+    router.get(
+      "/click/publicacion/:publicacion",
+      passport.authenticate("jwt", { session: false }),
+      ClickController.countByPublicacion
+    );
   
     /** Actualiza una click por id */
     router.put(

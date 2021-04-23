@@ -43,3 +43,6 @@ ComentarioSchema.statics = {
   
   const Comentario = (module.exports = mongoose.model("Comentario", ComentarioSchema));
   
+  module.exports.count = function (query,callback) {
+    Comentario.countDocuments(query,callback);
+  }

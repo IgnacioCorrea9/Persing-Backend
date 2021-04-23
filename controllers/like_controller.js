@@ -35,6 +35,17 @@ exports.getAll = function (req, res) {
   });
 };
 
+/** get function to get all Like. */
+exports.countByPublicacion = function (req, res) {
+  Like.count({publicacion:req.params.publicacion}, function (err, result) {
+    if (!err) {
+      return res.status(200).json({data: result});
+    } else {
+      return res.send(err); // 500 error
+    }
+  });
+};
+
 /** update function to update Like by id. */
 exports.update = function (req, res) {
   Like.updateById(req.params.id, req.body, function (err, result) {

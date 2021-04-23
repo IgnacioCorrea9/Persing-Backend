@@ -29,6 +29,17 @@ exports.getAllByPublicacion = function (req, res) {
   );
 };
 
+/** get function to count comentarios by publicacion. */
+exports.countByPublicacion = function (req, res) {
+  Comentario.count({publicacion:req.params.publicacion}, function (err, result) {
+    if (!err) {
+      return res.status(200).json({data: result});
+    } else {
+      return res.send(err); // 500 error
+    }
+  });
+};
+
 /** get function to get Comentario by id. */
 exports.create = function (req, res) {
   Comentario.create(req.body, function (err, result) {

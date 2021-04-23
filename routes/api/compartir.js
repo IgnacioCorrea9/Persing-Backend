@@ -23,6 +23,12 @@ module.exports = function (router) {
       passport.authenticate("jwt", { session: false }),
       CompartirController.get
     );
+
+    router.get(
+      "/compartir/publicacion/:publicacion",
+      passport.authenticate("jwt", { session: false }),
+      CompartirController.countByPublicacion
+    );
   
     /** Actualiza una compartir por id */
     router.put(

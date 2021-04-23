@@ -10,6 +10,12 @@ module.exports = function (router) {
       LikeController.getAll
     );
 
+    router.get(
+      "/like/publicacion/:publicacion",
+      passport.authenticate("jwt", { session: false }),
+      LikeController.countByPublicacion
+    );
+
       /** Trae todos los usuarios por tipo */
     router.post(
       "/like",
