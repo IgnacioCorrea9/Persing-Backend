@@ -7,7 +7,7 @@ const Like = require("../models/like");
 exports.get = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json({data: result});
+      return res.json({ data: result });
     } else {
       return res.send(err); // 500 error
     }
@@ -29,7 +29,11 @@ exports.getAllForUser = function (req, res) {
         element._doc["saved"] = saved;
         const search = req.query.search;
         if (search) {
-          result = result.filter(p => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+          result = result.filter(
+            (p) =>
+              p.titulo.toLowerCase().includes(search) ||
+              p.texto.toLowerCase().includes(search)
+          );
         }
       });
       return res.status(200).json(result);
@@ -42,8 +46,8 @@ exports.getAllForUser = function (req, res) {
 /** Gets publicaciones and evaluates for each one if user liked it or saved it and modifies model response.
  * FLiters by name and description if query available
  */
- exports.getAllDestacadasForUser = function (req, res) {
-  Publicacion.getAll({destacada: true}, function (err, result) {
+exports.getAllDestacadasForUser = function (req, res) {
+  Publicacion.getAll({ destacada: true }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
       result.forEach((element) => {
@@ -54,7 +58,11 @@ exports.getAllForUser = function (req, res) {
         element._doc["saved"] = saved;
         const search = req.query.search;
         if (search) {
-          result = result.filter(p => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+          result = result.filter(
+            (p) =>
+              p.titulo.toLowerCase().includes(search) ||
+              p.texto.toLowerCase().includes(search)
+          );
         }
       });
       return res.status(200).json(result);
@@ -162,7 +170,7 @@ exports.toggleLike = function (req, res) {
 exports.getAll = function (req, res) {
   Publicacion.getAll({}, function (err, result) {
     if (!err) {
-      return res.status(200).json(result);
+      return res.status(200).json({ data: result });
     } else {
       return res.status(400).send(err); // 500 error
     }
@@ -171,9 +179,9 @@ exports.getAll = function (req, res) {
 
 /** get function to get all Publicacion. */
 exports.getAllByEmpresa = function (req, res) {
-  Publicacion.getAll({empresa: req.params.empresa}, function (err, result) {
+  Publicacion.getAll({ empresa: req.params.empresa }, function (err, result) {
     if (!err) {
-      return res.status(200).json({data: result});
+      return res.status(200).json({ data: result });
     } else {
       return res.status(400).send(err); // 500 error
     }
@@ -184,9 +192,9 @@ exports.getAllByEmpresa = function (req, res) {
 exports.update = function (req, res) {
   Publicacion.updateById(req.params.id, req.body, function (err, result) {
     if (!err) {
-      return res.json({success: true, data: result});
+      return res.json({ success: true, data: result });
     } else {
-      return res.send({success: true, error: err}); // 500 error
+      return res.send({ success: true, error: err }); // 500 error
     }
   });
 };

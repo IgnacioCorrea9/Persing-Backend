@@ -15,6 +15,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "*",
     "cron": "^1.8.2",
+    "dotenv": "^10.0.0",
     "epayco-node": "0.0.5",
     "express": "*",
     "firebase-admin": "^8.1.0",

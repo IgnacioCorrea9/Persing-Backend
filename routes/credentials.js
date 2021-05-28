@@ -10,7 +10,10 @@ router.get(
   "/s3-credentials",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({ success:true, data: {accessKeyId: accessKeyId, secretAccessKey: secretAccessKey} });
+    res.json({
+      success: true,
+      data: { accessKeyId: accessKeyId, secretAccessKey: secretAccessKey },
+    });
   }
 );
 

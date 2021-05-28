@@ -12,6 +12,10 @@ const passport = require("passport");
 // const FIXER_API_KEY = process.env.FIXER_API_KEY;
 // const axios = require("axios").default;
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const database =
   process.env.MONGODB_URI ||
   "mongodb+srv://persing:persing2021@persing.nsfrd.mongodb.net/persing?retryWrites=true&w=majority";
@@ -68,6 +72,8 @@ require("./routes/api/comentario")(router);
 require("./routes/api/compartir")(router);
 require("./routes/api/click")(router);
 require("./routes/api/sector")(router);
+require("./routes/api/producto")(router);
+require("./routes/api/compra_producto")(router);
 
 // Import other routes and paths
 const users = require("./routes/users");
@@ -93,5 +99,3 @@ app.get("***", (req, res) => {
 app.listen(port, () => {
   console.log("Server started on port " + port);
 });
-
-
