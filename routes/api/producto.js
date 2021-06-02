@@ -1,50 +1,44 @@
 const { Router } = require("express");
 const passport = require("passport");
-const CompraProductoController = require("../../controllers/compra_producto_controller");
+const ProductoController = require("../../controllers/producto_controller");
 
 module.exports = function (router) {
   router.get(
-    "/compra-producto",
+    "/producto",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.getAll
+    ProductoController.getAll
   );
 
   router.get(
-    "/compra-producto/usuario/:usuario",
+    "/producto/sector/:sector",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.getAllByUser
-  );
-
-  router.get(
-    "/compra-producto/producto/:producto",
-    passport.authenticate("jwt", { session: false }),
-    CompraProductoController.getAllByProducto
+    ProductoController.getAllBySector
   );
 
   router.post(
-    "/compra-producto",
+    "/producto",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.create
+    ProductoController.create
   );
 
-  /** Gets compra-producto by id */
+  /** Gets producto by id */
   router.get(
-    "/compra-producto/:id",
+    "/producto/:id",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.get
+    ProductoController.get
   );
 
-  /** Actualiza una compra-producto por id */
+  /** Actualiza una producto por id */
   router.put(
-    "/compra-producto/:id",
+    "/producto/:id",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.update
+    ProductoController.update
   );
 
-  /** Elimina una compra-producto */
+  /** Elimina una producto */
   router.delete(
-    "/compra-producto/:id",
+    "/producto/:id",
     passport.authenticate("jwt", { session: false }),
-    CompraProductoController.delete
+    ProductoController.delete
   );
 };
