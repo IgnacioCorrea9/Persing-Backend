@@ -185,7 +185,7 @@ router.post("/authenticate", (req, res, next) => {
 
 router.post(
   "/change_pass",
-  passport.authenticate("jwt", { session: false }),
+  /* passport.authenticate("jwt", { session: false }), */
   (req, res, next) => {
     const email = req.user.email;
     const password = req.body.password;
@@ -205,8 +205,7 @@ router.post(
               if (err) {
                 return res.json({
                   success: false,
-                  msg:
-                    "Error al actualizar la contraseña, por favor intente de nuevo.",
+                  msg: "Error al actualizar la contraseña, por favor intente de nuevo.",
                 });
               }
               User.findOneAndUpdate(
@@ -234,33 +233,30 @@ router.post(
   }
 );
 
-router.post(
-  "/verify-email",
-  (req, res, next) => {
-    User.getUserByEmail(req.body.email, (error, result) => {
-      if (!error) {
-        if (result !== null) {
-          res.status(200).json({
-            success: false,
-            data: {message: "Email ya registrado"},
-            message: "Email ya registrado"
-          });
-        } else {
-          res.status(200).json({
-            success: true,
-            data: {message: "Available"},
-            message: "Available"
-          });
-        }
-      } else {
-        res.status(400).json({
+router.post("/verify-email", (req, res, next) => {
+  User.getUserByEmail(req.body.email, (error, result) => {
+    if (!error) {
+      if (result !== null) {
+        res.status(200).json({
           success: false,
-          data: {error: error.toString()},
-          message: error.toString()
+          data: { message: "Email ya registrado" },
+          message: "Email ya registrado",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: { message: "Available" },
+          message: "Available",
         });
       }
-    });
-  }
-);
+    } else {
+      res.status(400).json({
+        success: false,
+        data: { error: error.toString() },
+        message: error.toString(),
+      });
+    }
+  });
+});
 
 module.exports = router;
