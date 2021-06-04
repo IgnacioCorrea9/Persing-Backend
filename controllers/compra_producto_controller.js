@@ -46,7 +46,7 @@ exports.getAllByUser = function (req, res) {
 exports.create = function (req, res) {
   CompraProducto.create(req.body, function (err, result) {
     if (!err) {
-      Product.get({ _id: req.body.producto }, function (err, producto) {
+      Producto.get({ _id: req.body.producto }, function (err, producto) {
         if (!err) {
           if (producto) {
             producto.compras++;
