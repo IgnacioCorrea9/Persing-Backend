@@ -1,46 +1,29 @@
 const mongoose = require("mongoose");
 
-const PublicacionSchema = mongoose.Schema({
-  empresa: {
+const DestacadoSchema = mongoose.Schema({
+  seccion: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Empresa",
-    required: false,
-  },
-  sector: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Sector",
+    ref: "Seccion",
     required: false,
   },
   titulo: { type: String, required: false },
-  link: { type: String, required: false },
   texto: { type: String, required: false },
   foto: { type: String, required: false },
   video: { type: String, required: false },
   likes: [
     { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
   ],
-  guardados: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
-  ],
   comentarios: { type: Number, required: false, default: 0 },
   alcanzados: { type: Number, required: false, default: 0 },
-  inversion: { type: Number, required: false },
-  destacada: { type: Boolean, required: true, default: false },
-  vtr: { type: String, required: false },
-  engagement: { type: String, required: false },
-  cpc: { type: String, required: false },
-  cpm: { type: String, required: false },
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
-PublicacionSchema.statics = {
+DestacadoSchema.statics = {
   get: function (query, callback) {
-    this.findOne(query, { password: 0 })
-      .populate("empresa sector")
-      .exec(callback);
+    this.findOne(query, { password: 0 }).populate("seccion").exec(callback);
   },
   getAll: function (query, callback) {
-    this.find(query, { password: 0 }).populate("empresa sector").exec(callback);
+    this.find(query, { password: 0 }).populate("seccion").exec(callback);
   },
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
@@ -55,8 +38,8 @@ PublicacionSchema.statics = {
     this.findOneAndRemove(removeData, callback);
   },
   create: function (data, callback) {
-    const user = new this(data);
-    user.save(callback);
+    const destacado = new this(data);
+    destacado.save(callback);
   },
 
   getNoPopulate: function (query, callback) {
@@ -64,7 +47,7 @@ PublicacionSchema.statics = {
   },
 };
 
-const Publicacion = (module.exports = mongoose.model(
-  "Publicacion",
-  PublicacionSchema
+const Destacado = (module.exports = mongoose.model(
+  "Destacado",
+  DestacadoSchema
 ));

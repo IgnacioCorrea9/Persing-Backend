@@ -23,6 +23,7 @@ exports.getAllForUser = function (req, res) {
       const userId = req.params.user;
       result.forEach((element) => {
         var liked = element.likes.includes(userId);
+        console.log(element.texto, liked);
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
         var saved = element.guardados.includes(userId);
@@ -36,7 +37,23 @@ exports.getAllForUser = function (req, res) {
           );
         }
       });
+      console.log(result);
       return res.status(200).json(result);
+    } else {
+      return res.status(400).send(err); // 500 error
+    }
+  });
+};
+
+/**
+ * Gets all publicaciones destacadas
+ * @param {*} req
+ * @param {*} res
+ */
+exports.getAllDestacadas = function (req, res) {
+  Publicacion.getAll({ destacada: true }, function (err, result) {
+    if (!err) {
+      return res.status(200).json({ data: result });
     } else {
       return res.status(400).send(err); // 500 error
     }
@@ -152,6 +169,7 @@ exports.toggleLike = function (req, res) {
           };
           Like.create(like, function (err2, result2) {
             if (!err2) {
+              console.log(result2);
               console.log("created like");
             }
           });

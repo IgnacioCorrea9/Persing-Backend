@@ -1,36 +1,36 @@
 const { Router } = require("express");
 const passport = require("passport");
-const SeccionController = require("../../controllers/seccion_controller");
+const SectorController = require("../../controllers/sector_controller");
 
 module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
-  router.get("/seccion", SeccionController.getAll);
+  router.get("/sector", SectorController.getAll);
 
   /** Trae todos los usuarios por tipo */
   router.post(
-    "/seccion",
+    "/sector",
     /* passport.authenticate("jwt", { session: false }), */
-    SeccionController.create
+    SectorController.create
   );
 
-  /** Gets seccion by id */
+  /** Gets sector by id */
   router.get(
-    "/seccion/:id",
+    "/sector/:id",
     /* passport.authenticate("jwt", { session: false }), */
-    SeccionController.get
+    SectorController.get
   );
 
-  /** Actualiza una seccion por id */
+  /** Actualiza una sector por id */
   router.put(
-    "/seccion/:id",
+    "/sector/:id",
     /* passport.authenticate("jwt", { session: false }), */
-    SeccionController.update
+    SectorController.update
   );
 
-  /** Elimina una seccion */
+  /** Elimina una sector */
   router.delete(
-    "/seccion/:id",
+    "/sector/:id",
     /* passport.authenticate("jwt", { session: false }), */
-    SeccionController.delete
+    SectorController.delete
   );
 };

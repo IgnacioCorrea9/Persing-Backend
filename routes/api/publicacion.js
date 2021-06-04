@@ -17,6 +17,12 @@ module.exports = function (router) {
   );
 
   router.get(
+    "/publicacion/destacadas",
+    /* passport.authenticate("jwt", { session: false }), */
+    PublicacionController.getAllDestacadas
+  );
+
+  router.get(
     "/publicacion",
     /* passport.authenticate("jwt", { session: false }), */
     PublicacionController.getAll

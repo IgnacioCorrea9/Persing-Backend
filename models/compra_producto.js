@@ -11,6 +11,7 @@ const CompraProductoSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
+  createdAt: { type: Date, required: false, default: Date.now },
 });
 
 CompraProductoSchema.statics = {

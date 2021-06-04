@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const SectorSchema = mongoose.Schema({
+const SeccionSchema = mongoose.Schema({
   nombre: { type: String, required: true },
-  descripcion: [{ type: String, required: true }],
+  descripcion: { type: String, required: true },
   icono: {
     type: String,
     required: false,
@@ -12,7 +12,7 @@ const SectorSchema = mongoose.Schema({
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
-SectorSchema.statics = {
+SeccionSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 }).exec(callback);
   },
@@ -32,8 +32,8 @@ SectorSchema.statics = {
     this.findOneAndRemove(removeData, callback);
   },
   create: function (data, callback) {
-    const user = new this(data);
-    user.save(callback);
+    const seccion = new this(data);
+    seccion.save(callback);
   },
 
   getNoPopulate: function (query, callback) {
@@ -41,4 +41,4 @@ SectorSchema.statics = {
   },
 };
 
-const Sector = (module.exports = mongoose.model("Sector", SectorSchema));
+const Seccion = (module.exports = mongoose.model("Seccion", SeccionSchema));
