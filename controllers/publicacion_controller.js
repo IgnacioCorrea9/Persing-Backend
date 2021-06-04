@@ -205,6 +205,17 @@ exports.getAllByEmpresa = function (req, res) {
   });
 };
 
+/** get function to get all Publicacion. */
+exports.getAllBySector = function (req, res) {
+  Publicacion.getAll({ sector: req.params.sector }, function (err, result) {
+    if (!err) {
+      return res.status(200).json({ success: true, data: result });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
 /** update function to update Publicacion by id. */
 exports.update = function (req, res) {
   Publicacion.updateById(req.params.id, req.body, function (err, result) {

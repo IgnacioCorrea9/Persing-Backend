@@ -35,6 +35,12 @@ module.exports = function (router) {
   );
 
   router.get(
+    "/publicacion/sector/:sector",
+    /* passport.authenticate("jwt", { session: false }), */
+    PublicacionController.getAllBySector
+  );
+
+  router.get(
     "/publicacion/guardado/:user",
     /* passport.authenticate("jwt", { session: false }), */
     PublicacionController.getAllSavedByUser
