@@ -46,17 +46,28 @@ exports.getAllByUser = function (req, res) {
 exports.create = function (req, res) {
   CompraProducto.create(req.body, function (err, result) {
     if (!err) {
-      Producto.updateById(
-        req.body.producto,
-        { compras: result2._doc.compras + 1 },
-        function (err3, result3) {
-          if (!err3) {
-            return res.status(201).json(result);
+      Product.get({ _id: req.body.producto }, function (err, producto) {
+        if (!err) {
+          if (producto) {
+            producto.compras++;
+            Producto.updateById(
+              req.body.producto,
+              producto,
+              function (err3, result3) {
+                if (!err3) {
+                  return res.status(201).json(result);
+                } else {
+                  return res.status(400).send({ error: err3 }); // 500 error
+                }
+              }
+            );
           } else {
-            return res.status(400).send({ error: err3 }); // 500 error
+            return res.status(400).send({ msg: "Producto no existente" });
           }
+        } else {
+          return res.status(400).send({ error: err }); // 500 error
         }
-      );
+      });
     } else {
       return res.status(400).send({ error: err }); // 500 error
     }
