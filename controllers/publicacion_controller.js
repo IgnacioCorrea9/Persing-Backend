@@ -7,9 +7,9 @@ const Like = require("../models/like");
 exports.get = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json({ data: result });
+      return res.json({ success: true, data: result });
     } else {
-      return res.send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -37,10 +37,9 @@ exports.getAllForUser = function (req, res) {
           );
         }
       });
-      console.log(result);
-      return res.status(200).json(result);
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -53,9 +52,9 @@ exports.getAllForUser = function (req, res) {
 exports.getAllDestacadas = function (req, res) {
   Publicacion.getAll({ destacada: true }, function (err, result) {
     if (!err) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -82,9 +81,9 @@ exports.getAllDestacadasForUser = function (req, res) {
           );
         }
       });
-      return res.status(200).json(result);
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -110,13 +109,13 @@ exports.toggleSave = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
-          return res.status(200).json(result);
+          return res.status(200).json({ success: true, data: result });
         } else {
-          return res.status(400).send({ error: err }); // 500 error
+          return res.status(500).send({ success: false, error: err }); // 500 error
         }
       });
     } else {
-      return res.status(400).send({ error: err }); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -134,9 +133,9 @@ exports.getAllSavedByUser = function (req, res) {
           var saved = element.guardados.includes(userId);
           element._doc["saved"] = saved;
         });
-        return res.status(200).json(result);
+        return res.status(200).json({ success: true, data: result });
       } else {
-        return res.status(400).send({ error: err }); // 500 error
+        return res.status(500).send({ success: false, error: err }); // 500 error
       }
     }
   );
@@ -173,13 +172,13 @@ exports.toggleLike = function (req, res) {
               console.log("created like");
             }
           });
-          return res.status(200).json(result);
+          return res.status(200).json({ success: true, data: result });
         } else {
-          return res.status(400).send({ error: err }); // 500 error
+          return res.status(500).send({ success: false, error: err }); // 500 error
         }
       });
     } else {
-      return res.status(400).send({ error: err }); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -188,9 +187,9 @@ exports.toggleLike = function (req, res) {
 exports.getAll = function (req, res) {
   Publicacion.getAll({}, function (err, result) {
     if (!err) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -199,9 +198,9 @@ exports.getAll = function (req, res) {
 exports.getAllByEmpresa = function (req, res) {
   Publicacion.getAll({ empresa: req.params.empresa }, function (err, result) {
     if (!err) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -210,9 +209,9 @@ exports.getAllByEmpresa = function (req, res) {
 exports.update = function (req, res) {
   Publicacion.updateById(req.params.id, req.body, function (err, result) {
     if (!err) {
-      return res.json({ success: true, data: result });
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.send({ success: true, error: err }); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -223,7 +222,7 @@ exports.create = function (req, res) {
     if (!err) {
       return res.status(201).json({ success: true, data: result });
     } else {
-      return res.status(400).send({ success: false, error: err }); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -232,9 +231,9 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
   Publicacion.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.send(err); // 500 error
+      return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
 };
