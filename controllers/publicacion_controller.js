@@ -23,7 +23,6 @@ exports.getAllForUser = function (req, res) {
       const userId = req.params.user;
       result.forEach((element) => {
         var liked = element.likes.includes(userId);
-        console.log(element.texto, liked);
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
         var saved = element.guardados.includes(userId);
