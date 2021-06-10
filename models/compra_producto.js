@@ -17,11 +17,13 @@ const CompraProductoSchema = mongoose.Schema({
 CompraProductoSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 })
+      .sort("-createdAt")
       .populate("producto usuario")
       .exec(callback);
   },
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
+      .sort("-createdAt")
       .populate("producto usuario")
       .exec(callback);
   },

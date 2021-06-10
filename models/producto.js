@@ -16,10 +16,16 @@ const ProductoSchema = mongoose.Schema({
 
 ProductoSchema.statics = {
   get: function (query, callback) {
-    this.findOne(query, { password: 0 }).populate("sector").exec(callback);
+    this.findOne(query, { password: 0 })
+      .sort("-createdAt")
+      .populate("sector")
+      .exec(callback);
   },
   getAll: function (query, callback) {
-    this.find(query, { password: 0 }).populate("sector").exec(callback);
+    this.find(query, { password: 0 })
+      .sort("-createdAt")
+      .populate("sector")
+      .exec(callback);
   },
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
