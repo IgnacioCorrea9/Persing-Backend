@@ -41,6 +41,10 @@ exports.getAllForUser = function (req, res) {
                   p.texto.toLowerCase().includes(search)
               );
             }
+            if (req.query.intereses) {
+              const intereses = JSON.parse(req.query.intereses);
+              usuario.intereses = intereses;
+            }
             result = result.filter((p) => {
               return (
                 p.sector && usuario.intereses.includes(p.sector._id.toString())
