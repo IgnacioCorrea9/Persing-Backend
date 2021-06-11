@@ -2,6 +2,7 @@
 
 const Publicacion = require("../models/publicacion");
 const Like = require("../models/like");
+const User = require("../models/user");
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -21,22 +22,35 @@ exports.getAllForUser = function (req, res) {
   Publicacion.getAll({}, function (err, result) {
     if (!err) {
       const userId = req.params.user;
-      result.forEach((element) => {
-        var liked = element.likes.includes(userId);
-        element._doc["liked"] = liked;
-        element._doc["likes"] = element.likes.length;
-        var saved = element.guardados.includes(userId);
-        element._doc["saved"] = saved;
-        const search = req.query.search;
-        if (search) {
-          result = result.filter(
-            (p) =>
-              p.titulo.toLowerCase().includes(search) ||
-              p.texto.toLowerCase().includes(search)
-          );
+      User.get({ _id: userId }, function (err2, usuario) {
+        if (!err) {
+          if (usuario) {
+            console.log(usuario);
+            result.forEach((element) => {
+              var liked = element.likes.includes(userId);
+              element._doc["liked"] = liked;
+              element._doc["likes"] = element.likes.length;
+              var saved = element.guardados.includes(userId);
+              element._doc["saved"] = saved;
+            });
+            const search = req.query.search;
+            if (search) {
+              result = result.filter(
+                (p) =>
+                  p.titulo.toLowerCase().includes(search) ||
+                  p.texto.toLowerCase().includes(search)
+              );
+            }
+            result = result.filter((p) => {
+              return (
+                p.sector && usuario.intereses.includes(p.sector._id.toString())
+              );
+            });
+            console.log(result.length);
+            return res.status(200).json({ success: true, data: result });
+          }
         }
       });
-      return res.status(200).json({ success: true, data: result });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }
