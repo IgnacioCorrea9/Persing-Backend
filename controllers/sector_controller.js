@@ -40,7 +40,7 @@ exports.update = function (req, res) {
 exports.create = function (req, res) {
   Sector.create(req.body, function (err, result) {
     if (!err) {
-      return res.status(200).json(result);
+      return res.status(201).json({ success: true, data: result });
     } else {
       return res.status(400).send(err); // 500 error
     }
