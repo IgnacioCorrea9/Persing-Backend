@@ -42,7 +42,11 @@ exports.getAllForUser = function (req, res) {
               );
             }
             if (req.query.intereses) {
-              const intereses = JSON.parse(req.query.intereses);
+              const intereses = req.query.intereses
+                .replace(/\s/g, "")
+                .substring(1)
+                .slice(0, -1)
+                .split(",");
               usuario.intereses = intereses;
             }
             result = result.filter((p) => {
