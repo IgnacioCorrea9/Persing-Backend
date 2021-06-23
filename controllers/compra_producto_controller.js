@@ -55,21 +55,23 @@ exports.create = function (req, res) {
               producto,
               function (err3, result3) {
                 if (!err3) {
-                  return res.status(201).json(result);
+                  return res.json({ data: result, success: true });
                 } else {
-                  return res.status(400).send({ error: err3 }); // 500 error
+                  return res.status(400).send({ success: false, error: err3 }); // 500 error
                 }
               }
             );
           } else {
-            return res.status(400).send({ msg: "Producto no existente" });
+            return res
+              .status(400)
+              .send({ success: false, msg: "Producto no existente" });
           }
         } else {
-          return res.status(400).send({ error: err }); // 500 error
+          return res.status(400).send({ success: false, error: err }); // 500 error
         }
       });
     } else {
-      return res.status(400).send({ error: err }); // 500 error
+      return res.status(400).send({ success: false, error: err }); // 500 error
     }
   });
 };
