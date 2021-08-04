@@ -37,7 +37,7 @@ exports.getAllBySector = function (req, res) {
 };
 
 /** get function to get all Producto en descuento. */
-exports.getAllBySector = function (req, res) {
+exports.getAllBDescuento = function (req, res) {
 	Producto.getAll({ descuento: true }, function (err, result) {
 		if (!err) {
 			return res.json({ success: true, data: result });
