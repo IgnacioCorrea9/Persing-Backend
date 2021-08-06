@@ -29,7 +29,7 @@ module.exports = function (router) {
 	);
 
 	router.get(
-		"/publicacion/empresa/:empresa",
+		"/publicacion/empresa/:empresa/usuario/:user",
 		/* passport.authenticate("jwt", { session: false }), */
 		PublicacionController.getAllByEmpresa
 	);

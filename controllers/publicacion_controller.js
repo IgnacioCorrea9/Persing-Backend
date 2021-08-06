@@ -234,7 +234,27 @@ exports.getAll = function (req, res) {
 exports.getAllByEmpresa = function (req, res) {
 	Publicacion.getAll({ empresa: req.params.empresa }, function (err, result) {
 		if (!err) {
-			return res.status(200).json({ success: true, data: result });
+			const userId = req.params.user;
+			User.get({ _id: userId }, function (err2, usuario) {
+				if (!err) {
+					if (usuario) {
+						console.log(usuario);
+						result.forEach((element) => {
+							var liked = element.likes.includes(userId);
+							element._doc["liked"] = liked;
+							element._doc["likes"] = element.likes.length;
+							var saved = element.guardados.includes(userId);
+							element._doc["saved"] = saved;
+						});
+						console.log(result.length);
+						return res.status(200).json({ success: true, data: result });
+					}
+				} else {
+					return res
+						.status(500)
+						.send({ success: false, error: "User not found" });
+				}
+			});
 		} else {
 			return res.status(500).send({ success: false, error: err }); // 500 error
 		}
