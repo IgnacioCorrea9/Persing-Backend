@@ -95,6 +95,58 @@ exports.getAllNuevas = function (req, res) {
 	});
 };
 
+/**
+ * Gets all publicaciones nuevas
+ * @param {*} req
+ * @param {*} res
+ */
+exports.getNuevasByUser = function (req, res) {
+	Publicacion.getAll({ nueva: true }, function (err, result) {
+		if (!err) {
+			const userId = req.params.user;
+			User.get({ _id: userId }, function (err2, usuario) {
+				if (!err) {
+					if (usuario) {
+						console.log(usuario);
+						result.forEach((element) => {
+							var liked = element.likes.includes(userId);
+							element._doc["liked"] = liked;
+							element._doc["likes"] = element.likes.length;
+							var saved = element.guardados.includes(userId);
+							element._doc["saved"] = saved;
+						});
+						const search = req.query.search;
+						if (search) {
+							result = result.filter(
+								(p) =>
+									p.titulo.toLowerCase().includes(search) ||
+									p.texto.toLowerCase().includes(search)
+							);
+						}
+						if (req.query.intereses) {
+							const intereses = req.query.intereses
+								.replace(/\s/g, "")
+								.substring(1)
+								.slice(0, -1)
+								.split(",");
+							usuario.intereses = intereses;
+						}
+						result = result.filter((p) => {
+							return (
+								p.sector && usuario.intereses.includes(p.sector._id.toString())
+							);
+						});
+						console.log(result.length);
+						return res.status(200).json({ success: true, data: result });
+					}
+				}
+			});
+		} else {
+			return res.status(500).send({ success: false, error: err }); // 500 error
+		}
+	});
+};
+
 /** Gets publicaciones and evaluates for each one if user liked it or saved it and modifies model response.
  * FLiters by name and description if query available
  */

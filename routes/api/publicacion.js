@@ -77,6 +77,12 @@ module.exports = function (router) {
 		PublicacionController.getAllNuevas
 	);
 
+	router.get(
+		"/publicacion-nuevas/user/:user",
+		/* passport.authenticate("jwt", { session: false }), */
+		PublicacionController.getNuevasByUser
+	);
+
 	/** Actualiza una publicacion por id */
 	router.put(
 		"/publicacion/:id",
