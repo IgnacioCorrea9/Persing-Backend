@@ -204,7 +204,8 @@ exports.sumInteractions = function (req, res) {
 					)
 				).toFixed(2);
 				let newCreditos = currentCreditos + credits;
-				console.log(newRankRecompensa, newCreditos);
+				let total = recompensa.usuario.creditos + credits;
+				console.log(newRankRecompensa, currentCreditos, newCreditos);
 				if (newRankRecompensa > 10) {
 					newRankRecompensa = 10;
 				}
@@ -217,7 +218,7 @@ exports.sumInteractions = function (req, res) {
 				);
 				User.updateById(
 					recompensa.usuario._id,
-					{ creditos: newCreditos },
+					{ creditos: total },
 					await function (err, resultUsuario) {
 						console.log(resultUsuario);
 					}
