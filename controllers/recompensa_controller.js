@@ -40,6 +40,42 @@ const saveValues = [
 	["save", 1.0, 0.8, 0.6, 0.4, 0.2],
 ];
 
+const viewsValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["0-2.99", 20, 0, 0, 0, 0],
+	["3-5.99", 40, 20, 0, 0, 0],
+	["6-9.99", 60, 40, 20, 0, 0],
+	["10-14.99", 80, 60, 40, 20, 0],
+	["15-19.99", 100, 80, 60, 40, 20],
+	["20-29.99", 120, 100, 80, 60, 40],
+	["30-100000000", 150, 120, 100, 80, 60],
+];
+
+const likeValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["like", 20, 0, 0, 0, 0],
+];
+
+const shareValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["share", 150, 120, 100, 80, 60],
+];
+
+const commentValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["comment", 60, 40, 20, 0, 0],
+];
+
+const clickValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["click", 120, 100, 80, 60, 40],
+];
+
+const saveValuesCreditos = [
+	["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
+	["save", 100, 80, 60, 40, 20],
+];
+
 /** get function to get Recompensa by id. */
 exports.get = function (req, res) {
 	Recompensa.get({ _id: req.params.id }, function (err, result) {
@@ -51,8 +87,11 @@ exports.get = function (req, res) {
 	});
 };
 
-function getEarningsFromInteraction(factor) {
-	return 0.6 - 0.006 * Math.pow(factor, 2);
+function getEarningsFromInteraction(factor, currentRank, totalRank) {
+	return (
+		currentRank +
+		factor * (totalRank / 30 - (totalRank / 3000) * Math.pow(currentRank, 2))
+	);
 }
 
 exports.sumInteractions = function (req, res) {
@@ -77,10 +116,12 @@ exports.sumInteractions = function (req, res) {
 					);
 				}
 				let currentRank = recompensa.ranking;
+				let currentCreditos = recompensa.creditos;
 				console.log("current rank: " + currentRank);
 				let interaccion = req.body.interaccion;
 				console.log("interaction to evaluate: " + interaccion);
 				var points;
+				var credits;
 				switch (interaccion) {
 					case "like":
 						for (var i = 1; i < likeValues[0].length; i++) {
@@ -94,6 +135,7 @@ exports.sumInteractions = function (req, res) {
 							if (currentRank >= lower && currentRank <= higher) {
 								console.log("found index: " + i);
 								points = likeValues[1][i];
+								credits = likeValuesCreditos[1][i];
 								break;
 							}
 						}
@@ -110,6 +152,7 @@ exports.sumInteractions = function (req, res) {
 							if (currentRank >= lower && currentRank <= higher) {
 								console.log("found index: " + i);
 								points = commentValues[1][i];
+								credits = commentValuesCreditos[1][i];
 								break;
 							}
 						}
@@ -126,6 +169,7 @@ exports.sumInteractions = function (req, res) {
 							if (currentRank >= lower && currentRank <= higher) {
 								console.log("found index: " + i);
 								points = saveValues[1][i];
+								credits = saveValuesCreditos[1][i];
 								break;
 							}
 						}
@@ -142,6 +186,7 @@ exports.sumInteractions = function (req, res) {
 							if (currentRank >= lower && currentRank <= higher) {
 								console.log("found index: " + i);
 								points = shareValues[1][i];
+								credits = shareValuesCreditos[1][i];
 								break;
 							}
 						}
@@ -149,19 +194,32 @@ exports.sumInteractions = function (req, res) {
 				}
 
 				console.log("points summed for " + interaccion + ": " + points);
-
+				console.log("credits summed for " + interaccion + ": " + credits);
 				let newRankRecompensa = (
-					currentRank + getEarningsFromInteraction(points)
+					currentRank +
+					getEarningsFromInteraction(
+						points,
+						currentRank,
+						recompensa.usuario.calificacionApp || 1
+					)
 				).toFixed(2);
-				console.log(newRankRecompensa);
+				let newCreditos = currentCreditos + credits;
+				console.log(newRankRecompensa, newCreditos);
 				if (newRankRecompensa > 10) {
 					newRankRecompensa = 10;
 				}
 				Recompensa.updateById(
 					recompensa._id,
-					{ ranking: newRankRecompensa },
+					{ ranking: newRankRecompensa, creditos: newCreditos },
 					await function (error, resultRecompensa) {
 						console.log(resultRecompensa);
+					}
+				);
+				User.updateById(
+					recompensa.usuario._id,
+					{ creditos: newCreditos },
+					await function (err, resultUsuario) {
+						console.log(resultUsuario);
 					}
 				);
 				return res.status(200).json("saved interaction");

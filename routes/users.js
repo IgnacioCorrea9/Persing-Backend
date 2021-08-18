@@ -32,23 +32,45 @@ router.post("/register", (req, res, next) => {
 			creditos: req.body.creditos || 0,
 			intereses: req.body.intereses || [],
 		});
+		newUser["calificacionApp"] = 1.5;
 		if (req.body.empresa) {
 			newUser["empresa"] = req.body.empresa;
 		}
 		if (req.body.genero) {
 			newUser["genero"] = req.body.genero;
+			newUser["calificacionApp"] += 0.5;
 		}
 		if (req.body.estrato) {
 			newUser["estrato"] = req.body.estrato;
+			newUser["calificacionApp"] += 1;
 		}
 		if (req.body.nivelEducativo) {
 			newUser["nivelEducativo"] = req.body.nivelEducativo;
+			newUser["calificacionApp"] += 1.5;
 		}
-		if (req.body.profesion) {
-			newUser["profesion"] = req.body.profesion;
+		if (req.body.ocupacion) {
+			newUser["ocupacion"] = req.body.ocupacion;
+			newUser["calificacionApp"] += 2;
 		}
 		if (req.body.hijos) {
 			newUser["hijos"] = req.body.hijos;
+			newUser["calificacionApp"] += 0.5;
+		}
+		if (req.body.cantidadHijos) {
+			newUser["cantidadHijos"] = req.body.cantidadHijos;
+			newUser["calificacionApp"] += 0.5;
+		}
+		if (req.body.mascotas) {
+			newUser["mascotas"] = req.body.mascotas;
+			newUser["calificacionApp"] += 0.5;
+		}
+		if (req.body.cantidadMascotas) {
+			newUser["cantidadMascotas"] = req.body.cantidadMascotas;
+			newUser["calificacionApp"] += 0.5;
+		}
+		if (req.body.estadoCivil) {
+			newUser["estadoCivil"] = req.body.estadoCivil;
+			newUser["calificacionApp"] += 1.5;
 		}
 		User.addUser(newUser, async (err, user) => {
 			if (err) {
