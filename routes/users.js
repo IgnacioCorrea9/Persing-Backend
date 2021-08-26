@@ -16,6 +16,7 @@ const sector = require("../models/sector");
 sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 router.post("/register", (req, res, next) => {
+	console.log(req.body);
 	if (
 		req.body.password &&
 		req.body.nombre &&
