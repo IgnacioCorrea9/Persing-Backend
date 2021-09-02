@@ -232,6 +232,7 @@ exports.getAllSavedByUser = function (req, res) {
 exports.toggleLike = function (req, res) {
 	Publicacion.get({ _id: req.params.id }, function (err, result) {
 		if (!err) {
+			console.log("PUBLICACION DE LIKE" + result);
 			const userId = req.body.user;
 			const type = req.body.type;
 			const arrayLikes = result._doc.likes;
