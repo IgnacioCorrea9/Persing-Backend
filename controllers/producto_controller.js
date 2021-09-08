@@ -2,6 +2,7 @@
 
 const Producto = require("../models/producto");
 const Like = require("../models/like");
+const _ = require("lodash");
 
 /** get function to get Producto by id. */
 exports.get = function (req, res) {
@@ -29,6 +30,7 @@ exports.getAll = function (req, res) {
 exports.getAllBySector = function (req, res) {
 	Producto.getAll({ sector: req.params.sector }, function (err, result) {
 		if (!err) {
+			result = _.shuffle(result);
 			return res.json({ success: true, data: result });
 		} else {
 			return res.status(400).send(err); // 500 error
@@ -40,6 +42,7 @@ exports.getAllBySector = function (req, res) {
 exports.getAllBDescuento = function (req, res) {
 	Producto.getAll({ descuento: true }, function (err, result) {
 		if (!err) {
+			result = _.shuffle(result);
 			return res.json({ success: true, data: result });
 		} else {
 			return res.status(400).send(err); // 500 error

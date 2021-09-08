@@ -2,6 +2,7 @@
 
 const Destacado = require("../models/destacado");
 const Like = require("../models/like");
+const _ = require("lodash");
 
 /** get function to get Destacado by id. */
 exports.get = function (req, res) {
