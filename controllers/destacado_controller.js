@@ -35,6 +35,7 @@ exports.getAllForUser = function (req, res) {
 					);
 				}
 			});
+			result = _.shuffle(result);
 			return res.json({ success: true, data: result });
 		} else {
 			return res.status(500).send({ success: false, error: err }); // 500 error
@@ -113,6 +114,7 @@ exports.getAllBySeccion = function (req, res) {
 					);
 				}
 			});
+			result = _.shuffle(result);
 			return res.json({ success: true, data: result });
 		} else {
 			return res.status(500).send({ success: false, error: err }); // 500 error

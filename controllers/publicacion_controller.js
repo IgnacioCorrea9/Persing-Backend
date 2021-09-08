@@ -3,6 +3,7 @@
 const Publicacion = require("../models/publicacion");
 const Like = require("../models/like");
 const User = require("../models/user");
+const _ = require("lodash");
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -54,7 +55,7 @@ exports.getAllForUser = function (req, res) {
 								p.sector && usuario.intereses.includes(p.sector._id.toString())
 							);
 						});
-						console.log(result.length);
+						result = _.shuffle(result);
 						return res.status(200).json({ success: true, data: result });
 					}
 				}
@@ -136,7 +137,7 @@ exports.getNuevasByUser = function (req, res) {
 								p.sector && usuario.intereses.includes(p.sector._id.toString())
 							);
 						});
-						console.log(result.length);
+						result = _.shuffle(result);
 						return res.status(200).json({ success: true, data: result });
 					}
 				}
@@ -169,6 +170,7 @@ exports.getAllDestacadasForUser = function (req, res) {
 					);
 				}
 			});
+			result = _.shuffle(result);
 			return res.status(200).json({ success: true, data: result });
 		} else {
 			return res.status(500).send({ success: false, error: err }); // 500 error
