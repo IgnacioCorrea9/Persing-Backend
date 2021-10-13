@@ -34,6 +34,6 @@ module.exports = function (router) {
   router.delete(
     "/user/:id",
     /* passport.authenticate("jwt", { session: false }), */
-    UserController.delete
+    UserController.deleteById
   );
 };

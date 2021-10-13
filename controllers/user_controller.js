@@ -6,6 +6,7 @@ var User = require("../models/user");
 exports.get = function (req, res) {
 	User.get({ _id: req.user._id }, function (err, result) {
 		if (!err) {
+			
 			return res.json(result);
 		} else {
 			return res.send(err); // 500 error
@@ -50,7 +51,6 @@ exports.getAll = function (req, res) {
 exports.update = function (req, res) {
 	User.updateById(req.params.id, req.body, function (err, result) {
 		if (!err) {
-			console.log(result);
 			return res.status(200).json(result);
 		} else {
 			return res.status(400).send({ error: err }); // 500 error
@@ -59,8 +59,8 @@ exports.update = function (req, res) {
 };
 
 /** remove function to remove User by id. */
-exports.delete = function (req, res) {
-	User.removeById({ _id: req.params.id }, function (err, result) {
+exports.deleteById = function (req, res) {
+	User.deleteUserById(req.params.id, { deletedAt: Date.now() }, function (err, result) {
 		if (!err) {
 			return res.json(result);
 		} else {

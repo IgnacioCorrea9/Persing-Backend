@@ -35,6 +35,7 @@ const UserSchema = mongoose.Schema({
 		required: true,
 		enum: ["consumidor", "administrador", "superadministrador"],
 	},
+	deletedAt: { type: Date, required: false},
 	createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -47,6 +48,7 @@ UserSchema.statics = {
 			.populate("intereses empresa")
 			.exec(callback);
 	},
+
 	updateById: function (id, updateData, callback) {
 		this.findOneAndUpdate(
 			{ _id: id },
@@ -56,9 +58,10 @@ UserSchema.statics = {
 		);
 	},
 
-	removeById: function (removeData, callback) {
-		this.findOneAndRemove(removeData, callback);
-	},
+	// removeById: function (removeData, callback) {
+	// 	this.findOneAndRemove(removeData, callback);
+	// },
+
 	create: function (data, callback) {
 		const user = new this(data);
 		user.save(callback);
@@ -67,6 +70,14 @@ UserSchema.statics = {
 	getNoPopulate: function (query, callback) {
 		this.findOne(query, { password: 0 }).exec(callback);
 	},
+
+	deleteUserById: function(id, update, callback){
+		this.findOneAndUpdate(
+			{ _id: id }, 
+			{ $set: update },
+			{ new: true }, 
+		callback)
+	}
 };
 
 const User = (module.exports = mongoose.model("User", UserSchema));
@@ -90,8 +101,6 @@ module.exports.addUser = function (newUser, callback) {
 			newUser.password = hash;
 			var UserSchema = mongoose.model("User");
 			UserSchema.find({ email: newUser.email }, (err3, res) => {
-				console.log("printing resp of find");
-				console.log(res);
 				if (res.length == 0) {
 					newUser.save(callback);
 				} else {
