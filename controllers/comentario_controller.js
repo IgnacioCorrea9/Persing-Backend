@@ -20,7 +20,6 @@ exports.getAllByPublicacion = function (req, res) {
     { publicacion: req.params.publicacion },
     function (err, result) {
       if (!err) {
-        console.log(result);
         return res.status(200).json(result);
       } else {
         return res.status(400).send({ error: err }); // 500 error
