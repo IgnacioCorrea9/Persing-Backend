@@ -25,6 +25,7 @@ mongoose.connect(database, {
   autoIndex: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false
 });
 // On db connection
 mongoose.connection.on("connected", () => {
