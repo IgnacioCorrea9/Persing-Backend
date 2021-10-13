@@ -35,7 +35,7 @@ const UserSchema = mongoose.Schema({
 		required: true,
 		enum: ["consumidor", "administrador", "superadministrador"],
 	},
-	deletedAt: { type: Date, required: false},
+	deletedAt: { type: Date, required: false },
 	createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -43,6 +43,7 @@ UserSchema.statics = {
 	get: function (query, callback) {
 		this.findOne(query, { password: 0 }).populate("empresa").exec(callback);
 	},
+
 	getAll: function (query, callback) {
 		this.find(query, { password: 0 })
 			.populate("intereses empresa")
@@ -71,12 +72,12 @@ UserSchema.statics = {
 		this.findOne(query, { password: 0 }).exec(callback);
 	},
 
-	deleteUserById: function(id, update, callback){
+	deleteUserById: function (id, update, callback) {
 		this.findOneAndUpdate(
-			{ _id: id }, 
+			{ _id: id },
 			{ $set: update },
-			{ new: true }, 
-		callback)
+			{ new: true },
+			callback)
 	}
 };
 
