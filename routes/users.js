@@ -216,7 +216,7 @@ router.post("/authenticate", (req, res, next) => {
 	const password = req.body.password;
 	User.getUserByEmail(email, (err, user) => {
 		if (err) throw err;
-		if (!user) {
+		if (!user || user.deletedAt !== undefined) {
 			return res
 				.status(400)
 				.json({ success: false, error: "Usuario no encontrado" });
