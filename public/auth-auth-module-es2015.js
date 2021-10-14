@@ -15560,7 +15560,7 @@ class LoginComponent {
                         if (this.authService.isSuperadmin) {
                             this.bin = [];
                             this.generalService.routerNavigateTo({
-                                path: '/index/dashboard',
+                                path: '/index',
                             });
                         }
                         else {

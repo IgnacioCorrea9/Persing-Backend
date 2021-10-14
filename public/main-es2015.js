@@ -1487,6 +1487,23 @@ class MainService {
             });
         });
     }
+    deleteResponseHandler({ request }) {
+        return new Promise((resolve) => {
+            request.subscribe((response) => {
+                if (response) {
+                    if (response.status === 200) {
+                        this.generalService.handleSuccess({ text: 'Registro eliminado exitosamente' });
+                    }
+                    else {
+                        this.generalService.handleError({ error: response.body });
+                    }
+                }
+                else {
+                    this.generalService.handleError({ error: response.body });
+                }
+            });
+        });
+    }
     /**
      * API Generico GET
      * @param {string} api route: api/componente
@@ -1522,7 +1539,7 @@ class MainService {
             headers: this.headers,
             observe: "response",
         });
-        return this.responseHandler({ request });
+        return this.deleteResponseHandler({ request });
     }
     /**
      * API Generico PUT

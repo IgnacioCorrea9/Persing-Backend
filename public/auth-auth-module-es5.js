@@ -19905,7 +19905,7 @@ function _createClass2(Constructor, protoProps, staticProps) { if (protoProps) _
                     _this13.bin = [];
 
                     _this13.generalService.routerNavigateTo({
-                      path: '/index/dashboard'
+                      path: '/index'
                     });
                   } else {
                     _this13.authService.logout();

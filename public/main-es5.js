@@ -2359,6 +2359,32 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             });
           });
         }
+      }, {
+        key: "deleteResponseHandler",
+        value: function deleteResponseHandler(_ref13) {
+          var _this6 = this;
+
+          var request = _ref13.request;
+          return new Promise(function (resolve) {
+            request.subscribe(function (response) {
+              if (response) {
+                if (response.status === 200) {
+                  _this6.generalService.handleSuccess({
+                    text: 'Registro eliminado exitosamente'
+                  });
+                } else {
+                  _this6.generalService.handleError({
+                    error: response.body
+                  });
+                }
+              } else {
+                _this6.generalService.handleError({
+                  error: response.body
+                });
+              }
+            });
+          });
+        }
         /**
          * API Generico GET
          * @param {string} api route: api/componente
@@ -2367,9 +2393,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "get",
-        value: function get(_ref13) {
-          var api = _ref13.api,
-              hide404 = _ref13.hide404;
+        value: function get(_ref14) {
+          var api = _ref14.api,
+              hide404 = _ref14.hide404;
           var request = this.http.get("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
             observe: "response"
@@ -2388,9 +2414,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "post",
-        value: function post(_ref14) {
-          var api = _ref14.api,
-              data = _ref14.data;
+        value: function post(_ref15) {
+          var api = _ref15.api,
+              data = _ref15.data;
           var request = this.http.post("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
             observe: "response"
@@ -2407,13 +2433,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "delete",
-        value: function _delete(_ref15) {
-          var api = _ref15.api;
+        value: function _delete(_ref16) {
+          var api = _ref16.api;
           var request = this.http["delete"]("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
             observe: "response"
           });
-          return this.responseHandler({
+          return this.deleteResponseHandler({
             request: request
           });
         }
@@ -2426,9 +2452,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "put",
-        value: function put(_ref16) {
-          var api = _ref16.api,
-              data = _ref16.data;
+        value: function put(_ref17) {
+          var api = _ref17.api,
+              data = _ref17.data;
           var request = this.http.put("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
             observe: "response"
