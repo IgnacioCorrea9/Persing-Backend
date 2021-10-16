@@ -3,14 +3,14 @@ const passport = require("passport");
 const ComentarioController = require("../../controllers/comentario_controller");
 
 module.exports = function (router) {
-  /** Trae todos los usuarios por tipo */
+  /** Get all comentarios */
   router.get(
     "/comentario",
     /* passport.authenticate("jwt", { session: false }), */
     ComentarioController.getAll
   );
 
-  /** Trae todos los usuarios por tipo */
+  /** Get all comentarios by id de publicacion */
   router.get(
     "/comentario/publicacion/:publicacion",
     /* passport.authenticate("jwt", { session: false }), */

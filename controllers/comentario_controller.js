@@ -2,6 +2,7 @@
 
 const Comentario = require("../models/comentario");
 const Publicacion = require("../models/publicacion");
+const User = require("../models/user")
 
 /** get function to get Comentario by id. */
 exports.get = function (req, res) {
@@ -14,12 +15,15 @@ exports.get = function (req, res) {
   });
 };
 
-/** get function to get Comentario by id. */
+/** get function to get Comentario by Publicacion. */
 exports.getAllByPublicacion = function (req, res) {
   Comentario.getAll(
     { publicacion: req.params.publicacion },
     function (err, result) {
       if (!err) {
+        result = result.filter((comentario) => {
+          return comentario.usuario && !comentario.usuario.deletedAt
+        })
         return res.status(200).json(result);
       } else {
         return res.status(400).send({ error: err }); // 500 error
