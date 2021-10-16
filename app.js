@@ -57,9 +57,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
-require("./config/passport")(passport);
+// app.use(passport.initialize());
+// app.use(passport.session());
+// require("./config/passport")(passport);
 
 // Use API routes
 var router = express.Router();

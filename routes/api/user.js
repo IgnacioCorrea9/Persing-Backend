@@ -5,9 +5,21 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     "/user/",
-    /* passport.authenticate("jwt", { session: false }), */
+    // passport.authenticate("jwt", { session: false }), 
     UserController.getAll
   );
+
+  /** Total de usuarios registrados */
+  router.get(
+    '/user/count',
+    UserController.getUsersCount
+  )
+
+  /** Total de usuarios activos */
+  router.get(
+    '/user/active',
+    UserController.getActiveUsersCount
+  )
 
   /** Trae un usuario por email del usuario */
   router.get(
@@ -15,6 +27,12 @@ module.exports = function (router) {
     /* passport.authenticate("jwt", { session: false }), */
     UserController.getByEmail
   );
+
+    /** Get all deleted users */
+    router.get(
+      '/user/deleted',
+      UserController.getDeletedUsers
+    );
 
   /** Trae los estudiantes de un advisor */
   router.get(
@@ -36,4 +54,6 @@ module.exports = function (router) {
     /* passport.authenticate("jwt", { session: false }), */
     UserController.deleteById
   );
+
+  
 };

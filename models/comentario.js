@@ -26,11 +26,13 @@ ComentarioSchema.statics = {
       .populate("publicacion usuario destacado")
       .exec(callback);
   },
+  
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
       .populate("publicacion usuario destacado")
       .exec(callback);
   },
+
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
       { _id: id },
@@ -43,6 +45,7 @@ ComentarioSchema.statics = {
   removeById: function (removeData, callback) {
     this.findOneAndRemove(removeData, callback);
   },
+
   create: function (data, callback) {
     const user = new this(data);
     user.save(callback);

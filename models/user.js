@@ -7,6 +7,7 @@ const UserSchema = mongoose.Schema({
 	apellido: { type: String, required: true },
 	email: { type: String, required: true },
 	password: { type: String, required: true },
+	lastSeen: { type: Date, required: true },
 	empresa: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Empresa",
@@ -50,6 +51,10 @@ UserSchema.statics = {
 			.exec(callback);
 	},
 
+	getCount: function(query, callback){
+		this.countDocuments(query).exec(callback)
+	},
+
 	updateById: function (id, updateData, callback) {
 		this.findOneAndUpdate(
 			{ _id: id },
@@ -78,6 +83,10 @@ UserSchema.statics = {
 			{ $set: update },
 			{ new: true },
 			callback)
+	},
+
+	getDeletedUsers: function(query, callback){
+		this.find(query, { password: 0}).populate("intereses empresa").exec(callback);
 	}
 };
 

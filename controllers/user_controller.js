@@ -47,6 +47,37 @@ exports.getAll = function (req, res) {
 	});
 };
 
+exports.getUsersCount = function(req, res) {
+	User.getCount({ "deletedAt": { $exists: false } }, function (err, result){
+		if(!err) {
+			return res.status(200).json({ data:  result})
+		} else {
+			return res.status(400).send(err);
+		}
+	})
+}
+
+exports.getActiveUsersCount = function(req, res) {
+	User.getActive({}, function (err, result){
+		if(!err) {
+			return res.status(200).json({ data:  result})
+		} else {
+			return res.status(400).send(err);
+		}
+	})
+}
+
+exports.getDeletedUsers = function(req, res) {
+	User.getDeletedUsers({ "deletedAt": { $exists: true} }, function(err, result){
+		console.log('holi', result)
+		if(!err) {
+			return res.status(200).json({ data:  result})
+		} else {
+			return res.status(400).send(err);
+		}
+	})
+}
+
 /** update function to update User by id. */
 exports.update = function (req, res) {
 	User.updateById(req.params.id, req.body, function (err, result) {
