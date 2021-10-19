@@ -16,6 +16,7 @@ const LikeSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
+  deletedUser: { type: Boolean, require: false},
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -37,6 +38,10 @@ LikeSchema.statics = {
       { new: true },
       callback
     );
+  },
+
+  deleteByUserId: function(id, update, callback){
+    this.updateMany({ usuario: id}, {$set: update}, {}, callback)
   },
 
   removeById: function (removeData, callback) {

@@ -18,15 +18,12 @@ exports.get = function (req, res) {
 /** get function to get Comentario by Publicacion. */
 exports.getAllByPublicacion = function (req, res) {
   Comentario.getAll(
-    { publicacion: req.params.publicacion },
+      { publicacion: req.params.publicacion, "deletedUser": { $exists: false }},
     function (err, result) {
       if (!err) {
-        result = result.filter((comentario) => {
-          return comentario.usuario && !comentario.usuario.deletedAt
-        })
         return res.status(200).json(result);
       } else {
-        return res.status(400).send({ error: err }); // 500 error
+        return res.status(400).send({ error: err }); 
       }
     }
   );
@@ -34,9 +31,11 @@ exports.getAllByPublicacion = function (req, res) {
 
 /** get function to count comentarios by publicacion. */
 exports.countByPublicacion = function (req, res) {
-  Comentario.count({publicacion:req.params.publicacion}, function (err, result) {
+  Comentario.count(
+      { publicacion: req.params.publicacion, "deletedUser": { $exists: false }
+   }, function (err, result) {
     if (!err) {
-      return res.status(200).json({data: result});
+      return res.status(200).json({ data: result });
     } else {
       return res.send(err); // 500 error
     }
@@ -61,7 +60,7 @@ exports.create = function (req, res) {
             }
           );
         } else {
-          return res.status(400).send({ error: er2 }); // 500 error
+          return res.status(400).send({ error: err2 }); // 500 error
         }
       });
     } else {
@@ -72,7 +71,7 @@ exports.create = function (req, res) {
 
 /** get function to get all Comentario. */
 exports.getAll = function (req, res) {
-  Comentario.getAll({}, function (err, result) {
+  Comentario.getAll({"deletedUser": { $exists: false }}, function (err, result) {
     if (!err) {
       return res.json(result);
     } else {
@@ -92,7 +91,7 @@ exports.update = function (req, res) {
   });
 };
 
-/** remove function to remove Comentario by id. */
+/** delete function to remove Comentario by id. */
 exports.delete = function (req, res) {
   Comentario.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
