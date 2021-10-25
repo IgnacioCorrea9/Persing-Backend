@@ -90,6 +90,9 @@ app.use("/credentials", credentials);
 // app.use("/pagos", pagos);
 // app.use("/email", email);
 
+//Middleware for active users
+
+
 app.get("/", (req, res) => {
   res.send("<h1>Exito</h1>");
 });
