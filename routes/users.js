@@ -233,10 +233,17 @@ router.post("/authenticate", (req, res, next) => {
             expiresIn: 604800, // 1 week
           }
         );
+
+        User.updateById(user._id, { lastSeen: Date.now() }, (err, result) => {
+          if (err) {
+            return res.send(err);
+          }
+        });
+
         res.status(200).json({
           success: true,
           token: "JWT " + token,
-          user: user,
+          user: user
         });
       } else {
         return res
