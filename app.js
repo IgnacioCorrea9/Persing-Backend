@@ -25,7 +25,7 @@ mongoose.connect(database, {
   autoIndex: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 // On db connection
 mongoose.connection.on("connected", () => {
@@ -57,9 +57,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Passport Middleware
-// app.use(passport.initialize());
-// app.use(passport.session());
-// require("./config/passport")(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+require("./config/passport")(passport);
 
 // Use API routes
 var router = express.Router();

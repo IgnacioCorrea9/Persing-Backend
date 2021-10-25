@@ -24,12 +24,15 @@ exports.getAllForUser = function (req, res) {
       const userId = req.params.user;
       result.forEach((element) => {
         var liked = element.likes.includes(userId);
-        console.log(element.texto, liked);
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
         const search = req.query.search;
         if (search) {
-          result = result.filter((p) => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+          result = result.filter(
+            (p) =>
+              p.titulo.toLowerCase().includes(search) ||
+              p.texto.toLowerCase().includes(search)
+          );
         }
       });
       result = _.shuffle(result);
@@ -103,12 +106,15 @@ exports.getAllBySeccion = function (req, res) {
       const userId = req.params.user;
       result.forEach((element) => {
         var liked = element.likes.includes(userId);
-        console.log(element.texto, liked);
         element._doc["liked"] = liked;
         element._doc["likes"] = element.likes.length;
         const search = req.query.search;
         if (search) {
-          result = result.filter((p) => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+          result = result.filter(
+            (p) =>
+              p.titulo.toLowerCase().includes(search) ||
+              p.texto.toLowerCase().includes(search)
+          );
         }
       });
       result = _.shuffle(result);

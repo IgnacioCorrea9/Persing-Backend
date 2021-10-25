@@ -38,7 +38,6 @@ exports.update = function (req, res) {
 
 /** update function to update Empresa by id. */
 exports.create = function (req, res) {
-  console.log(req.body);
   Empresa.create(req.body, function (err, result) {
     if (!err) {
       return res.status(200).json({success: true, data: result});
