@@ -6,48 +6,48 @@ module.exports = function (router) {
   /** Get all comentarios */
   router.get(
     "/comentario",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.getAll
   );
 
   /** Get all comentarios by id de publicacion */
   router.get(
     "/comentario/publicacion/:publicacion",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.getAllByPublicacion
   );
 
   /** Gets comentario by id */
   router.get(
     "/comentario/:id",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.get
   );
 
   router.get(
     "/comentario/publicacion-contar/:publicacion",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.countByPublicacion
   );
 
   /** Gets comentario by id */
   router.post(
     "/comentario",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }),
     ComentarioController.create
   );
 
   /** Actualiza una comentario por id */
   router.put(
     "/comentario/:id",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.update
   );
 
   /** Elimina una comentario */
   router.delete(
     "/comentario/:id",
-    /* passport.authenticate("jwt", { session: false }), */
+    passport.authenticate("jwt", { session: false }), 
     ComentarioController.delete
   );
 };

@@ -26,7 +26,6 @@ exports.getAllForUser = function (req, res) {
       User.get({ _id: userId }, function (err2, usuario) {
         if (!err) {
           if (usuario) {
-            console.log(usuario);
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
               element._doc["liked"] = liked;
@@ -98,7 +97,6 @@ exports.getNuevasByUser = function (req, res) {
       User.get({ _id: userId }, function (err2, usuario) {
         if (!err) {
           if (usuario) {
-            console.log(usuario);
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
               element._doc["liked"] = liked;
@@ -266,7 +264,6 @@ exports.getAllByEmpresaAndUser = function (req, res) {
       User.get({ _id: userId }, function (err2, usuario) {
         if (!err) {
           if (usuario) {
-            console.log(usuario);
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
               element._doc["liked"] = liked;
