@@ -1,13 +1,13 @@
 const UserController = require("../../controllers/user_controller");
 const passport = require("passport");
-const authMiddleware = require('../../middlewares/auth');
+const middleware = require('../../middlewares/main');
 
 module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     "/user/",
     passport.authenticate("jwt", { session: false }),
-    authMiddleware.isSuperAdministrador, 
+    middleware.isSuperAdministrador, 
     UserController.getAll
   );
 
@@ -15,15 +15,15 @@ module.exports = function (router) {
   router.get(
     "/user/count",
     passport.authenticate("jwt", { session: false }),
-    authMiddleware.isSuperAdministrador, 
+    middleware.isSuperAdministrador, 
     UserController.getUsersCount
   );
 
   /** Total de usuarios activos */
   router.get(
-    "/user/active",
+    "/user/active/count",
     passport.authenticate("jwt", { session: false }),
-    authMiddleware.isSuperAdministrador, 
+    middleware.isSuperAdministrador, 
     UserController.getActiveUsersCount
   );
 
@@ -38,7 +38,7 @@ module.exports = function (router) {
   router.get(
     "/user/deleted",
     passport.authenticate("jwt", { session: false }),
-    authMiddleware.isSuperAdministrador, 
+    middleware.isSuperAdministrador, 
     UserController.getDeletedUsers
   );
 
@@ -53,6 +53,7 @@ module.exports = function (router) {
   router.put(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
     UserController.update
   );
 
@@ -60,7 +61,7 @@ module.exports = function (router) {
   router.delete(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
-    authMiddleware.isSuperAdministrador, 
+    middleware.isSuperAdministrador, 
     UserController.deleteById
   );
 };

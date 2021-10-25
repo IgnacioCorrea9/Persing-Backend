@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
 const ComentarioController = require("../../controllers/comentario_controller");
+const middleware = require('../../middlewares/main');
 
 module.exports = function (router) {
   /** Get all comentarios */
@@ -34,6 +35,7 @@ module.exports = function (router) {
   router.post(
     "/comentario",
     passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
     ComentarioController.create
   );
 
@@ -41,13 +43,15 @@ module.exports = function (router) {
   router.put(
     "/comentario/:id",
     passport.authenticate("jwt", { session: false }), 
+    middleware.lastSeen,
     ComentarioController.update
   );
 
-  /** Elimina una comentario */
+  /** Elimina un comentario */
   router.delete(
     "/comentario/:id",
     passport.authenticate("jwt", { session: false }), 
+    middleware.lastSeen,
     ComentarioController.delete
   );
 };

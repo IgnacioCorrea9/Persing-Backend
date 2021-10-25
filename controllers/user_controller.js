@@ -3,6 +3,7 @@
 var User = require("../models/user");
 var Comentario = require("../models/comentario");
 var Like = require("../models/like");
+var moment = require("moment");
 
 /** get function to get User by id. */
 exports.get = function (req, res) {
@@ -48,24 +49,35 @@ exports.getAll = function (req, res) {
   });
 };
 
+/** get count of users consumidores */
 exports.getUsersCount = function (req, res) {
-  User.getCount({ deletedAt: { $exists: false } }, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ data: result });
-    } else {
-      return res.status(400).send(err);
+  User.getCount(
+    { tipo: "consumidor", deletedAt: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ data: result });
+      } else {
+        return res.status(400).send(err);
+      }
     }
-  });
+  );
 };
 
 exports.getActiveUsersCount = function (req, res) {
-  User.getActive({}, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ data: result });
-    } else {
-      return res.status(400).send(err);
+  User.getCount(
+    {
+      tipo: "consumidor",
+      deletedAt: { $exists: false },
+      lastSeen: { $gte: moment().subtract(1, "month"), $lte: moment() },
+    },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ data: result });
+      } else {
+        return res.status(400).send(err);
+      }
     }
-  });
+  );
 };
 
 exports.getDeletedUsers = function (req, res) {
@@ -120,7 +132,7 @@ exports.deleteById = function (req, res) {
               if (!err) {
                 return res.json(userResult);
               }
-              return res.send(err); 
+              return res.send(err);
             }
           );
         }
@@ -135,7 +147,7 @@ function getOne(_id) {
       if (!err) {
         return success(result);
       } else {
-        return error(err); 
+        return error(err);
       }
     });
   });
