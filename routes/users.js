@@ -31,7 +31,7 @@ router.post("/register", (req, res, next) => {
       tipo: req.body.tipo,
       creditos: req.body.creditos || 0,
       intereses: req.body.intereses || [],
-      lastSeen: Data.now()
+      lastSeen: Date.now()
     });
     newUser["calificacionApp"] = 1.5;
     if (req.body.empresa) {
