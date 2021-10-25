@@ -117,7 +117,6 @@ exports.sumInteractions = function (req, res) {
 				}
 				let currentRank = recompensa.ranking;
 				let currentCreditos = recompensa.creditos;
-				console.log("current rank: " + currentRank);
 				let interaccion = req.body.interaccion;
 				console.log("interaction to evaluate: " + interaccion);
 				var points;
@@ -125,7 +124,6 @@ exports.sumInteractions = function (req, res) {
 				switch (interaccion) {
 					case "like":
 						for (var i = 1; i < likeValues[0].length; i++) {
-							console.log("evaluating column index...");
 							var split = likeValues[0][i].split("-");
 							console.log(split);
 							let lower = parseFloat(split[0]);
@@ -293,7 +291,6 @@ exports.sumWatchTime = function (req, res) {
 					let newRankRecompensa = (
 						currentRank + getEarningsFromInteraction(points)
 					).toFixed(2);
-					console.log(newRankRecompensa);
 					if (newRankRecompensa > 10) {
 						newRankRecompensa = 10;
 					}

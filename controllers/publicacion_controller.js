@@ -205,7 +205,6 @@ exports.getAllSavedByUser = function (req, res) {
 exports.toggleLike = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      console.log("PUBLICACION DE LIKE" + result);
       const userId = req.body.user;
       const type = req.body.type;
       const arrayLikes = result._doc.likes;
@@ -271,7 +270,6 @@ exports.getAllByEmpresaAndUser = function (req, res) {
               var saved = element.guardados.includes(userId);
               element._doc["saved"] = saved;
             });
-            console.log(result.length);
             return res.status(200).json({ success: true, data: result });
           }
         } else {

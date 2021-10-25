@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
 const LikeController = require("../../controllers/like_controller");
+const middleware = require('../../middlewares/main');
 
 module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
@@ -20,6 +21,7 @@ module.exports = function (router) {
   router.post(
     "/like",
     passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
     LikeController.create
   );
 
@@ -34,6 +36,7 @@ module.exports = function (router) {
   router.put(
     "/like/:id",
     passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
     LikeController.update
   );
 
@@ -41,6 +44,7 @@ module.exports = function (router) {
   router.delete(
     "/like/:id",
     passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
     LikeController.delete
   );
 };
