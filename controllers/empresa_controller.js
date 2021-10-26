@@ -6,21 +6,34 @@ const Empresa = require("../models/empresa");
 exports.get = function (req, res) {
   Empresa.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-
-      return res.status(200).json({data: result});
+      return res.status(200).json({ data: result });
     } else {
-      return res.send(err); // 500 error
+      return res.send(err); 
     }
   });
 };
 
 /** get function to get all Empresa. */
 exports.getAll = function (req, res) {
-  Empresa.getAll({}, function (err, result) {
+  Empresa.getAll({
+    deletedAt: { $exists: false },
+    function(err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(400).send({ success: true, error: err });
+      }
+    },
+  });
+};
+
+/** get all deleted Empresas */
+exports.getDeletedEmpresas = function (req, res) {
+  Empresa.getAll({ deletedAt: { $exists: true } }, function (err, result) {
     if (!err) {
-      return res.status(200).json({success: true, data: result});
+      return res.status(200).json({ data: result });
     } else {
-      return res.status(400).send({success: true, error: err}); // 500 error
+      return res.status(400).send(err);
     }
   });
 };
@@ -29,9 +42,9 @@ exports.getAll = function (req, res) {
 exports.update = function (req, res) {
   Empresa.updateById(req.params.id, req.body, function (err, result) {
     if (!err) {
-      return res.status(200).json({success: true, data: result});
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send({success: false, error: err}); // 500 error
+      return res.status(400).send({ success: false, error: err }); // 500 error
     }
   });
 };
@@ -40,9 +53,9 @@ exports.update = function (req, res) {
 exports.create = function (req, res) {
   Empresa.create(req.body, function (err, result) {
     if (!err) {
-      return res.status(200).json({success: true, data: result});
+      return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send({error: err}); // 500 error
+      return res.status(400).send({ error: err }); // 500 error
     }
   });
 };
@@ -51,7 +64,7 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
   Empresa.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.status(200).json({success:true, data: result});
+      return res.status(200).json({ success: true, data: result });
     } else {
       return res.status(400).send(err); // 500 error
     }

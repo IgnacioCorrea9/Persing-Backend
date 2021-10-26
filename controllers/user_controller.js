@@ -63,6 +63,7 @@ exports.getUsersCount = function (req, res) {
   );
 };
 
+/** Get active users(consumidores): less than 1 month last activity */
 exports.getActiveUsersCount = function (req, res) {
   User.getCount(
     {
@@ -80,6 +81,31 @@ exports.getActiveUsersCount = function (req, res) {
   );
 };
 
+/** 
+ * Get user demographics stats (consumidores)
+ * query: gender, pets, children
+ * */
+exports.getDemographics = function (req, res) {
+  const statOptions = req.query.types.split(",");
+
+  Promise.all(
+    statOptions.map((stat) =>
+      User.getCount({
+        tipo: "consumidor",
+        deletedAt: { $exists: false },
+        [stat]: { $exists: true },
+      }
+      )
+    )
+  ).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err)
+  })
+  return res.status(200).send({ hole: 'holi'});
+};
+
+/** get all deleted users */
 exports.getDeletedUsers = function (req, res) {
   User.getDeletedUsers(
     { deletedAt: { $exists: true } },
