@@ -17,8 +17,7 @@ exports.get = function (req, res) {
 
 /** get function to get all Empresa. */
 exports.getAll = function (req, res) {
-  Empresa.getAll({
-    deletedAt: { $exists: false },
+  Empresa.getAll({ deletedAt: { $exists: false }},
     function(err, result) {
       if (!err) {
         return res.status(200).json({ success: true, data: result });
@@ -26,7 +25,7 @@ exports.getAll = function (req, res) {
         return res.status(400).send({ success: true, error: err });
       }
     },
-  });
+  )
 };
 
 /** get all deleted Empresas */

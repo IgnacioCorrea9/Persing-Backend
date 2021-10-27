@@ -86,27 +86,37 @@ exports.getActiveUsersCount = function (req, res) {
  * query: gender, pets, children
  * */
 exports.getDemographics = function (req, res) {
-  const statOptions = req.query.types.split(",");
 
-  Promise.all(
-    statOptions.map((stat) =>
-      User.getCount(
-        {
-          tipo: "consumidor",
-          deletedAt: { $exists: false },
-          [stat]: { $exists: true },
-        },
-        (err, result) => {}
-      )
-    )
-  )
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  return res.status(200).send({ hole: "holi" });
+  const stat = req.params.stat;
+
+  const result = {};
+
+  switch(stat) {
+    case 'gender':
+     
+    break;
+    case 'education':
+      break;
+    case 'economiclevel':
+      break;
+    case 'profession':
+      break;
+    case 'maritalstatus':
+      break;
+    case 'pets':
+      break;
+    case 'children':
+      break;
+
+    default:
+      console.log('No sé traerlos todos')
+      break;
+  }
+
+
+
+
+  return res.status(200).json({ data: result })
 };
 
 /** get all deleted users */

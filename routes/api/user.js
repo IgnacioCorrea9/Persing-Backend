@@ -29,7 +29,7 @@ module.exports = function (router) {
 
   /** Get users demographics stats */
   router.get(
-    "/user/demographics",
+    "/user/demographics/:stat",
     passport.authenticate('jwt', { session: false}),
     middleware.isAdministrador,
     UserController.getDemographics
