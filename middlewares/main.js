@@ -13,7 +13,6 @@ const decodedToken = (req) => {
 /** Permisos solo para Superadministrador */
 module.exports.isSuperAdministrador = (req, res, next) => {
   const decoded = decodedToken(req);
-  console.log(decoded);
   if (decoded.user.tipo && decoded.user.tipo === "superadministrador") {
     return next();
   }

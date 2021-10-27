@@ -35,8 +35,13 @@ EmpresaSchema.statics = {
     );
   },
 
-  removeById: function (removeData, callback) {
-    this.findOneAndRemove(removeData, callback);
+  removeById: function (id, callback) {
+    this.findOneAndUpdate(
+      { _id: id },
+      { $set: { deletedAt: Date.now() } },
+      { new: true },
+      callback
+      );
   },
   
   create: function (data, callback) {

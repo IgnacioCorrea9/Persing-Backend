@@ -1,6 +1,8 @@
 "use strict";
 
 const Empresa = require("../models/empresa");
+const Publicacion = require("../models/publicacion");
+const User = require("../models/user");
 
 /** get function to get Empresa by id. */
 exports.get = function (req, res) {
@@ -8,7 +10,7 @@ exports.get = function (req, res) {
     if (!err) {
       return res.status(200).json({ data: result });
     } else {
-      return res.send(err); 
+      return res.send(err);
     }
   });
 };
@@ -44,7 +46,7 @@ exports.update = function (req, res) {
     if (!err) {
       return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send({ success: false, error: err }); // 500 error
+      return res.status(400).send({ success: false, error: err });
     }
   });
 };
@@ -55,18 +57,47 @@ exports.create = function (req, res) {
     if (!err) {
       return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(400).send({ error: err }); // 500 error
+      return res.status(400).send({ error: err });
     }
   });
 };
 
-/** remove function to remove Empresa by id. */
+/** remove function to remove/hide Empresa by id */
 exports.delete = function (req, res) {
-  Empresa.removeById({ _id: req.params.id }, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ success: true, data: result });
-    } else {
-      return res.status(400).send(err); // 500 error
+  const empresaId = req.params.id;
+
+  Empresa.removeById(empresaId, function (err, result) {
+    if (err) {
+      return res.send(err);
     }
+
+    // Remove empresa admin
+    User.updateByEmpresa(
+      empresaId,
+      { deletedAt: Date.now() },
+      function (err, result) {
+        if (err) {
+          return res.send(err);
+        }
+
+        // Remove Empresa posts
+        Publicacion.updateByEmpresa(
+          empresaId,
+          { empresaDeleted: true },
+          function (err, result) {
+            if (err) {
+              return res.send(err);
+            }
+
+            return res
+              .status(200)
+              .json({
+                success: true,
+                message: "Empresa eliminada correctamente",
+              });
+          }
+        );
+      }
+    );
   });
 };

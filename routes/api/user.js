@@ -71,5 +71,14 @@ module.exports = function (router) {
     passport.authenticate("jwt", { session: false }),
     middleware.isSuperAdministrador, 
     UserController.deleteById
+    //UserController.removeById
   );
+
+  /** Disable superadmin */
+  router.delete(
+    '/admin/:id',
+    passport.authenticate('jwt', { session: false }),
+    middleware.isSuperAdministrador,
+    UserController.disableAdminById
+  )
 };

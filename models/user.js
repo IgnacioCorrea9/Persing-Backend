@@ -66,6 +66,15 @@ UserSchema.statics = {
     );
   },
 
+  updateByEmpresa: function (empresaId, update, callback) {
+    this.findOneAndUpdate(
+      { empresa: empresaId },
+      { $set: update },
+      { new: true },
+      callback
+    );
+  },
+
   create: function (data, callback) {
     const user = new this(data);
     user.save(callback);
