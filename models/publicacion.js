@@ -32,6 +32,7 @@ const PublicacionSchema = mongoose.Schema({
 	cpc: { type: String, required: false },
 	cpm: { type: String, required: false },
 	createdAt: { type: Date, required: false, default: Date.now },
+	empresaDeleted: { type: Boolean, required: false }
 });
 
 PublicacionSchema.statics = {
@@ -54,6 +55,15 @@ PublicacionSchema.statics = {
 			{ new: true },
 			callback
 		);
+	},
+
+	updateByEmpresa: function(id, update, callback){
+		this.findOneAndUpdate(
+			{empresa: id},
+			{$set: update},
+			{new: true},
+			callback
+			);
 	},
 
 	removeById: function (removeData, callback) {
