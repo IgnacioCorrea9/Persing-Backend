@@ -42,12 +42,14 @@ PublicacionSchema.statics = {
 			.populate("empresa sector")
 			.exec(callback);
 	},
+	
 	getAll: function (query, callback) {
 		this.find(query, { password: 0 })
 			.sort("-createdAt")
 			.populate("empresa sector")
 			.exec(callback);
 	},
+
 	updateById: function (id, updateData, callback) {
 		this.findOneAndUpdate(
 			{ _id: id },
@@ -69,6 +71,7 @@ PublicacionSchema.statics = {
 	removeById: function (removeData, callback) {
 		this.findOneAndRemove(removeData, callback);
 	},
+
 	create: function (data, callback) {
 		const user = new this(data);
 		user.save(callback);

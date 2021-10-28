@@ -7,7 +7,6 @@ module.exports = function (router) {
   router.get(
     "/user/",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getAll
   );
 
@@ -15,7 +14,6 @@ module.exports = function (router) {
   router.get(
     "/user/count",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getUsersCount
   );
 
@@ -23,7 +21,6 @@ module.exports = function (router) {
   router.get(
     "/user/active/count",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getActiveUsersCount
   );
 
@@ -31,7 +28,6 @@ module.exports = function (router) {
   router.get(
     "/user/demographics/:stat",
     passport.authenticate('jwt', { session: false}),
-    middleware.isAdministrador,
     UserController.getDemographics
   )
 
@@ -46,7 +42,6 @@ module.exports = function (router) {
   router.get(
     "/user/deleted",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getDeletedUsers
   );
 
@@ -69,16 +64,13 @@ module.exports = function (router) {
   router.delete(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.deleteById
-    //UserController.removeById
   );
 
   /** Disable superadmin */
   router.delete(
     '/admin/:id',
     passport.authenticate('jwt', { session: false }),
-    middleware.isSuperAdministrador,
     UserController.disableAdminById
   )
 };

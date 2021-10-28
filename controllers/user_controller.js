@@ -109,7 +109,7 @@ exports.getDemographics = function (req, res) {
       break;
 
     default:
-      console.log('No sé traerlos todos')
+      console.log('Pendiente')
       break;
   }
 
