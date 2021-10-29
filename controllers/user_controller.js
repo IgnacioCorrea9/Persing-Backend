@@ -63,6 +63,7 @@ exports.getUsersCount = function (req, res) {
   );
 };
 
+/** Get active users(consumidores): less than 1 month last activity */
 exports.getActiveUsersCount = function (req, res) {
   User.getCount(
     {
@@ -80,6 +81,45 @@ exports.getActiveUsersCount = function (req, res) {
   );
 };
 
+/**
+ * Get user demographics stats (consumidores)
+ * query: gender, pets, children
+ * */
+exports.getDemographics = function (req, res) {
+
+  const stat = req.params.stat;
+
+  const result = {};
+
+  switch(stat) {
+    case 'gender':
+     
+    break;
+    case 'education':
+      break;
+    case 'economiclevel':
+      break;
+    case 'profession':
+      break;
+    case 'maritalstatus':
+      break;
+    case 'pets':
+      break;
+    case 'children':
+      break;
+
+    default:
+      console.log('Pendiente')
+      break;
+  }
+
+
+
+
+  return res.status(200).json({ data: result })
+};
+
+/** get all deleted users */
 exports.getDeletedUsers = function (req, res) {
   User.getDeletedUsers(
     { deletedAt: { $exists: true } },
@@ -104,7 +144,23 @@ exports.update = function (req, res) {
   });
 };
 
-/** delete function to hide user by id - eliminación en cascada */
+/** Disable superadmin */
+exports.disableAdminById = function (req, res) {
+  const userId = req.params.id;
+  User.deleteUserById(
+    userId,
+    { deletedAt: Date.now() },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json(result);
+      } else {
+        return res.status(400).send({ error: err });
+      }
+    }
+  );
+};
+
+/** delete function to hide user by id - cascade removal */
 exports.deleteById = function (req, res) {
   const userId = req.params.id;
   User.deleteUserById(

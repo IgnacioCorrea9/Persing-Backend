@@ -3,29 +3,33 @@ const passport = require("passport");
 const middleware = require('../../middlewares/main');
 
 module.exports = function (router) {
-  /** Trae todos los usuarios por tipo */
+  /** Get all users */
   router.get(
     "/user/",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getAll
   );
 
-  /** Total de usuarios registrados */
+  /** Get users (consumidor) total count */
   router.get(
     "/user/count",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getUsersCount
   );
 
-  /** Total de usuarios activos */
+  /** Get active users (consumidor) total count */
   router.get(
     "/user/active/count",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getActiveUsersCount
   );
+
+  /** Get users demographics stats */
+  router.get(
+    "/user/demographics/:stat",
+    passport.authenticate('jwt', { session: false}),
+    UserController.getDemographics
+  )
 
   /** Trae un usuario por email del usuario */
   router.get(
@@ -38,18 +42,17 @@ module.exports = function (router) {
   router.get(
     "/user/deleted",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.getDeletedUsers
   );
 
-  /** Trae un usuario por id */
+  /** Get user by id */
   router.get(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
     UserController.getById
   );
 
-  /** Actualiza un usuario por id del usuario */
+  /** Update user by id */
   router.put(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
@@ -57,11 +60,17 @@ module.exports = function (router) {
     UserController.update
   );
 
-  /** Elimina un usuario por id del usuario */
+  /** Delete user by id */
   router.delete(
     "/user/:id",
     passport.authenticate("jwt", { session: false }),
-    middleware.isSuperAdministrador, 
     UserController.deleteById
   );
+
+  /** Disable superadmin */
+  router.delete(
+    '/admin/:id',
+    passport.authenticate('jwt', { session: false }),
+    UserController.disableAdminById
+  )
 };
