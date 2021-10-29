@@ -114,6 +114,7 @@ exports.getDemographics = function (req, res) {
           }
         });
       }
+      data.totalUsuarios = result.length;
 
       return res.status(200).json({ data });
     }
