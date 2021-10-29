@@ -1189,6 +1189,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector
             _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"],
             _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"],
             _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(),
             _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(),
             _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(),
@@ -1202,7 +1203,8 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector
         _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"],
         _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"],
         _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"],
-        _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"], _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"], _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"]] }); })();
+        _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"], _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"], _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"]] }); })();
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵsetClassMetadata"](AppModule, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"],
         args: [{
@@ -1213,6 +1215,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector
                     _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"],
                     _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"],
                     _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"],
+                    _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"],
                     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(),
                     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(),
                     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(),
@@ -1313,7 +1316,6 @@ class AuthService {
         this.mainService = mainService;
         /** API Access - ENV */
         this.baseUrl = "http://localhost:8081/";
-        // this.baseUrl = environment.baseUrl;
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append("Content-Type", "application/json");
     }
@@ -1362,7 +1364,7 @@ class AuthService {
      * @return {any} user
      */
     getToken() {
-        return localStorage.getItem("t_oken");
+        return localStorage.getItem("_token");
     }
     /**
      * Verifca si el usario está en sesión
