@@ -1981,7 +1981,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var AuthService =
     /*#__PURE__*/
     function () {
-      // public baseUrl: string = "https://persing.herokuapp.com/";
       function AuthService(http, generalService, mainService) {
         _classCallCheck(this, AuthService);
 
@@ -1989,8 +1988,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.generalService = generalService;
         this.mainService = mainService;
         /** API Access - ENV */
+        // public baseUrl: string = "http://localhost:8081/";
 
-        this.baseUrl = "http://localhost:8081/";
+        this.baseUrl = "https://persing.herokuapp.com/";
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append("Content-Type", "application/json");
       } // =================================
@@ -2615,15 +2615,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var MainService =
     /*#__PURE__*/
     function () {
+      // public baseUrl: string = "http://localhost:8081/";
       function MainService(http, generalService) {
         _classCallCheck(this, MainService);
 
         this.http = http;
         this.generalService = generalService;
         /** API Access - ENV */
-        // public baseUrl: string = "https://persing.herokuapp.com/";
 
-        this.baseUrl = "http://localhost:8081/"; // this.baseUrl = environment.baseUrl;
+        this.baseUrl = "https://persing.herokuapp.com/"; // this.baseUrl = environment.baseUrl;
 
         var _token = localStorage.getItem("_token") || "";
 

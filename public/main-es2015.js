@@ -1309,13 +1309,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AuthService {
-    // public baseUrl: string = "https://persing.herokuapp.com/";
     constructor(http, generalService, mainService) {
         this.http = http;
         this.generalService = generalService;
         this.mainService = mainService;
         /** API Access - ENV */
-        this.baseUrl = "http://localhost:8081/";
+        // public baseUrl: string = "http://localhost:8081/";
+        this.baseUrl = "https://persing.herokuapp.com/";
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append("Content-Type", "application/json");
     }
@@ -1734,12 +1734,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class MainService {
+    // public baseUrl: string = "http://localhost:8081/";
     constructor(http, generalService) {
         this.http = http;
         this.generalService = generalService;
         /** API Access - ENV */
-        // public baseUrl: string = "https://persing.herokuapp.com/";
-        this.baseUrl = "http://localhost:8081/";
+        this.baseUrl = "https://persing.herokuapp.com/";
         // this.baseUrl = environment.baseUrl;
         const _token = localStorage.getItem("_token") || "";
         this.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
