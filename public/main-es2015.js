@@ -1115,8 +1115,7 @@ __webpack_require__.r(__webpack_exports__);
 class AppComponent {
     constructor() {
     }
-    ngOnInit() {
-    }
+    ngOnInit() { }
 }
 AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(); };
 AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["ngx-app"]], decls: 1, vars: 0, template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
@@ -1125,8 +1124,10 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCompo
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AppComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-                selector: 'ngx-app',
-                template: '<router-outlet></router-outlet>',
+                selector: "ngx-app",
+                template: `
+        <router-outlet></router-outlet>
+      `,
             }]
     }], function () { return []; }, null); })();
 
@@ -1309,13 +1310,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AuthService {
+    // public baseUrl: string = "https://persing.herokuapp.com/";
     constructor(http, generalService, mainService) {
         this.http = http;
         this.generalService = generalService;
         this.mainService = mainService;
         /** API Access - ENV */
-        // public baseUrl: string = "http://localhost:8081/";
-        this.baseUrl = "https://persing.herokuapp.com/";
+        this.baseUrl = "http://localhost:8081/";
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append("Content-Type", "application/json");
     }
@@ -1332,7 +1333,7 @@ class AuthService {
             localStorage.removeItem("_token");
             localStorage.removeItem("_expiresIn");
             const _token = `${data.token}`;
-            this.mainService.headers.append("authorization", "Bearer " + _token);
+            this.mainService.headers = this.mainService.headers.set("authorization", _token);
             const _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, "second");
             delete data.token;
             delete data.expiresIn;
@@ -1734,12 +1735,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class MainService {
-    // public baseUrl: string = "http://localhost:8081/";
     constructor(http, generalService) {
         this.http = http;
         this.generalService = generalService;
         /** API Access - ENV */
-        this.baseUrl = "https://persing.herokuapp.com/";
+        // public baseUrl: string = "https://persing.herokuapp.com/";
+        this.baseUrl = "http://localhost:8081/";
         // this.baseUrl = environment.baseUrl;
         const _token = localStorage.getItem("_token") || "";
         this.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
