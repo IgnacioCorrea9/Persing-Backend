@@ -83,40 +83,42 @@ exports.getActiveUsersCount = function (req, res) {
 
 /**
  * Get user demographics stats (consumidores)
- * query: gender, pets, children
  * */
 exports.getDemographics = function (req, res) {
+  const data = {
+    hijos: {},
+    mascotas: {},
+    nivelEducativo: {},
+    estadoCivil: {},
+    genero: {},
+    estrato: {},
+  };
 
-  const stat = req.params.stat;
+  User.getAll(
+    { deletedAt: { $exists: false }, tipo: "consumidor" },
+    function (err, result) {
+      if (err) {
+        return res.status(400).send(err);
+      }
 
-  const result = {};
+      for (const property in data) {
+        [...new Set(result.map((user) => user[property]))].forEach((value) => {
+          if (value === undefined) {
+            data[property]["noRegistra"] = result.filter(
+              (user) => user[property] === value
+            ).length;
+          } else {
+            data[property][value] = result.filter(
+              (user) => user[property] === value
+            ).length;
+          }
+        });
+      }
+      data.totalUsuarios = result.length;
 
-  switch(stat) {
-    case 'gender':
-     
-    break;
-    case 'education':
-      break;
-    case 'economiclevel':
-      break;
-    case 'profession':
-      break;
-    case 'maritalstatus':
-      break;
-    case 'pets':
-      break;
-    case 'children':
-      break;
-
-    default:
-      console.log('Pendiente')
-      break;
-  }
-
-
-
-
-  return res.status(200).json({ data: result })
+      return res.status(200).json({ data });
+    }
+  );
 };
 
 /** get all deleted users */

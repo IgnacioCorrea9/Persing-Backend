@@ -238,13 +238,14 @@ router.post("/authenticate", (req, res, next) => {
           if (err) {
             return res.send(err);
           }
+
+          res.status(200).json({
+            success: true,
+            token: "JWT " + token,
+            user: user
+          });
         });
 
-        res.status(200).json({
-          success: true,
-          token: "JWT " + token,
-          user: user
-        });
       } else {
         return res
           .status(400)

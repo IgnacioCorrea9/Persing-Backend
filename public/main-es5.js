@@ -1657,8 +1657,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AppComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-          selector: 'ngx-app',
-          template: '<router-outlet></router-outlet>'
+          selector: "ngx-app",
+          template: "\n        <router-outlet></router-outlet>\n      "
         }]
       }], function () {
         return [];
@@ -1791,13 +1791,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         return new (t || AppModule)();
       },
       providers: [_public_services_main_service__WEBPACK_IMPORTED_MODULE_8__["MainService"], _public_services_auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"], _public_services_general_service__WEBPACK_IMPORTED_MODULE_12__["GeneralService"], _public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_13__["AuthGuard"]],
-      imports: [[_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"].forRoot(), _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"].forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"].forRoot()]]
+      imports: [[_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"].forRoot(), _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"].forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"].forRoot()]]
     });
 
     (function () {
       (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](AppModule, {
         declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]],
-        imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"], _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"], _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"]]
+        imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"], _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"], _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"]]
       });
     })();
     /*@__PURE__*/
@@ -1808,7 +1808,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"],
         args: [{
           declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]],
-          imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"].forRoot(), _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"].forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"].forRoot()],
+          imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_1__["BrowserAnimationsModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_6__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbSidebarModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbMenuModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDatepickerModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbWindowModule"].forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbToastrModule"].forRoot(), _core_core_module__WEBPACK_IMPORTED_MODULE_3__["CoreModule"].forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_4__["ThemeModule"].forRoot()],
           bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]],
           providers: [_public_services_main_service__WEBPACK_IMPORTED_MODULE_8__["MainService"], _public_services_auth_service__WEBPACK_IMPORTED_MODULE_9__["AuthService"], _public_services_general_service__WEBPACK_IMPORTED_MODULE_12__["GeneralService"], _public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_13__["AuthGuard"]]
         }]
@@ -1990,8 +1990,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.mainService = mainService;
         /** API Access - ENV */
 
-        this.baseUrl = "http://localhost:8081/"; // this.baseUrl = environment.baseUrl;
-
+        this.baseUrl = "http://localhost:8081/";
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append("Content-Type", "application/json");
       } // =================================
@@ -2016,7 +2015,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
             var _token = "".concat(data.token);
 
-            this.mainService.headers.append("authorization", "Bearer " + _token);
+            this.mainService.headers = this.mainService.headers.set("authorization", _token);
 
             var _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, "second");
 
@@ -2053,7 +2052,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getToken",
         value: function getToken() {
-          return localStorage.getItem("t_oken");
+          return localStorage.getItem("_token");
         }
         /**
          * Verifca si el usario está en sesión
