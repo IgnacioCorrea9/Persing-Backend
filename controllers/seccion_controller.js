@@ -51,7 +51,6 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
 	Seccion.removeById({ _id: req.params.id }, function (err, result) {
 		if (!err) {
-			console.log(result);
 			return res.json({ data: result, success: true });
 		} else {
 			return res.send(err); // 500 error

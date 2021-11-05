@@ -17,6 +17,7 @@ const ComentarioSchema = mongoose.Schema({
     required: true,
   },
   comentario: { type: String, required: true },
+  deletedUser: { type: Boolean, require: false},
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -26,11 +27,17 @@ ComentarioSchema.statics = {
       .populate("publicacion usuario destacado")
       .exec(callback);
   },
+  
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
       .populate("publicacion usuario destacado")
       .exec(callback);
   },
+
+  deleteByUserId: function(id, update, callback){
+    this.updateMany({ usuario: id}, {$set: update}, {}, callback)
+  },
+
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
       { _id: id },
@@ -43,6 +50,7 @@ ComentarioSchema.statics = {
   removeById: function (removeData, callback) {
     this.findOneAndRemove(removeData, callback);
   },
+
   create: function (data, callback) {
     const user = new this(data);
     user.save(callback);

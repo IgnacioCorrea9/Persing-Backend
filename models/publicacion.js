@@ -32,6 +32,7 @@ const PublicacionSchema = mongoose.Schema({
 	cpc: { type: String, required: false },
 	cpm: { type: String, required: false },
 	createdAt: { type: Date, required: false, default: Date.now },
+	empresaDeleted: { type: Boolean, required: false }
 });
 
 PublicacionSchema.statics = {
@@ -41,12 +42,14 @@ PublicacionSchema.statics = {
 			.populate("empresa sector")
 			.exec(callback);
 	},
+	
 	getAll: function (query, callback) {
 		this.find(query, { password: 0 })
 			.sort("-createdAt")
 			.populate("empresa sector")
 			.exec(callback);
 	},
+
 	updateById: function (id, updateData, callback) {
 		this.findOneAndUpdate(
 			{ _id: id },
@@ -56,9 +59,19 @@ PublicacionSchema.statics = {
 		);
 	},
 
+	updateByEmpresa: function(id, update, callback){
+		this.findOneAndUpdate(
+			{empresa: id},
+			{$set: update},
+			{new: true},
+			callback
+			);
+	},
+
 	removeById: function (removeData, callback) {
 		this.findOneAndRemove(removeData, callback);
 	},
+
 	create: function (data, callback) {
 		const user = new this(data);
 		user.save(callback);

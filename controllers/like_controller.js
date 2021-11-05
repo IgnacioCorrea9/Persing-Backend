@@ -26,20 +26,21 @@ exports.create = function (req, res) {
 
 /** get function to get all Like. */
 exports.getAll = function (req, res) {
-  Like.getAll({}, function (err, result) {
-    if (!err) {
-      return res.json(result);
-    } else {
-      return res.send(err); // 500 error
-    }
-  });
+  Like.getAll({
+    "deletedUser": { $exists: false }}, function(err, result) {
+      if (!err) {
+        return res.json(result);
+      } else {
+        return res.send(err); // 500 error
+      }
+    });
 };
 
 /** get function to get all Like. */
 exports.countByPublicacion = function (req, res) {
-  Like.count({publicacion:req.params.publicacion}, function (err, result) {
+  Like.count({ publicacion: req.params.publicacion, "deletedUser": { $exists: false } }, function (err, result) {
     if (!err) {
-      return res.status(200).json({data: result});
+      return res.status(200).json({ data: result });
     } else {
       return res.send(err); // 500 error
     }

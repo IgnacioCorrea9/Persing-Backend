@@ -20,40 +20,53 @@ exports.get = function (req, res) {
  * FLiters by name and description if query available
  */
 exports.getAllForUser = function (req, res) {
-  Publicacion.getAll({}, function (err, result) {
-    if (!err) {
-      const userId = req.params.user;
-      User.get({ _id: userId }, function (err2, usuario) {
-        if (!err) {
-          if (usuario) {
-            console.log(usuario);
-            result.forEach((element) => {
-              var liked = element.likes.includes(userId);
-              element._doc["liked"] = liked;
-              element._doc["likes"] = element.likes.length;
-              var saved = element.guardados.includes(userId);
-              element._doc["saved"] = saved;
-            });
-            const search = req.query.search;
-            if (search) {
-              result = result.filter((p) => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+  Publicacion.getAll(
+    { empresaDeleted: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        const userId = req.params.user;
+        User.get({ _id: userId }, function (err2, usuario) {
+          if (!err) {
+            if (usuario) {
+              result.forEach((element) => {
+                var liked = element.likes.includes(userId);
+                element._doc["liked"] = liked;
+                element._doc["likes"] = element.likes.length;
+                var saved = element.guardados.includes(userId);
+                element._doc["saved"] = saved;
+              });
+              const search = req.query.search;
+              if (search) {
+                result = result.filter(
+                  (p) =>
+                    p.titulo.toLowerCase().includes(search) ||
+                    p.texto.toLowerCase().includes(search)
+                );
+              }
+              if (req.query.intereses) {
+                const intereses = req.query.intereses
+                  .replace(/\s/g, "")
+                  .substring(1)
+                  .slice(0, -1)
+                  .split(",");
+                usuario.intereses = intereses;
+              }
+              result = result.filter((p) => {
+                return (
+                  p.sector &&
+                  usuario.intereses.includes(p.sector._id.toString())
+                );
+              });
+              result = _.shuffle(result);
+              return res.status(200).json({ success: true, data: result });
             }
-            if (req.query.intereses) {
-              const intereses = req.query.intereses.replace(/\s/g, "").substring(1).slice(0, -1).split(",");
-              usuario.intereses = intereses;
-            }
-            result = result.filter((p) => {
-              return p.sector && usuario.intereses.includes(p.sector._id.toString());
-            });
-            result = _.shuffle(result);
-            return res.status(200).json({ success: true, data: result });
           }
-        }
-      });
-    } else {
-      return res.status(500).send({ success: false, error: err }); // 500 error
+        });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
     }
-  });
+  );
 };
 
 /**
@@ -62,13 +75,16 @@ exports.getAllForUser = function (req, res) {
  * @param {*} res
  */
 exports.getAllDestacadas = function (req, res) {
-  Publicacion.getAll({ destacada: true }, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ success: true, data: result });
-    } else {
-      return res.status(500).send({ success: false, error: err }); // 500 error
+  Publicacion.getAll(
+    { destacada: true, empresaDeleted: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
     }
-  });
+  );
 };
 
 /**
@@ -92,13 +108,12 @@ exports.getAllNuevas = function (req, res) {
  * @param {*} res
  */
 exports.getNuevasByUser = function (req, res) {
-  Publicacion.getAll({ nueva: true }, function (err, result) {
+  Publicacion.getAll({ nueva: true, empresaDeleted: { $exists: false} }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
       User.get({ _id: userId }, function (err2, usuario) {
         if (!err) {
           if (usuario) {
-            console.log(usuario);
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
               element._doc["liked"] = liked;
@@ -108,14 +123,24 @@ exports.getNuevasByUser = function (req, res) {
             });
             const search = req.query.search;
             if (search) {
-              result = result.filter((p) => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+              result = result.filter(
+                (p) =>
+                  p.titulo.toLowerCase().includes(search) ||
+                  p.texto.toLowerCase().includes(search)
+              );
             }
             if (req.query.intereses) {
-              const intereses = req.query.intereses.replace(/\s/g, "").substring(1).slice(0, -1).split(",");
+              const intereses = req.query.intereses
+                .replace(/\s/g, "")
+                .substring(1)
+                .slice(0, -1)
+                .split(",");
               usuario.intereses = intereses;
             }
             result = result.filter((p) => {
-              return p.sector && usuario.intereses.includes(p.sector._id.toString());
+              return (
+                p.sector && usuario.intereses.includes(p.sector._id.toString())
+              );
             });
             result = _.shuffle(result);
             return res.status(200).json({ success: true, data: result });
@@ -132,7 +157,7 @@ exports.getNuevasByUser = function (req, res) {
  * FLiters by name and description if query available
  */
 exports.getAllDestacadasForUser = function (req, res) {
-  Publicacion.getAll({ destacada: true }, function (err, result) {
+  Publicacion.getAll({ destacada: true, empresaDeleted: {$exists: false} }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
       result.forEach((element) => {
@@ -143,7 +168,11 @@ exports.getAllDestacadasForUser = function (req, res) {
         element._doc["saved"] = saved;
         const search = req.query.search;
         if (search) {
-          result = result.filter((p) => p.titulo.toLowerCase().includes(search) || p.texto.toLowerCase().includes(search));
+          result = result.filter(
+            (p) =>
+              p.titulo.toLowerCase().includes(search) ||
+              p.texto.toLowerCase().includes(search)
+          );
         }
       });
       result = _.shuffle(result);
@@ -187,27 +216,29 @@ exports.toggleSave = function (req, res) {
 };
 
 exports.getAllSavedByUser = function (req, res) {
-  Publicacion.getAll({ guardados: { $in: [req.params.user] } }, function (err, result) {
-    if (!err) {
-      const userId = req.params.user;
-      result.forEach((element) => {
-        var liked = element.likes.includes(userId);
-        element._doc["liked"] = liked;
-        element._doc["likes"] = element.likes.length;
-        var saved = element.guardados.includes(userId);
-        element._doc["saved"] = saved;
-      });
-      return res.status(200).json({ success: true, data: result });
-    } else {
-      return res.status(500).send({ success: false, error: err }); // 500 error
+  Publicacion.getAll(
+    { guardados: { $in: [req.params.user] }, empresaDeleted: {$exists: false} },
+    function (err, result) {
+      if (!err) {
+        const userId = req.params.user;
+        result.forEach((element) => {
+          var liked = element.likes.includes(userId);
+          element._doc["liked"] = liked;
+          element._doc["likes"] = element.likes.length;
+          var saved = element.guardados.includes(userId);
+          element._doc["saved"] = saved;
+        });
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
     }
-  });
+  );
 };
 
 exports.toggleLike = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      console.log("PUBLICACION DE LIKE" + result);
       const userId = req.body.user;
       const type = req.body.type;
       const arrayLikes = result._doc.likes;
@@ -249,13 +280,16 @@ exports.toggleLike = function (req, res) {
 
 /** get function to get all Publicacion. */
 exports.getAll = function (req, res) {
-  Publicacion.getAll({}, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ success: true, data: result });
-    } else {
-      return res.status(500).send({ success: false, error: err }); // 500 error
+  Publicacion.getAll(
+    { empresaDeleted: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
     }
-  });
+  );
 };
 
 /** get function to get all Publicacion by empresa and user */
@@ -266,7 +300,6 @@ exports.getAllByEmpresaAndUser = function (req, res) {
       User.get({ _id: userId }, function (err2, usuario) {
         if (!err) {
           if (usuario) {
-            console.log(usuario);
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
               element._doc["liked"] = liked;
@@ -274,11 +307,12 @@ exports.getAllByEmpresaAndUser = function (req, res) {
               var saved = element.guardados.includes(userId);
               element._doc["saved"] = saved;
             });
-            console.log(result.length);
             return res.status(200).json({ success: true, data: result });
           }
         } else {
-          return res.status(500).send({ success: false, error: "User not found" });
+          return res
+            .status(500)
+            .send({ success: false, error: "User not found" });
         }
       });
     } else {
@@ -300,13 +334,16 @@ exports.getAllByEmpresa = function (req, res) {
 
 /** get function to get all Publicacion. */
 exports.getAllBySector = function (req, res) {
-  Publicacion.getAll({ sector: req.params.sector }, function (err, result) {
-    if (!err) {
-      return res.status(200).json({ success: true, data: result });
-    } else {
-      return res.status(500).send({ success: false, error: err }); // 500 error
+  Publicacion.getAll(
+    { sector: req.params.sector, empresaDeleted: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
     }
-  });
+  );
 };
 
 /** update function to update Publicacion by id. */

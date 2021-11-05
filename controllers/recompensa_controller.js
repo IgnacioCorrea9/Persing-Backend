@@ -117,15 +117,68 @@ exports.sumInteractions = function (req, res) {
 				}
 				let currentRank = recompensa.ranking;
 				let currentCreditos = recompensa.creditos;
-				console.log("current rank: " + currentRank);
 				let interaccion = req.body.interaccion;
 				console.log("interaction to evaluate: " + interaccion);
 				var points;
 				var credits;
 				switch (interaccion) {
+					case "dislike":
+						for (var i = 1; i < likeValues[0].length; i++) {
+							var split = likeValues[0][i].split("-");
+							console.log(split);
+							let lower = parseFloat(split[0]);
+							console.log(lower);
+							let higher = parseFloat(split[1]);
+							console.log(higher);
+							if (currentRank >= lower && currentRank <= higher) {
+								console.log("found index: " + i);
+								points = likeValues[1][i];
+								credits = likeValuesCreditos[1][i];
+								break;
+							}
+						}
+				console.log("points summed for " + interaccion + ": " + points);
+				console.log("credits summed for " + interaccion + ": " + credits);
+				let newRankRecompensa = (
+					currentRank -
+					getEarningsFromInteraction(
+						points,
+						currentRank,
+						recompensa.usuario.calificacionApp || 1
+					)
+				).toFixed(2);
+				let newCreditos = currentCreditos - credits;
+				let total = recompensa.usuario.creditos - credits;
+				console.log(newRankRecompensa, currentCreditos, newCreditos);
+				if (newRankRecompensa > 10) {
+					newRankRecompensa = 10;
+				}
+				if(newRankRecompensa < 0){
+					newRankRecompensa = 0;
+				}
+				if(newCreditos < 0){
+					newCreditos = 0;
+				}
+				if (total < 0) {
+					total = 0;
+				}
+				Recompensa.updateById(
+					recompensa._id,
+					{ ranking: newRankRecompensa, creditos: newCreditos },
+					await function (error, resultRecompensa) {
+						console.log(resultRecompensa);
+					}
+				);
+				User.updateById(
+					recompensa.usuario._id,
+					{ creditos: total },
+					await function (err, resultUsuario) {
+						console.log(resultUsuario);
+					}
+				);
+				return res.status(200).json("saved interaction");
 					case "like":
 						for (var i = 1; i < likeValues[0].length; i++) {
-							console.log("evaluating column index...");
 							var split = likeValues[0][i].split("-");
 							console.log(split);
 							let lower = parseFloat(split[0]);
@@ -208,6 +261,9 @@ exports.sumInteractions = function (req, res) {
 				console.log(newRankRecompensa, currentCreditos, newCreditos);
 				if (newRankRecompensa > 10) {
 					newRankRecompensa = 10;
+				}
+				if(newRankRecompensa < 0){
+					newRankRecompensa = 0;
 				}
 				Recompensa.updateById(
 					recompensa._id,
@@ -293,7 +349,6 @@ exports.sumWatchTime = function (req, res) {
 					let newRankRecompensa = (
 						currentRank + getEarningsFromInteraction(points)
 					).toFixed(2);
-					console.log(newRankRecompensa);
 					if (newRankRecompensa > 10) {
 						newRankRecompensa = 10;
 					}

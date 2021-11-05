@@ -25,10 +25,11 @@ mongoose.connect(database, {
   autoIndex: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 // On db connection
 mongoose.connection.on("connected", () => {
-  console.log("Connected to database " + database);
+  console.log("Connected to database: " + database);
 });
 // On db error
 mongoose.connection.on("error", (err) => {
@@ -89,11 +90,13 @@ app.use("/credentials", credentials);
 // app.use("/pagos", pagos);
 // app.use("/email", email);
 
-// app.use("/users", users);
+//Middleware for active users
+
+
 app.get("/", (req, res) => {
   res.send("<h1>Exito</h1>");
-  console.log("entro");
 });
+
 app.get("***", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
