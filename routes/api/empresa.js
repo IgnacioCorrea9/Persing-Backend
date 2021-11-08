@@ -5,7 +5,7 @@ const EmpresaController = require("../../controllers/empresa_controller");
 module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
-    "/empresa",
+    "/empresa/",
     passport.authenticate("jwt", { session: false }),
     EmpresaController.getAll
   );
@@ -14,6 +14,12 @@ module.exports = function (router) {
     "/empresa",
     passport.authenticate("jwt", { session: false }),
     EmpresaController.create
+  );
+
+  router.get(
+    "/empresa/active/count",
+    passport.authenticate("jwt", { session: false }),
+    EmpresaController.getActiveEmpresasCount
   );
 
   /** Get registered companies total count */

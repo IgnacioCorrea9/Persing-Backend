@@ -16,6 +16,7 @@ const EmpresaSchema = mongoose.Schema({
     default: "pendiente",
   },
   deletedAt: { type: Date, required: false },
+  lastSeen: { type: Date, required: false },
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -23,9 +24,11 @@ EmpresaSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 }).populate("sectores").exec(callback);
   },
+
   getAll: function (query, callback) {
     this.find(query, { password: 0 }).populate("sectores").exec(callback);
   },
+  
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
       { _id: id },

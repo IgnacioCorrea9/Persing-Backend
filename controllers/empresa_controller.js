@@ -3,6 +3,7 @@
 const Empresa = require("../models/empresa");
 const Publicacion = require("../models/publicacion");
 const User = require("../models/user");
+const moment = require("moment");
 
 /** get function to get Empresa by id. */
 exports.get = function (req, res) {
@@ -41,6 +42,20 @@ exports.getEmpresasCount = function (req, res) {
     }
   );
 };
+
+/** Get active empresas: 3 months */
+exports.getActiveEmpresasCount = function(req, res){
+  Publicacion.getAll({
+    empresaDeleted: { $exists: false },
+    createdAt: { $gte: moment().subtract(3, "month"), $lte: moment() }
+  }, function(err, result){
+    if(err){
+      return res.status(400).send(err)
+    }
+    const activeEmpresas = [...new Set(result.map(publicacion => publicacion.empresa))];
+    return res.status(200).json({data: activeEmpresas.length})
+  })
+}
 
 /** get all deleted Empresas */
 exports.getDeletedEmpresas = function (req, res) {
@@ -84,9 +99,6 @@ exports.delete = function (req, res) {
       return res.send(err);
     }
 
-    console.log(empresaId);
-    console.log('es que ni entraaaaaaaaa')
-
     // Remove empresa admin
     User.updateByEmpresa(
       empresaId,
@@ -95,8 +107,6 @@ exports.delete = function (req, res) {
         if (err) {
           return res.send(err);
         }
-
-        console.log(result)
 
         // Remove Empresa posts
         Publicacion.updateByEmpresa(

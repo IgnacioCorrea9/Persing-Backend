@@ -59,6 +59,10 @@ PublicacionSchema.statics = {
 		);
 	},
 
+	getCount: function(query, callback){
+    this.countDocuments(query).exec(callback)
+  },
+
 	updateByEmpresa: function(id, update, callback){
 		this.findOneAndUpdate(
 			{empresa: id},
