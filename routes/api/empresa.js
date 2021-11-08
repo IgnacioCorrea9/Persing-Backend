@@ -6,27 +6,34 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     "/empresa",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     EmpresaController.getAll
   );
 
   router.post(
     "/empresa",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     EmpresaController.create
+  );
+
+  /** Get registered companies total count */
+  router.get(
+    "/empresa/count",
+    passport.authenticate("jwt", { session: false }),
+    EmpresaController.getEmpresasCount
   );
 
   /** Gets empresa by id */
   router.get(
     "/empresa/:id",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     EmpresaController.get
   );
 
   /** Actualiza una empresa por id */
   router.put(
     "/empresa/:id",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     EmpresaController.update
   );
 

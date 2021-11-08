@@ -121,6 +121,7 @@ exports.sumInteractions = function (req, res) {
 				console.log("interaction to evaluate: " + interaccion);
 				var points;
 				var credits;
+				
 				switch (interaccion) {
 					case "like":
 						for (var i = 1; i < likeValues[0].length; i++) {

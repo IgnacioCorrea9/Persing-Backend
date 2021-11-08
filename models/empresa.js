@@ -43,6 +43,10 @@ EmpresaSchema.statics = {
       callback
       );
   },
+
+  getCount: function(query, callback){
+    this.countDocuments(query).exec(callback)
+  },
   
   create: function (data, callback) {
     const user = new this(data);

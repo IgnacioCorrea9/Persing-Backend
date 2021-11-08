@@ -28,6 +28,20 @@ exports.getAll = function (req, res) {
   )
 };
 
+/** get empresas count */
+exports.getEmpresasCount = function (req, res) {
+  Empresa.getCount(
+    { estado: "aprobado", deletedAt: { $exists: false } },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ data: result });
+      } else {
+        return res.status(400).send(err);
+      }
+    }
+  );
+};
+
 /** get all deleted Empresas */
 exports.getDeletedEmpresas = function (req, res) {
   Empresa.getAll({ deletedAt: { $exists: true } }, function (err, result) {
@@ -70,6 +84,9 @@ exports.delete = function (req, res) {
       return res.send(err);
     }
 
+    console.log(empresaId);
+    console.log('es que ni entraaaaaaaaa')
+
     // Remove empresa admin
     User.updateByEmpresa(
       empresaId,
@@ -78,6 +95,8 @@ exports.delete = function (req, res) {
         if (err) {
           return res.send(err);
         }
+
+        console.log(result)
 
         // Remove Empresa posts
         Publicacion.updateByEmpresa(
