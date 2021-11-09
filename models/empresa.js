@@ -16,7 +16,6 @@ const EmpresaSchema = mongoose.Schema({
     default: "pendiente",
   },
   deletedAt: { type: Date, required: false },
-  lastSeen: { type: Date, required: false },
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
