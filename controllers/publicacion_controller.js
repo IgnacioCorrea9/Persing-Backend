@@ -357,8 +357,9 @@ exports.update = function (req, res) {
   });
 };
 
-/** update function to update Publicacion by id. */
+/** update function to create post */
 exports.create = function (req, res) {
+  console.log(req.body)
   Publicacion.create(req.body, function (err, result) {
     if (!err) {
       return res.status(201).json({ success: true, data: result });
