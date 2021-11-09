@@ -46,13 +46,14 @@ exports.getEmpresasCount = function (req, res) {
 /** Get active empresas: 3 months */
 exports.getActiveEmpresasCount = function(req, res){
   Publicacion.getAll({
-    empresaDeleted: { $exists: false },
-    createdAt: { $gte: moment().subtract(3, "month"), $lte: moment() }
+    deletedAt: { $exists: false },
+    createdAt: { $gte: moment().subtract(3, "months"), $lte: moment() }
   }, function(err, result){
     if(err){
       return res.status(400).send(err)
     }
-    const activeEmpresas = [...new Set(result.map(publicacion => publicacion.empresa))];
+    
+    const activeEmpresas = [...new Set(result.map(publicacion => publicacion.empresa._id))];
     return res.status(200).json({data: activeEmpresas.length})
   })
 }
@@ -111,7 +112,7 @@ exports.delete = function (req, res) {
         // Remove Empresa posts
         Publicacion.updateByEmpresa(
           empresaId,
-          { empresaDeleted: true },
+          { deletedAt: Date.now() },
           function (err, result) {
             if (err) {
               return res.send(err);
