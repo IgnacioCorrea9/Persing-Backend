@@ -1115,7 +1115,8 @@ __webpack_require__.r(__webpack_exports__);
 class AppComponent {
     constructor() {
     }
-    ngOnInit() { }
+    ngOnInit() {
+    }
 }
 AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(); };
 AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["ngx-app"]], decls: 1, vars: 0, template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
@@ -1124,10 +1125,8 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCompo
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AppComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-                selector: "ngx-app",
-                template: `
-        <router-outlet></router-outlet>
-      `,
+                selector: 'ngx-app',
+                template: '<router-outlet></router-outlet>',
             }]
     }], function () { return []; }, null); })();
 
@@ -1582,7 +1581,7 @@ class GeneralService {
             const url = `${error.url}`.split("api/");
             const domain = url[0].includes("local")
                 ? "Localhost Server"
-                : "Heorku Server";
+                : "Heroku Server";
             this.handleResponseNull({
                 titulo: `Servidor: ${domain || "inválido"}. API: ${url[1] || "inválido"}`,
             });

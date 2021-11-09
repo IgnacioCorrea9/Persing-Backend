@@ -1657,8 +1657,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AppComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-          selector: "ngx-app",
-          template: "\n        <router-outlet></router-outlet>\n      "
+          selector: 'ngx-app',
+          template: '<router-outlet></router-outlet>'
         }]
       }], function () {
         return [];
@@ -2376,7 +2376,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           if (error.ok == false && error.status == 500) {
             var url = "".concat(error.url).split("api/");
-            var domain = url[0].includes("local") ? "Localhost Server" : "Heorku Server";
+            var domain = url[0].includes("local") ? "Localhost Server" : "Heroku Server";
             this.handleResponseNull({
               titulo: "Servidor: ".concat(domain || "inválido", ". API: ").concat(url[1] || "inválido")
             });
