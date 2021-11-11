@@ -935,7 +935,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "p");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "Porcentaje de registro por caracter\xEDsica demogr\xE1fica.");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "Porcentaje de registro por caracter\xEDstica demogr\xE1fica.");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
