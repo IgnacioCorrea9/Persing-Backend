@@ -3,10 +3,10 @@ const passport = require("passport");
 const SectorController = require("../../controllers/sector_controller");
 
 module.exports = function (router) {
-  /** Trae todos los usuarios por tipo */
+  /** Trae todos los sectores registrados */
   router.get("/sector", SectorController.getAll);
 
-  /** Trae todos los usuarios por tipo */
+  /** Crea un nuevo sector */
   router.post(
     "/sector",
     passport.authenticate("jwt", { session: false }), 

@@ -6,7 +6,7 @@ const Sector = require("../models/sector");
 exports.get = function (req, res) {
   Sector.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.json({ data: result, success: true });
     } else {
       return res.send(err); // 500 error
     }
