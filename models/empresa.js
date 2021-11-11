@@ -23,9 +23,11 @@ EmpresaSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 }).populate("sectores").exec(callback);
   },
+
   getAll: function (query, callback) {
     this.find(query, { password: 0 }).populate("sectores").exec(callback);
   },
+  
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
       { _id: id },
@@ -42,6 +44,10 @@ EmpresaSchema.statics = {
       { new: true },
       callback
       );
+  },
+
+  getCount: function(query, callback){
+    this.countDocuments(query).exec(callback)
   },
   
   create: function (data, callback) {

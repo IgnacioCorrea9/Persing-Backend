@@ -18,9 +18,9 @@ sendgrid.setApiKey(sendGridCredentials.apiKey);
 router.post("/register", (req, res, next) => {
   if (
     req.body.password &&
-    req.body.nombre &&
+   // req.body.nombre &&
     req.body.email &&
-    req.body.apellido &&
+   // req.body.apellido &&
     req.body.tipo
   ) {
     let newUser = new User({

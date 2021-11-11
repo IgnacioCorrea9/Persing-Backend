@@ -69,7 +69,7 @@ exports.getActiveUsersCount = function (req, res) {
     {
       tipo: "consumidor",
       deletedAt: { $exists: false },
-      lastSeen: { $gte: moment().subtract(1, "month"), $lte: moment() },
+      lastSeen: { $gte: moment().subtract(1, "months"), $lte: moment() },
     },
     function (err, result) {
       if (!err) {

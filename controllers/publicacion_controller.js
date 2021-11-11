@@ -21,7 +21,7 @@ exports.get = function (req, res) {
  */
 exports.getAllForUser = function (req, res) {
   Publicacion.getAll(
-    { empresaDeleted: { $exists: false } },
+    { deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
         const userId = req.params.user;
@@ -76,7 +76,7 @@ exports.getAllForUser = function (req, res) {
  */
 exports.getAllDestacadas = function (req, res) {
   Publicacion.getAll(
-    { destacada: true, empresaDeleted: { $exists: false } },
+    { destacada: true, deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
         return res.status(200).json({ success: true, data: result });
@@ -108,7 +108,7 @@ exports.getAllNuevas = function (req, res) {
  * @param {*} res
  */
 exports.getNuevasByUser = function (req, res) {
-  Publicacion.getAll({ nueva: true, empresaDeleted: { $exists: false} }, function (err, result) {
+  Publicacion.getAll({ nueva: true, deletedAt: { $exists: false} }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
       User.get({ _id: userId }, function (err2, usuario) {
@@ -157,7 +157,7 @@ exports.getNuevasByUser = function (req, res) {
  * FLiters by name and description if query available
  */
 exports.getAllDestacadasForUser = function (req, res) {
-  Publicacion.getAll({ destacada: true, empresaDeleted: {$exists: false} }, function (err, result) {
+  Publicacion.getAll({ destacada: true, deletedAt: {$exists: false} }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
       result.forEach((element) => {
@@ -217,7 +217,7 @@ exports.toggleSave = function (req, res) {
 
 exports.getAllSavedByUser = function (req, res) {
   Publicacion.getAll(
-    { guardados: { $in: [req.params.user] }, empresaDeleted: {$exists: false} },
+    { guardados: { $in: [req.params.user] }, deletedAt: {$exists: false} },
     function (err, result) {
       if (!err) {
         const userId = req.params.user;
@@ -281,7 +281,7 @@ exports.toggleLike = function (req, res) {
 /** get function to get all Publicacion. */
 exports.getAll = function (req, res) {
   Publicacion.getAll(
-    { empresaDeleted: { $exists: false } },
+    { deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
         return res.status(200).json({ success: true, data: result });
@@ -335,7 +335,7 @@ exports.getAllByEmpresa = function (req, res) {
 /** get function to get all Publicacion. */
 exports.getAllBySector = function (req, res) {
   Publicacion.getAll(
-    { sector: req.params.sector, empresaDeleted: { $exists: false } },
+    { sector: req.params.sector, deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
         return res.status(200).json({ success: true, data: result });
@@ -357,7 +357,7 @@ exports.update = function (req, res) {
   });
 };
 
-/** update function to update Publicacion by id. */
+/** update function to create post */
 exports.create = function (req, res) {
   Publicacion.create(req.body, function (err, result) {
     if (!err) {
