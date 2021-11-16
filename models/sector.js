@@ -39,6 +39,42 @@ SectorSchema.statics = {
   getNoPopulate: function (query, callback) {
     this.findOne(query, { password: 0 }).exec(callback);
   },
+
+  getWithUsers: function (callback) {
+    this.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          let: { sector_id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $and: [
+                  {
+                    deletedAt: {
+                      $exists: false,
+                    },
+                  },
+                  {
+                    $expr: {
+                      $in: ["$$sector_id", "$intereses"],
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              $project: {
+                email: 1,
+              },
+            },
+          ],
+
+          as: "users",
+        },
+      },
+    ]).exec(callback);
+  },
 };
 
 const Sector = (module.exports = mongoose.model("Sector", SectorSchema));

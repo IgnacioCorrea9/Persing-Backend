@@ -3,13 +3,19 @@ const passport = require("passport");
 const SectorController = require("../../controllers/sector_controller");
 
 module.exports = function (router) {
+  router.get(
+    "/sector/users",
+    passport.authenticate("jwt", { session: false }),
+    SectorController.getAllWithUsers
+  );
+
   /** Trae todos los sectores registrados */
   router.get("/sector", SectorController.getAll);
 
   /** Crea un nuevo sector */
   router.post(
     "/sector",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     SectorController.create
   );
 
@@ -23,14 +29,14 @@ module.exports = function (router) {
   /** Actualiza una sector por id */
   router.put(
     "/sector/:id",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     SectorController.update
   );
 
   /** Elimina una sector */
   router.delete(
     "/sector/:id",
-    passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }),
     SectorController.delete
   );
 };
