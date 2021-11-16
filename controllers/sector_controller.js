@@ -6,14 +6,14 @@ const Sector = require("../models/sector");
 exports.get = function (req, res) {
   Sector.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      return res.json(result);
+      return res.json({ data: result, success: true });
     } else {
       return res.send(err); // 500 error
     }
   });
 };
 
-/** get function to get all Sector. */
+/** get function to get all Sectors  */
 exports.getAll = function (req, res) {
   Sector.getAll({}, function (err, result) {
     if (!err) {
@@ -21,6 +21,17 @@ exports.getAll = function (req, res) {
       return res.json({ data: result, success: true });
     } else {
       return res.send(err); // 500 error
+    }
+  });
+};
+
+/** Get function for all sectores and related users for each  */
+exports.getAllWithUsers = function (req, res) {
+  Sector.getWithUsers(function (err, result) {
+    if (!err) {
+      return res.status(201).json({ success: true, data: result });
+    } else {
+      return res.status(400).send(err);
     }
   });
 };
