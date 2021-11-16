@@ -1864,12 +1864,12 @@ class MainService {
      * @param {any} data propiedades a actualizar
      * @return {Observable<any>} respuesta asincrónica
      */
-    put({ api, data }) {
+    put({ api, data, hide404, }) {
         const request = this.http.put(`${this.baseUrl}${api}`, data, {
             headers: this.headers,
             observe: "response",
         });
-        return this.responseHandler({ request });
+        return this.responseHandler({ request, hide404: hide404 });
     }
 }
 MainService.ɵfac = function MainService_Factory(t) { return new (t || MainService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_general_service__WEBPACK_IMPORTED_MODULE_3__["GeneralService"])); };

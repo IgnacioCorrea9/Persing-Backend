@@ -2791,13 +2791,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "put",
         value: function put(_ref17) {
           var api = _ref17.api,
-              data = _ref17.data;
+              data = _ref17.data,
+              hide404 = _ref17.hide404;
           var request = this.http.put("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
             observe: "response"
           });
           return this.responseHandler({
-            request: request
+            request: request,
+            hide404: hide404
           });
         }
       }]);
