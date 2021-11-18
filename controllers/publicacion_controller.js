@@ -333,6 +333,7 @@ exports.getAllByEmpresa = function (req, res) {
 };
 
 /** get function to get all Publicacion. */
+/** get function to get all Publicacion. */
 exports.getAllBySector = function (req, res) {
   Publicacion.getAll(
     { sector: req.params.sector, deletedAt: { $exists: false } },
