@@ -338,6 +338,15 @@ exports.getAllBySector = function (req, res) {
     { sector: req.params.sector, deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
+          const userId = req.params.user;
+          result.forEach((element) => {
+            var liked = element.likes.includes(userId);
+            element._doc["liked"] = liked;
+            element._doc["likes"] = element.likes.length;
+            var saved = element.guardados.includes(userId);
+            element._doc["saved"] = saved;
+          });
+          return res.status(200).json({ success: true, data: result });
         return res.status(200).json({ success: true, data: result });
       } else {
         return res.status(500).send({ success: false, error: err }); // 500 error
