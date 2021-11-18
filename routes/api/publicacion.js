@@ -41,7 +41,7 @@ module.exports = function (router) {
   );
 
   router.get(
-    "/publicacion/sector/:sector",
+    "/publicacion/sector/:sector/:user",
     passport.authenticate("jwt", { session: false }), 
     PublicacionController.getAllBySector
   );

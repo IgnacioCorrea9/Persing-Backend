@@ -32,7 +32,8 @@ const PublicacionSchema = mongoose.Schema({
 	cpc: { type: String, required: false },
 	cpm: { type: String, required: false },
 	createdAt: { type: Date, required: false, default: Date.now },
-	deletedAt: { type: Boolean, required: false }
+	deletedAt: { type: Boolean, required: false },
+	ctr: { type: String, required: false },
 });
 
 PublicacionSchema.statics = {
