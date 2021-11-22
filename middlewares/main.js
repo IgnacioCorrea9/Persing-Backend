@@ -6,7 +6,7 @@ const User = require("../models/user");
 const decodedToken = (req) => {
   const [type, token] = req.headers.authorization.split(" ");
   return jwt.decode(token);
-}
+};
 
 /** Middlewares */
 
@@ -24,7 +24,8 @@ module.exports.isAdministrador = (req, res, next) => {
   const decoded = decodedToken(req);
   if (
     decoded.user &&
-    (decoded.user.tipo === "administrador" || decoded.user.tipo === "superadministrador")
+    (decoded.user.tipo === "administrador" ||
+      decoded.user.tipo === "superadministrador")
   ) {
     return next();
   }
