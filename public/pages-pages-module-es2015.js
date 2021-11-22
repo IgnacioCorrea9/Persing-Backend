@@ -379,7 +379,7 @@ class ChartsIndexComponent {
         this.mainService = mainService;
         this.authService = authService;
         /** API URL */
-        this.API_DEMOGRAPHICS = "api/user/demographics";
+        this.API_DEMOGRAPHICS = 'api/user/demographics';
         this.loading = true;
         // options
         this.showXAxis = true;
@@ -387,20 +387,12 @@ class ChartsIndexComponent {
         this.gradient = false;
         this.showLegend = true;
         this.showXAxisLabel = true;
-        this.yAxisLabel = "Característica proporcionada";
+        this.yAxisLabel = 'Característica proporcionada';
         this.showYAxisLabel = true;
-        this.xAxisLabel = "Total usuarios %";
-        this.legendTitle = "";
+        this.xAxisLabel = 'Total usuarios %';
+        this.legendTitle = '';
         this.colorScheme = {
-            domain: [
-                "#3d5a80",
-                "#98c1d9",
-                "#e0fbfc",
-                "#ee6c4d",
-                "#293241",
-                "#f7b2ad",
-                "#b89685",
-            ],
+            domain: ['#3d5a80', '#98c1d9', '#e0fbfc', '#ee6c4d', '#293241', '#f7b2ad', '#b89685'],
         };
     }
     ngOnInit() {
@@ -444,11 +436,11 @@ class ChartsIndexComponent {
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "¿Tiene hijos?",
+            xAxisLabel: '¿Tiene hijos?',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad de usuarios",
+            yAxisLabel: 'Cantidad de usuarios',
             animations: true,
-            legendTitle: "",
+            legendTitle: '',
             colorScheme: this.colorScheme,
         };
         this.petConfig = {
@@ -471,11 +463,11 @@ class ChartsIndexComponent {
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "¿Tiene mascotas?",
+            xAxisLabel: '¿Tiene mascotas?',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad",
+            yAxisLabel: 'Cantidad',
             animations: true,
-            legendTitle: "",
+            legendTitle: '',
             colorScheme: this.colorScheme,
         };
         this.genderConfig = {
@@ -506,10 +498,10 @@ class ChartsIndexComponent {
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "Géneros",
+            xAxisLabel: 'Géneros',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad",
-            legendTitle: "",
+            yAxisLabel: 'Cantidad',
+            legendTitle: '',
             animations: true,
             colorScheme: this.colorScheme,
         };
@@ -517,68 +509,58 @@ class ChartsIndexComponent {
             data: [
                 {
                     name: `Primaria: ${this.getPercentValue(data.nivelEducativo.Primaria)}%`,
-                    value: data.nivelEducativo.Primaria
-                        ? data.nivelEducativo.Primaria
-                        : 0,
+                    value: data.nivelEducativo.Primaria ? data.nivelEducativo.Primaria : 0,
                 },
                 {
                     name: `Bachillerato: ${this.getPercentValue(data.nivelEducativo.Bachillerato)}%`,
-                    value: data.nivelEducativo.Bachillerato
-                        ? data.nivelEducativo.Bachillerato
-                        : 0,
+                    value: data.nivelEducativo.Bachillerato ? data.nivelEducativo.Bachillerato : 0,
                 },
                 {
                     name: `Pregrado: ${this.getPercentValue(data.nivelEducativo.Pregrado)}%`,
-                    value: data.nivelEducativo.Pregrado
-                        ? data.nivelEducativo.Pregrado
-                        : 0,
+                    value: data.nivelEducativo.Pregrado ? data.nivelEducativo.Pregrado : 0,
                 },
                 {
                     name: `Doctorado: ${this.getPercentValue(data.nivelEducativo.Doctorado)}%`,
-                    value: data.nivelEducativo.Doctorado
-                        ? data.nivelEducativo.Doctorado
-                        : 0,
+                    value: data.nivelEducativo.Doctorado ? data.nivelEducativo.Doctorado : 0,
                 },
                 {
                     name: `No registra: ${this.getPercentValue(data.nivelEducativo.noRegistra)}%`,
-                    value: data.nivelEducativo.noRegistra
-                        ? data.nivelEducativo.noRegistra
-                        : 0,
+                    value: data.nivelEducativo.noRegistra ? data.nivelEducativo.noRegistra : 0,
                 },
             ],
             showLegend: true,
             showLabels: true,
             isDoughnut: false,
             trimLabels: false,
-            legendTitle: "",
-            legendPosition: "right",
+            legendTitle: '',
+            legendPosition: 'right',
             colorScheme: this.colorScheme,
         };
         this.stratumConfig = {
             data: [
                 {
                     name: `Estrato 1: ${this.getPercentValue(data.estrato['1'])}`,
-                    value: data.estrato["1"] ? data.estrato["1"] : 0,
+                    value: data.estrato['1'] ? data.estrato['1'] : 0,
                 },
                 {
                     name: `Estrato 2: ${this.getPercentValue(data.estrato['2'])}%`,
-                    value: data.estrato["2"] ? data.estrato["2"] : 0,
+                    value: data.estrato['2'] ? data.estrato['2'] : 0,
                 },
                 {
                     name: `Estrato 3: ${this.getPercentValue(data.estrato['3'])}%`,
-                    value: data.estrato["3"] ? data.estrato["3"] : 0,
+                    value: data.estrato['3'] ? data.estrato['3'] : 0,
                 },
                 {
                     name: `Estrato 4: ${this.getPercentValue(data.estrato['4'])}%`,
-                    value: data.estrato["4"] ? data.estrato["4"] : 0,
+                    value: data.estrato['4'] ? data.estrato['4'] : 0,
                 },
                 {
                     name: `Estrato 5: ${this.getPercentValue(data.estrato['5'])}%`,
-                    value: data.estrato["5"] ? data.estrato["5"] : 0,
+                    value: data.estrato['5'] ? data.estrato['5'] : 0,
                 },
                 {
                     name: `Estrato 6: ${this.getPercentValue(data.estrato['6'])}%`,
-                    value: data.estrato["6"] ? data.estrato["6"] : 0,
+                    value: data.estrato['6'] ? data.estrato['6'] : 0,
                 },
                 {
                     name: `No registra: ${this.getPercentValue(data.estrato.noRegistra)}%`,
@@ -588,9 +570,9 @@ class ChartsIndexComponent {
             showLegend: false,
             showLabels: true,
             trimLabels: false,
-            legendTitle: "",
+            legendTitle: '',
             isDoughnut: false,
-            legendPosition: "right",
+            legendPosition: 'right',
             colorScheme: this.colorScheme,
         };
         this.maritalStatusConfig = {
@@ -619,98 +601,86 @@ class ChartsIndexComponent {
             showLegend: true,
             showLabels: true,
             isDoughnut: false,
-            legendTitle: "",
-            legendPosition: "right",
+            legendTitle: '',
+            legendPosition: 'right',
             colorScheme: this.colorScheme,
         };
         this.multi = [
             {
-                name: "Género",
+                name: 'Género',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.genero.noRegistra ? data.genero.noRegistra : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.genero.noRegistra ? data.genero.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
+                        name: 'No registra',
                         value: data.genero.noRegistra ? data.genero.noRegistra : 0,
                     },
                 ],
             },
             {
-                name: "Estrato",
+                name: 'Estrato',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.estrato.noRegistra ? data.estrato.noRegistra : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.estrato.noRegistra ? data.estrato.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
+                        name: 'No registra',
                         value: data.estrato.noRegistra ? data.estrato.noRegistra : 0,
                     },
                 ],
             },
             {
-                name: "Nivel educativo",
+                name: 'Nivel educativo',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.nivelEducativo.noRegistra
-                                ? data.nivelEducativo.noRegistra
-                                : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.nivelEducativo.noRegistra ? data.nivelEducativo.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
-                        value: data.nivelEducativo.noRegistra
-                            ? data.nivelEducativo.noRegistra
-                            : 0,
+                        name: 'No registra',
+                        value: data.nivelEducativo.noRegistra ? data.nivelEducativo.noRegistra : 0,
                     },
                 ],
             },
             {
-                name: "Hijos",
+                name: 'Hijos',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.hijos.noRegistra ? data.hijos.noRegistra : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.hijos.noRegistra ? data.hijos.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
+                        name: 'No registra',
                         value: data.hijos.noRegistra ? data.hijos.noRegistra : 0,
                     },
                 ],
             },
             {
-                name: "Mascotas",
+                name: 'Mascotas',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.mascotas.noRegistra ? data.mascotas.noRegistra : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.mascotas.noRegistra ? data.mascotas.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
+                        name: 'No registra',
                         value: data.mascotas.noRegistra ? data.mascotas.noRegistra : 0,
                     },
                 ],
             },
             {
-                name: "Estado civil",
+                name: 'Estado civil',
                 series: [
                     {
-                        name: "Registra",
-                        value: data.totalUsuarios -
-                            (data.estadoCivil.noRegistra ? data.estadoCivil.noRegistra : 0),
+                        name: 'Registra',
+                        value: data.totalUsuarios - (data.estadoCivil.noRegistra ? data.estadoCivil.noRegistra : 0),
                     },
                     {
-                        name: "No registra",
-                        value: data.estadoCivil.noRegistra
-                            ? data.estadoCivil.noRegistra
-                            : 0,
+                        name: 'No registra',
+                        value: data.estadoCivil.noRegistra ? data.estadoCivil.noRegistra : 0,
                     },
                 ],
             },
@@ -755,9 +725,9 @@ ChartsIndexComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdef
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](ChartsIndexComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-                selector: "ngx-charts-index",
-                templateUrl: "./charts-index.component.html",
-                styleUrls: ["./charts-index.component.scss"],
+                selector: 'ngx-charts-index',
+                templateUrl: './charts-index.component.html',
+                styleUrls: ['./charts-index.component.scss'],
             }]
     }], function () { return [{ type: _public_services_main_service__WEBPACK_IMPORTED_MODULE_2__["MainService"] }, { type: _public_services_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"] }]; }, null); })();
 

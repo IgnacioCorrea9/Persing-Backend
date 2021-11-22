@@ -647,7 +647,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.authService = authService;
         /** API URL */
 
-        this.API_DEMOGRAPHICS = "api/user/demographics";
+        this.API_DEMOGRAPHICS = 'api/user/demographics';
         this.loading = true; // options
 
         this.showXAxis = true;
@@ -655,12 +655,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.gradient = false;
         this.showLegend = true;
         this.showXAxisLabel = true;
-        this.yAxisLabel = "Característica proporcionada";
+        this.yAxisLabel = 'Característica proporcionada';
         this.showYAxisLabel = true;
-        this.xAxisLabel = "Total usuarios %";
-        this.legendTitle = "";
+        this.xAxisLabel = 'Total usuarios %';
+        this.legendTitle = '';
         this.colorScheme = {
-          domain: ["#3d5a80", "#98c1d9", "#e0fbfc", "#ee6c4d", "#293241", "#f7b2ad", "#b89685"]
+          domain: ['#3d5a80', '#98c1d9', '#e0fbfc', '#ee6c4d', '#293241', '#f7b2ad', '#b89685']
         };
       }
 
@@ -711,11 +711,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "¿Tiene hijos?",
+            xAxisLabel: '¿Tiene hijos?',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad de usuarios",
+            yAxisLabel: 'Cantidad de usuarios',
             animations: true,
-            legendTitle: "",
+            legendTitle: '',
             colorScheme: this.colorScheme
           };
           this.petConfig = {
@@ -734,11 +734,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "¿Tiene mascotas?",
+            xAxisLabel: '¿Tiene mascotas?',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad",
+            yAxisLabel: 'Cantidad',
             animations: true,
-            legendTitle: "",
+            legendTitle: '',
             colorScheme: this.colorScheme
           };
           this.genderConfig = {
@@ -763,10 +763,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             gradient: false,
             showLegend: false,
             showXAxisLabel: true,
-            xAxisLabel: "Géneros",
+            xAxisLabel: 'Géneros',
             showYAxisLabel: true,
-            yAxisLabel: "Cantidad",
-            legendTitle: "",
+            yAxisLabel: 'Cantidad',
+            legendTitle: '',
             animations: true,
             colorScheme: this.colorScheme
           };
@@ -791,29 +791,29 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             showLabels: true,
             isDoughnut: false,
             trimLabels: false,
-            legendTitle: "",
-            legendPosition: "right",
+            legendTitle: '',
+            legendPosition: 'right',
             colorScheme: this.colorScheme
           };
           this.stratumConfig = {
             data: [{
               name: "Estrato 1: ".concat(this.getPercentValue(data.estrato['1'])),
-              value: data.estrato["1"] ? data.estrato["1"] : 0
+              value: data.estrato['1'] ? data.estrato['1'] : 0
             }, {
               name: "Estrato 2: ".concat(this.getPercentValue(data.estrato['2']), "%"),
-              value: data.estrato["2"] ? data.estrato["2"] : 0
+              value: data.estrato['2'] ? data.estrato['2'] : 0
             }, {
               name: "Estrato 3: ".concat(this.getPercentValue(data.estrato['3']), "%"),
-              value: data.estrato["3"] ? data.estrato["3"] : 0
+              value: data.estrato['3'] ? data.estrato['3'] : 0
             }, {
               name: "Estrato 4: ".concat(this.getPercentValue(data.estrato['4']), "%"),
-              value: data.estrato["4"] ? data.estrato["4"] : 0
+              value: data.estrato['4'] ? data.estrato['4'] : 0
             }, {
               name: "Estrato 5: ".concat(this.getPercentValue(data.estrato['5']), "%"),
-              value: data.estrato["5"] ? data.estrato["5"] : 0
+              value: data.estrato['5'] ? data.estrato['5'] : 0
             }, {
               name: "Estrato 6: ".concat(this.getPercentValue(data.estrato['6']), "%"),
-              value: data.estrato["6"] ? data.estrato["6"] : 0
+              value: data.estrato['6'] ? data.estrato['6'] : 0
             }, {
               name: "No registra: ".concat(this.getPercentValue(data.estrato.noRegistra), "%"),
               value: data.estrato.noRegistra ? data.estrato.noRegistra : 0
@@ -821,9 +821,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             showLegend: false,
             showLabels: true,
             trimLabels: false,
-            legendTitle: "",
+            legendTitle: '',
             isDoughnut: false,
-            legendPosition: "right",
+            legendPosition: 'right',
             colorScheme: this.colorScheme
           };
           this.maritalStatusConfig = {
@@ -846,62 +846,62 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             showLegend: true,
             showLabels: true,
             isDoughnut: false,
-            legendTitle: "",
-            legendPosition: "right",
+            legendTitle: '',
+            legendPosition: 'right',
             colorScheme: this.colorScheme
           };
           this.multi = [{
-            name: "Género",
+            name: 'Género',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.genero.noRegistra ? data.genero.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.genero.noRegistra ? data.genero.noRegistra : 0
             }]
           }, {
-            name: "Estrato",
+            name: 'Estrato',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.estrato.noRegistra ? data.estrato.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.estrato.noRegistra ? data.estrato.noRegistra : 0
             }]
           }, {
-            name: "Nivel educativo",
+            name: 'Nivel educativo',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.nivelEducativo.noRegistra ? data.nivelEducativo.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.nivelEducativo.noRegistra ? data.nivelEducativo.noRegistra : 0
             }]
           }, {
-            name: "Hijos",
+            name: 'Hijos',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.hijos.noRegistra ? data.hijos.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.hijos.noRegistra ? data.hijos.noRegistra : 0
             }]
           }, {
-            name: "Mascotas",
+            name: 'Mascotas',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.mascotas.noRegistra ? data.mascotas.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.mascotas.noRegistra ? data.mascotas.noRegistra : 0
             }]
           }, {
-            name: "Estado civil",
+            name: 'Estado civil',
             series: [{
-              name: "Registra",
+              name: 'Registra',
               value: data.totalUsuarios - (data.estadoCivil.noRegistra ? data.estadoCivil.noRegistra : 0)
             }, {
-              name: "No registra",
+              name: 'No registra',
               value: data.estadoCivil.noRegistra ? data.estadoCivil.noRegistra : 0
             }]
           }];
@@ -997,9 +997,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](ChartsIndexComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
-          selector: "ngx-charts-index",
-          templateUrl: "./charts-index.component.html",
-          styleUrls: ["./charts-index.component.scss"]
+          selector: 'ngx-charts-index',
+          templateUrl: './charts-index.component.html',
+          styleUrls: ['./charts-index.component.scss']
         }]
       }], function () {
         return [{
