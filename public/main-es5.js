@@ -1988,7 +1988,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.generalService = generalService;
         this.mainService = mainService;
         /** API Access - ENV */
-        // public baseUrl: string = 'http://localhost:8081/';
+        //public baseUrl: string = 'http://localhost:8081/';
 
         this.baseUrl = 'https://persing.herokuapp.com/';
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
