@@ -123,16 +123,24 @@ exports.sumInteractions = function (req, res) {
 
         switch (interaccion) {
           case "dislike":
-            for (var i = 1; i < likeValues[0].length; i++) {
-              var split = likeValues[0][i].split("-");
+          case "disguardar":
+            let dynamicValues =
+              "dislike" === interaccion ? likeValues : saveValues;
+            let dynamicValuesCredits =
+              "dislike" === interaccion
+                ? likeValuesCreditos
+                : saveValuesCreditos;
+
+            for (var i = 1; i < dynamicValues[0].length; i++) {
+              var split = dynamicValues[0][i].split("-");
 
               let lower = parseFloat(split[0]);
 
               let higher = parseFloat(split[1]);
 
               if (currentRank >= lower && currentRank <= higher) {
-                points = likeValues[1][i];
-                credits = likeValuesCreditos[1][i];
+                points = dynamicValues[1][i];
+                credits = dynamicValuesCredits[1][i];
                 break;
               }
             }
@@ -205,15 +213,10 @@ exports.sumInteractions = function (req, res) {
             break;
           case "guardar":
             for (var i = 1; i < saveValues[0].length; i++) {
-              console.log("evaluating column index...");
               var split = saveValues[0][i].split("-");
-              console.log(split);
               let lower = parseFloat(split[0]);
-              console.log(lower);
               let higher = parseFloat(split[1]);
-              console.log(higher);
               if (currentRank >= lower && currentRank <= higher) {
-                console.log("found index: " + i);
                 points = saveValues[1][i];
                 credits = saveValuesCreditos[1][i];
                 break;
