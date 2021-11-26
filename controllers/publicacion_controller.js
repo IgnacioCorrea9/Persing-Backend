@@ -192,6 +192,7 @@ exports.toggleSave = function (req, res) {
       const userId = req.body.user;
       const type = req.body.type;
       const arraySaves = result._doc.guardados;
+
       if (type === "add") {
         if (!arraySaves.includes(userId)) {
           arraySaves.push(userId);

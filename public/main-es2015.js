@@ -1061,16 +1061,16 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [
     {
-        path: "index",
+        path: 'index',
         loadChildren: () => Promise.all(/*! import() | public-public-module */[__webpack_require__.e("default~auth-auth-module~public-public-module"), __webpack_require__.e("public-public-module")]).then(__webpack_require__.bind(null, /*! ./public/public.module */ "./src/app/public/public.module.ts")).then((m) => m.PublicModule),
         canActivate: [_public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_2__["AuthGuard"]],
     },
     {
-        path: "login",
+        path: 'login',
         loadChildren: () => Promise.all(/*! import() | auth-auth-module */[__webpack_require__.e("default~auth-auth-module~public-public-module"), __webpack_require__.e("auth-auth-module")]).then(__webpack_require__.bind(null, /*! ./auth/auth.module */ "./src/app/auth/auth.module.ts")).then((m) => m.AuthModule),
     },
-    { path: "", redirectTo: "index", pathMatch: "full" },
-    { path: "**", redirectTo: "index" },
+    { path: '', redirectTo: 'index', pathMatch: 'full' },
+    { path: '**', redirectTo: 'index' },
 ];
 const config = {
     useHash: false,
@@ -1313,8 +1313,7 @@ class AuthService {
         this.http = http;
         this.generalService = generalService;
         this.mainService = mainService;
-        /** API Access - ENV */
-        //public baseUrl: string = 'http://localhost:8081/';
+        // public baseUrl: string = 'http://localhost:8081/';
         this.baseUrl = 'https://persing.herokuapp.com/';
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
         this.headers.append('Content-Type', 'application/json');

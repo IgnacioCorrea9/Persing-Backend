@@ -1511,7 +1511,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     "./src/app/public/guards/auth.guard.ts");
 
     var routes = [{
-      path: "index",
+      path: 'index',
       loadChildren: function loadChildren() {
         return Promise.all(
         /*! import() | public-public-module */
@@ -1523,7 +1523,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       },
       canActivate: [_public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_2__["AuthGuard"]]
     }, {
-      path: "login",
+      path: 'login',
       loadChildren: function loadChildren() {
         return Promise.all(
         /*! import() | auth-auth-module */
@@ -1534,12 +1534,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         });
       }
     }, {
-      path: "",
-      redirectTo: "index",
-      pathMatch: "full"
+      path: '',
+      redirectTo: 'index',
+      pathMatch: 'full'
     }, {
-      path: "**",
-      redirectTo: "index"
+      path: '**',
+      redirectTo: 'index'
     }];
     var config = {
       useHash: false
@@ -1986,9 +1986,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         this.http = http;
         this.generalService = generalService;
-        this.mainService = mainService;
-        /** API Access - ENV */
-        //public baseUrl: string = 'http://localhost:8081/';
+        this.mainService = mainService; // public baseUrl: string = 'http://localhost:8081/';
 
         this.baseUrl = 'https://persing.herokuapp.com/';
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
