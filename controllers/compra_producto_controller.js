@@ -20,7 +20,7 @@ exports.getAllByProducto = function (req, res) {
     { producto: req.params.producto },
     function (err, result) {
       if (!err) {
-        return res.status(200).json(result);
+        return res.status(200).json({ data: result, success: true });
       } else {
         return res.status(400).send({ error: err }); // 500 error
       }
@@ -42,7 +42,7 @@ exports.getAllByUser = function (req, res) {
   );
 };
 
-/** get function to get CompraProducto by id. */
+/** Comprar producto  */
 exports.create = function (req, res) {
   CompraProducto.create(req.body, function (err, result) {
     if (!err) {

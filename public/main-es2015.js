@@ -1061,16 +1061,16 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [
     {
-        path: "index",
+        path: 'index',
         loadChildren: () => Promise.all(/*! import() | public-public-module */[__webpack_require__.e("default~auth-auth-module~public-public-module"), __webpack_require__.e("public-public-module")]).then(__webpack_require__.bind(null, /*! ./public/public.module */ "./src/app/public/public.module.ts")).then((m) => m.PublicModule),
         canActivate: [_public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_2__["AuthGuard"]],
     },
     {
-        path: "login",
+        path: 'login',
         loadChildren: () => Promise.all(/*! import() | auth-auth-module */[__webpack_require__.e("default~auth-auth-module~public-public-module"), __webpack_require__.e("auth-auth-module")]).then(__webpack_require__.bind(null, /*! ./auth/auth.module */ "./src/app/auth/auth.module.ts")).then((m) => m.AuthModule),
     },
-    { path: "", redirectTo: "index", pathMatch: "full" },
-    { path: "**", redirectTo: "index" },
+    { path: '', redirectTo: 'index', pathMatch: 'full' },
+    { path: '**', redirectTo: 'index' },
 ];
 const config = {
     useHash: false,
@@ -1313,11 +1313,10 @@ class AuthService {
         this.http = http;
         this.generalService = generalService;
         this.mainService = mainService;
-        /** API Access - ENV */
-        // public baseUrl: string = "http://localhost:8081/";
-        this.baseUrl = "https://persing.herokuapp.com/";
+        // public baseUrl: string = 'http://localhost:8081/';
+        this.baseUrl = 'https://persing.herokuapp.com/';
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
-        this.headers.append("Content-Type", "application/json");
+        this.headers.append('Content-Type', 'application/json');
     }
     // =================================
     //  Metodos
@@ -1328,18 +1327,18 @@ class AuthService {
      */
     setAuthValues({ data }) {
         try {
-            localStorage.removeItem("_user");
-            localStorage.removeItem("_token");
-            localStorage.removeItem("_expiresIn");
+            localStorage.removeItem('_user');
+            localStorage.removeItem('_token');
+            localStorage.removeItem('_expiresIn');
             const _token = `${data.token}`;
-            this.mainService.headers = this.mainService.headers.set("authorization", _token);
-            const _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, "second");
+            this.mainService.headers = this.mainService.headers.set('authorization', _token);
+            const _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, 'second');
             delete data.token;
             delete data.expiresIn;
             const _user = Object.assign({}, data.user);
-            localStorage.setItem("_user", JSON.stringify(_user));
-            localStorage.setItem("_token", _token);
-            localStorage.setItem("_expiresIn", JSON.stringify(_expiresIn.valueOf()));
+            localStorage.setItem('_user', JSON.stringify(_user));
+            localStorage.setItem('_token', _token);
+            localStorage.setItem('_expiresIn', JSON.stringify(_expiresIn.valueOf()));
             return true;
         }
         catch (error) { }
@@ -1348,30 +1347,29 @@ class AuthService {
      * User is admin PROGEN
      */
     get isSuperadmin() {
-        const _user = JSON.parse(localStorage.getItem("_user" || false)) || {};
-        return (_user.tipo &&
-            (_user.tipo === "superadministrador" || _user.tipo === "administrador"));
+        const _user = JSON.parse(localStorage.getItem('_user' || false)) || {};
+        return _user.tipo && (_user.tipo === 'superadministrador' || _user.tipo === 'administrador');
     }
     /**
      * Retorna el usuario en sesión
      * @return {any} user
      */
     getUser() {
-        return JSON.parse(localStorage.getItem("_user"));
+        return JSON.parse(localStorage.getItem('_user'));
     }
     /**
      * Retorna el usuario en sesión
      * @return {any} user
      */
     getToken() {
-        return localStorage.getItem("_token");
+        return localStorage.getItem('_token');
     }
     /**
      * Verifca si el usario está en sesión
      */
     isLoggedIn() {
-        const _user = JSON.parse(localStorage.getItem("_user" || false)) || {};
-        const _token = localStorage.getItem("_token") || "";
+        const _user = JSON.parse(localStorage.getItem('_user' || false)) || {};
+        const _token = localStorage.getItem('_token') || '';
         if (this.isSuperadmin)
             return _token && _user._id;
         else {
@@ -1383,8 +1381,8 @@ class AuthService {
      * @return {any} user
      */
     logout() {
-        localStorage.removeItem("_user");
-        localStorage.removeItem("_token");
+        localStorage.removeItem('_user');
+        localStorage.removeItem('_token');
         return true;
     }
     /**
@@ -1405,7 +1403,7 @@ class AuthService {
      * Obtiene una respuesta del servidor
      * @param {Observable} request
      */
-    responseHandler({ request, }) {
+    responseHandler({ request }) {
         return new Promise((resolve) => {
             request.subscribe((response) => {
                 if (response) {
@@ -1414,7 +1412,7 @@ class AuthService {
                             resolve(response);
                         else {
                             this.generalService.handleError({
-                                error: "Usuario no registrado.",
+                                error: 'Usuario no registrado.',
                             });
                             resolve(undefined);
                         }
@@ -1429,7 +1427,7 @@ class AuthService {
                     resolve(undefined);
                 }
             }, (error) => {
-                const _body = JSON.parse(error._body || "{}");
+                const _body = JSON.parse(error._body || '{}');
                 if (_body.error)
                     this.generalService.handleError({
                         error: `${_body.error}`,
@@ -1442,11 +1440,11 @@ class AuthService {
     }
 }
 AuthService.ɵfac = function AuthService_Factory(t) { return new (t || AuthService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_http__WEBPACK_IMPORTED_MODULE_3__["Http"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_general_service__WEBPACK_IMPORTED_MODULE_5__["GeneralService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_main_service__WEBPACK_IMPORTED_MODULE_6__["MainService"])); };
-AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AuthService, factory: AuthService.ɵfac, providedIn: "root" });
+AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AuthService, factory: AuthService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-                providedIn: "root",
+                providedIn: 'root',
             }]
     }], function () { return [{ type: _angular_http__WEBPACK_IMPORTED_MODULE_3__["Http"] }, { type: _general_service__WEBPACK_IMPORTED_MODULE_5__["GeneralService"] }, { type: _main_service__WEBPACK_IMPORTED_MODULE_6__["MainService"] }]; }, null); })();
 
@@ -1734,16 +1732,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class MainService {
-    // public baseUrl: string = "http://localhost:8081/";
+    // public baseUrl: string = 'http://localhost:8081/';
     constructor(http, generalService) {
         this.http = http;
         this.generalService = generalService;
         /** API Access - ENV */
-        this.baseUrl = "https://persing.herokuapp.com/";
+        this.baseUrl = 'https://persing.herokuapp.com/';
         // this.baseUrl = environment.baseUrl;
-        const _token = localStorage.getItem("_token") || "";
+        const _token = localStorage.getItem('_token') || '';
         this.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: _token,
         });
         // this.headers.append('Content-Type', 'application/json');
@@ -1762,18 +1760,17 @@ class MainService {
      * Obtiene una respuesta del servidor
      * @param {Observable} request
      */
-    responseHandler({ request, hide404, }) {
+    responseHandler({ request, hide404 }) {
         return new Promise((resolve) => {
             request.subscribe((response) => {
                 if (response) {
                     if (response.status === 200 || response.status === 201) {
-                        if (response.body["data"] !== undefined &&
-                            response.body["data"] != null)
-                            resolve(response.body["data"]);
+                        if (response.body['data'] !== undefined && response.body['data'] != null)
+                            resolve(response.body['data']);
                         else {
                             if (!hide404)
                                 this.generalService.handleError({
-                                    error: "404 Objeto No Encontrado.",
+                                    error: '404 Objeto No Encontrado.',
                                 });
                             resolve(undefined);
                         }
@@ -1788,7 +1785,7 @@ class MainService {
                     resolve(undefined);
                 }
             }, (error) => {
-                const _body = JSON.parse(error._body || "{}");
+                const _body = JSON.parse(error._body || '{}');
                 if (_body.message)
                     this.generalService.handleError({
                         error: `${_body.message}`,
@@ -1805,7 +1802,7 @@ class MainService {
                 if (response) {
                     if (response.status === 200) {
                         this.generalService.handleSuccess({
-                            text: "Registro eliminado exitosamente",
+                            text: 'Registro eliminado exitosamente',
                         });
                         resolve(response);
                     }
@@ -1815,8 +1812,8 @@ class MainService {
                     }
                 }
                 else {
-                    this.generalService.handleError({ error: "Sin respuesta" });
-                    reject(new Error("Sin respuesta"));
+                    this.generalService.handleError({ error: 'Sin respuesta' });
+                    reject(new Error('Sin respuesta'));
                 }
             });
         });
@@ -1826,10 +1823,10 @@ class MainService {
      * @param {string} api route: api/componente
      * @return {Promise<any>} respuesta asincrónica
      */
-    get({ api, hide404, }) {
+    get({ api, hide404 }) {
         const request = this.http.get(`${this.baseUrl}${api}`, {
             headers: this.headers,
-            observe: "response",
+            observe: 'response',
         });
         return this.responseHandler({ request, hide404: hide404 });
     }
@@ -1842,7 +1839,7 @@ class MainService {
     post({ api, data }) {
         const request = this.http.post(`${this.baseUrl}${api}`, data, {
             headers: this.headers,
-            observe: "response",
+            observe: 'response',
         });
         return this.responseHandler({ request });
     }
@@ -1854,7 +1851,7 @@ class MainService {
     delete({ api }) {
         const request = this.http.delete(`${this.baseUrl}${api}`, {
             headers: this.headers,
-            observe: "response",
+            observe: 'response',
         });
         return this.deleteResponseHandler({ request });
     }
@@ -1864,20 +1861,20 @@ class MainService {
      * @param {any} data propiedades a actualizar
      * @return {Observable<any>} respuesta asincrónica
      */
-    put({ api, data, hide404, }) {
+    put({ api, data, hide404 }) {
         const request = this.http.put(`${this.baseUrl}${api}`, data, {
             headers: this.headers,
-            observe: "response",
+            observe: 'response',
         });
         return this.responseHandler({ request, hide404: hide404 });
     }
 }
 MainService.ɵfac = function MainService_Factory(t) { return new (t || MainService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_general_service__WEBPACK_IMPORTED_MODULE_3__["GeneralService"])); };
-MainService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: MainService, factory: MainService.ɵfac, providedIn: "root" });
+MainService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: MainService, factory: MainService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](MainService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-                providedIn: "root",
+                providedIn: 'root',
             }]
     }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }, { type: _general_service__WEBPACK_IMPORTED_MODULE_3__["GeneralService"] }]; }, null); })();
 

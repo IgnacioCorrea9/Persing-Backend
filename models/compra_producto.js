@@ -39,6 +39,7 @@ CompraProductoSchema.statics = {
   removeById: function (removeData, callback) {
     this.findOneAndRemove(removeData, callback);
   },
+  
   create: function (data, callback) {
     const user = new this(data);
     user.save(callback);

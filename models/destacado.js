@@ -43,6 +43,11 @@ DestacadoSchema.statics = {
   removeById: function (removeData, callback) {
     this.findOneAndRemove(removeData, callback);
   },
+
+  removeMany: function (query, callback) {
+    this.deleteMany(query, callback);
+  },
+
   create: function (data, callback) {
     const destacado = new this(data);
     destacado.save(callback);

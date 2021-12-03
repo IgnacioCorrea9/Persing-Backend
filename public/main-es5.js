@@ -1511,7 +1511,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     "./src/app/public/guards/auth.guard.ts");
 
     var routes = [{
-      path: "index",
+      path: 'index',
       loadChildren: function loadChildren() {
         return Promise.all(
         /*! import() | public-public-module */
@@ -1523,7 +1523,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       },
       canActivate: [_public_guards_auth_guard__WEBPACK_IMPORTED_MODULE_2__["AuthGuard"]]
     }, {
-      path: "login",
+      path: 'login',
       loadChildren: function loadChildren() {
         return Promise.all(
         /*! import() | auth-auth-module */
@@ -1534,12 +1534,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         });
       }
     }, {
-      path: "",
-      redirectTo: "index",
-      pathMatch: "full"
+      path: '',
+      redirectTo: 'index',
+      pathMatch: 'full'
     }, {
-      path: "**",
-      redirectTo: "index"
+      path: '**',
+      redirectTo: 'index'
     }];
     var config = {
       useHash: false
@@ -1986,13 +1986,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         this.http = http;
         this.generalService = generalService;
-        this.mainService = mainService;
-        /** API Access - ENV */
-        // public baseUrl: string = "http://localhost:8081/";
+        this.mainService = mainService; // public baseUrl: string = 'http://localhost:8081/';
 
-        this.baseUrl = "https://persing.herokuapp.com/";
+        this.baseUrl = 'https://persing.herokuapp.com/';
         this.headers = new _angular_http__WEBPACK_IMPORTED_MODULE_3__["Headers"]();
-        this.headers.append("Content-Type", "application/json");
+        this.headers.append('Content-Type', 'application/json');
       } // =================================
       //  Metodos
       // ================================
@@ -2009,24 +2007,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var data = _ref.data;
 
           try {
-            localStorage.removeItem("_user");
-            localStorage.removeItem("_token");
-            localStorage.removeItem("_expiresIn");
+            localStorage.removeItem('_user');
+            localStorage.removeItem('_token');
+            localStorage.removeItem('_expiresIn');
 
             var _token = "".concat(data.token);
 
-            this.mainService.headers = this.mainService.headers.set("authorization", _token);
+            this.mainService.headers = this.mainService.headers.set('authorization', _token);
 
-            var _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, "second");
+            var _expiresIn = moment__WEBPACK_IMPORTED_MODULE_2__().add(data.expiresIn, 'second');
 
             delete data.token;
             delete data.expiresIn;
 
             var _user = Object.assign({}, data.user);
 
-            localStorage.setItem("_user", JSON.stringify(_user));
-            localStorage.setItem("_token", _token);
-            localStorage.setItem("_expiresIn", JSON.stringify(_expiresIn.valueOf()));
+            localStorage.setItem('_user', JSON.stringify(_user));
+            localStorage.setItem('_token', _token);
+            localStorage.setItem('_expiresIn', JSON.stringify(_expiresIn.valueOf()));
             return true;
           } catch (error) {}
         }
@@ -2042,7 +2040,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
          * @return {any} user
          */
         value: function getUser() {
-          return JSON.parse(localStorage.getItem("_user"));
+          return JSON.parse(localStorage.getItem('_user'));
         }
         /**
          * Retorna el usuario en sesión
@@ -2052,7 +2050,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getToken",
         value: function getToken() {
-          return localStorage.getItem("_token");
+          return localStorage.getItem('_token');
         }
         /**
          * Verifca si el usario está en sesión
@@ -2061,9 +2059,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "isLoggedIn",
         value: function isLoggedIn() {
-          var _user = JSON.parse(localStorage.getItem("_user" || false)) || {};
+          var _user = JSON.parse(localStorage.getItem('_user' || false)) || {};
 
-          var _token = localStorage.getItem("_token") || "";
+          var _token = localStorage.getItem('_token') || '';
 
           if (this.isSuperadmin) return _token && _user._id;else {
             return false;
@@ -2077,8 +2075,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "logout",
         value: function logout() {
-          localStorage.removeItem("_user");
-          localStorage.removeItem("_token");
+          localStorage.removeItem('_user');
+          localStorage.removeItem('_token');
           return true;
         }
         /**
@@ -2119,7 +2117,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 if (response.success) {
                   if (response.user !== undefined && response.user != null) resolve(response);else {
                     _this4.generalService.handleError({
-                      error: "Usuario no registrado."
+                      error: 'Usuario no registrado.'
                     });
 
                     resolve(undefined);
@@ -2137,7 +2135,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 resolve(undefined);
               }
             }, function (error) {
-              var _body = JSON.parse(error._body || "{}");
+              var _body = JSON.parse(error._body || '{}');
 
               if (_body.error) _this4.generalService.handleError({
                 error: "".concat(_body.error)
@@ -2151,9 +2149,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "isSuperadmin",
         get: function get() {
-          var _user = JSON.parse(localStorage.getItem("_user" || false)) || {};
+          var _user = JSON.parse(localStorage.getItem('_user' || false)) || {};
 
-          return _user.tipo && (_user.tipo === "superadministrador" || _user.tipo === "administrador");
+          return _user.tipo && (_user.tipo === 'superadministrador' || _user.tipo === 'administrador');
         }
       }]);
 
@@ -2167,7 +2165,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
       token: AuthService,
       factory: AuthService.ɵfac,
-      providedIn: "root"
+      providedIn: 'root'
     });
     /*@__PURE__*/
 
@@ -2175,7 +2173,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-          providedIn: "root"
+          providedIn: 'root'
         }]
       }], function () {
         return [{
@@ -2615,7 +2613,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var MainService =
     /*#__PURE__*/
     function () {
-      // public baseUrl: string = "http://localhost:8081/";
+      // public baseUrl: string = 'http://localhost:8081/';
       function MainService(http, generalService) {
         _classCallCheck(this, MainService);
 
@@ -2623,12 +2621,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.generalService = generalService;
         /** API Access - ENV */
 
-        this.baseUrl = "https://persing.herokuapp.com/"; // this.baseUrl = environment.baseUrl;
+        this.baseUrl = 'https://persing.herokuapp.com/'; // this.baseUrl = environment.baseUrl;
 
-        var _token = localStorage.getItem("_token") || "";
+        var _token = localStorage.getItem('_token') || '';
 
         this.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: _token
         }); // this.headers.append('Content-Type', 'application/json');
         // this.setBearer();
@@ -2660,9 +2658,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             request.subscribe(function (response) {
               if (response) {
                 if (response.status === 200 || response.status === 201) {
-                  if (response.body["data"] !== undefined && response.body["data"] != null) resolve(response.body["data"]);else {
+                  if (response.body['data'] !== undefined && response.body['data'] != null) resolve(response.body['data']);else {
                     if (!hide404) _this5.generalService.handleError({
-                      error: "404 Objeto No Encontrado."
+                      error: '404 Objeto No Encontrado.'
                     });
                     resolve(undefined);
                   }
@@ -2679,7 +2677,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 resolve(undefined);
               }
             }, function (error) {
-              var _body = JSON.parse(error._body || "{}");
+              var _body = JSON.parse(error._body || '{}');
 
               if (_body.message) _this5.generalService.handleError({
                 error: "".concat(_body.message)
@@ -2701,7 +2699,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               if (response) {
                 if (response.status === 200) {
                   _this6.generalService.handleSuccess({
-                    text: "Registro eliminado exitosamente"
+                    text: 'Registro eliminado exitosamente'
                   });
 
                   resolve(response);
@@ -2714,10 +2712,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 }
               } else {
                 _this6.generalService.handleError({
-                  error: "Sin respuesta"
+                  error: 'Sin respuesta'
                 });
 
-                reject(new Error("Sin respuesta"));
+                reject(new Error('Sin respuesta'));
               }
             });
           });
@@ -2735,7 +2733,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               hide404 = _ref14.hide404;
           var request = this.http.get("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
-            observe: "response"
+            observe: 'response'
           });
           return this.responseHandler({
             request: request,
@@ -2756,7 +2754,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               data = _ref15.data;
           var request = this.http.post("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
-            observe: "response"
+            observe: 'response'
           });
           return this.responseHandler({
             request: request
@@ -2774,7 +2772,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var api = _ref16.api;
           var request = this.http["delete"]("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
-            observe: "response"
+            observe: 'response'
           });
           return this.deleteResponseHandler({
             request: request
@@ -2795,7 +2793,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               hide404 = _ref17.hide404;
           var request = this.http.put("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
-            observe: "response"
+            observe: 'response'
           });
           return this.responseHandler({
             request: request,
@@ -2814,7 +2812,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     MainService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
       token: MainService,
       factory: MainService.ɵfac,
-      providedIn: "root"
+      providedIn: 'root'
     });
     /*@__PURE__*/
 
@@ -2822,7 +2820,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](MainService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-          providedIn: "root"
+          providedIn: 'root'
         }]
       }], function () {
         return [{
