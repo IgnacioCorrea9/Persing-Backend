@@ -11,8 +11,10 @@ const PublicacionSchema = mongoose.Schema({
 		ref: "Sector",
 		required: false,
 	},
+	firstSaved: { type: String, required: false },
 	titulo: { type: String, required: false },
 	link: { type: String, required: false },
+	linkClicks: { type: Number, required: false, default: 0 },
 	texto: { type: String, required: false },
 	foto: { type: String, required: false },
 	video: { type: String, required: false },
@@ -28,15 +30,20 @@ const PublicacionSchema = mongoose.Schema({
 	destacada: { type: Boolean, required: false, default: false },
 	nueva: { type: Boolean, required: false, default: false },
 	vtr: { type: String, required: false },
-	engagement: { type: String, required: false },
-	cpc: { type: String, required: false },
-	cpm: { type: String, required: false },
+	engagement: { type: Number, required: false },
+	cpc: { type: Number, required: false },
+	cpm: { type: Number, required: false },
 	createdAt: { type: Date, required: false, default: Date.now },
 	deletedAt: { type: Boolean, required: false },
-	ctr: { type: String, required: false },
+	ctr: { type: Number, required: false },
+	ignored: { type: Number, required: false },
+	interacted: { type: Number, required: false },
 });
 
 PublicacionSchema.statics = {
+
+
+	
 	get: function (query, callback) {
 		this.findOne(query, { password: 0 })
 			.sort("-createdAt")

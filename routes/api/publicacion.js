@@ -59,6 +59,42 @@ module.exports = function (router) {
   );
 
   router.put(
+    "/publicacion/add-view/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.addView
+  );
+
+  router.put(
+    "/publicacion/interaction/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.interacted
+  );
+
+  router.put(
+    "/publicacion/engagement/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.engagement
+  );
+
+  router.put(
+    "/publicacion/ctr-calculation/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.ctrCalculation
+  );
+
+  router.put(
+    "/publicacion/ad-clicked/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.linkClicked
+  );
+
+  router.put(
+    "/publicacion/ignored/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.ignoredPost
+  );
+
+  router.put(
     "/publicacion/toggle-save/:id",
     passport.authenticate("jwt", { session: false }), 
     PublicacionController.toggleSave
