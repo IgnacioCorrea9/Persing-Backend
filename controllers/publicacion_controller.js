@@ -215,6 +215,134 @@ exports.toggleSave = function (req, res) {
   });
 };
 
+exports.addView = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const views = result._doc.alcanzados;
+      let updatedViews = views + 1;
+      var toSave = {
+        alcanzados: updatedViews,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.interacted = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const interacted = result._doc.interacted;
+      let updateInteractions = interacted + 1;
+      var toSave = {
+        interacted: updateInteractions,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.engagement = function (req, res) {
+  Publicacion.get(function (err, result) {
+    if (!err) {
+      const views = result._doc.alcanzados;
+      const interacted = result._doc.interacted;
+      let updateEngagement = (interacted * 100) / views;
+      var toSave = {
+        engagement: updateEngagement,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.ctrCalculation = function (req, res) {
+  Publicacion.get(function (err, result) {
+    if (!err) {
+      const views = result._doc.alcanzados;
+      const clicks = result._doc.linkClicks;
+      let updatedCtr = (clicks * 100) / views;
+      var toSave = {
+        ctr: updatedCtr,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.ignoredPost = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const ignored = result._doc.ignored;
+      let updateIgnored = ignored + 1;
+      var toSave = {
+        ignored: updateIgnored,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.linkClicked = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const clicks = result._doc.linkClicks;
+      let updatedClicks = clicks + 1;
+      var toSave = {
+        linkClicks: updatedClicks,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
 exports.getAllSavedByUser = function (req, res) {
   Publicacion.getAll(
     { guardados: { $in: [req.params.user] }, deletedAt: {$exists: false} },
