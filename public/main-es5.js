@@ -2259,8 +2259,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _createClass(GeneralService, [{
         key: "getNumber",
         value: function getNumber(fromVal) {
-          var valor = parseFloat("".concat(fromVal || '0')).toString();
-          if (valor === 'NaN') return 0;else return parseFloat(valor);
+          var valor = parseFloat("".concat(fromVal || "0")).toString();
+          if (valor === "NaN") return 0;else return parseFloat(valor);
         }
         /**
          * Remueve todos los espacios en blanco
@@ -2272,7 +2272,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "removeWS",
         value: function removeWS(x) {
-          return "".concat(x).trim().replace(/\s/g, '');
+          return "".concat(x).trim().replace(/\s/g, "");
         }
         /**
          * Remueve los diacriticos de una cadena
@@ -2283,7 +2283,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "removeDiacritics",
         value: function removeDiacritics(x) {
-          return "".concat(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          return "".concat(x).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
         /**
          * Remueve los diacriticos de una cadena
@@ -2312,7 +2312,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function showDialog(_ref4) {
           var dialog = _ref4.dialog;
           return this.dialogService.open(dialog, {
-            context: ''
+            context: ""
           });
         } // =================================
         // Metodos TOASTR
@@ -2334,8 +2334,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               title = _ref5.title,
               message = _ref5.message,
               status = _ref5.status;
-          var realPosition = position ? position : 'top-end';
-          var realMessage = message ? message : '';
+          var realPosition = position ? position : "top-end";
+          var realMessage = message ? message : "";
           var duractionMilisec = 4650;
           this.toastrService.show("".concat(realMessage), "".concat(title), {
             position: realPosition,
@@ -2354,9 +2354,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function handleResponseNull(_ref6) {
           var titulo = _ref6.titulo;
           this.showToastr({
-            title: 'No se ha establecido una conexión con el servidor.',
-            message: "".concat(titulo || ''),
-            status: 'basic'
+            title: "No se ha establecido una conexión con el servidor.",
+            message: "".concat(titulo || ""),
+            status: "basic"
           });
         }
         /**
@@ -2373,17 +2373,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               titulo = _ref7.titulo;
 
           if (error.ok == false && error.status == 500) {
-            var url = "".concat(error.url).split('api/');
-            var domain = url[0].includes('local') ? 'Localhost Server' : 'Heroku Server';
+            var url = "".concat(error.url).split("api/");
+            var domain = url[0].includes("local") ? "Localhost Server" : "Heroku Server";
             this.handleResponseNull({
-              titulo: "Servidor: ".concat(domain || 'inválido', ". API: ").concat(url[1] || 'inválido')
+              titulo: "Servidor: ".concat(domain || "inválido", ". API: ").concat(url[1] || "inválido")
             });
             return;
           }
 
           this.showToastr({
-            title: "".concat(error.message || error.data || error || '404 No Encontrado.'),
-            status: 'warning'
+            title: "".concat(error.message || error.data || error || "404 No Encontrado."),
+            status: "warning"
           });
         }
         /**
@@ -2398,16 +2398,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var text = _ref8.text;
           this.showToastr({
             title: "".concat(text),
-            status: 'success'
-          });
-        }
-      }, {
-        key: "handleErrorWithCustomizedText",
-        value: function handleErrorWithCustomizedText(_ref9) {
-          var text = _ref9.text;
-          this.showToastr({
-            title: text,
-            status: 'danger'
+            status: "success"
           });
         }
         /**
@@ -2419,8 +2410,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "on401",
         value: function on401() {
           this.showToastr({
-            title: 'No cuenta con los suficientes permisos.',
-            status: 'danger'
+            title: "No cuenta con los suficientes permisos.",
+            status: "danger"
           });
         }
         /**
@@ -2432,8 +2423,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "onIncomplete",
         value: function onIncomplete() {
           this.showToastr({
-            title: 'Faltan campos por completar.',
-            status: 'warning'
+            title: "Faltan campos por completar.",
+            status: "warning"
           });
         } // =================================
         // Metodos GENERALES
@@ -2456,8 +2447,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "routerNavigateTo",
-        value: function routerNavigateTo(_ref10) {
-          var path = _ref10.path;
+        value: function routerNavigateTo(_ref9) {
+          var path = _ref9.path;
           this.router.navigate([path]).then(function (fulfilled) {});
         }
         /**
@@ -2469,9 +2460,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "routerNavQueryTo",
-        value: function routerNavQueryTo(_ref11) {
-          var path = _ref11.path,
-              query = _ref11.query;
+        value: function routerNavQueryTo(_ref10) {
+          var path = _ref10.path,
+              query = _ref10.query;
           this.router.navigate([path], {
             queryParams: query
           });
@@ -2484,12 +2475,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "onAddQuery",
-        value: function onAddQuery(_ref12) {
-          var query = _ref12.query;
+        value: function onAddQuery(_ref11) {
+          var query = _ref11.query;
           this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: query || null,
-            queryParamsHandling: 'merge'
+            queryParamsHandling: "merge"
           });
         }
         /**
@@ -2547,7 +2538,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     GeneralService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
       token: GeneralService,
       factory: GeneralService.ɵfac,
-      providedIn: 'root'
+      providedIn: "root"
     });
     /*@__PURE__*/
 
@@ -2555,7 +2546,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](GeneralService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-          providedIn: 'root'
+          providedIn: "root"
         }]
       }], function () {
         return [{
@@ -2658,16 +2649,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       _createClass(MainService, [{
         key: "responseHandler",
-        value: function responseHandler(_ref13) {
+        value: function responseHandler(_ref12) {
           var _this5 = this;
 
-          var request = _ref13.request,
-              hide404 = _ref13.hide404;
+          var request = _ref12.request,
+              hide404 = _ref12.hide404;
           return new Promise(function (resolve) {
             request.subscribe(function (response) {
               if (response) {
                 if (response.status === 200 || response.status === 201) {
-                  if (response.body['data'] !== undefined && response.body['data'] !== null) resolve(response.body['data']);else {
+                  if (response.body['data'] !== undefined && response.body['data'] != null) resolve(response.body['data']);else {
                     if (!hide404) _this5.generalService.handleError({
                       error: '404 Objeto No Encontrado.'
                     });
@@ -2696,23 +2687,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               resolve(undefined);
             });
           });
-        } // Services with observables
-
-      }, {
-        key: "changePassword",
-        value: function changePassword(_ref14) {
-          var api = _ref14.api,
-              data = _ref14.data;
-          return this.http.post("".concat(this.baseUrl).concat(api), data, {
-            headers: this.headers
-          });
         }
       }, {
         key: "deleteResponseHandler",
-        value: function deleteResponseHandler(_ref15) {
+        value: function deleteResponseHandler(_ref13) {
           var _this6 = this;
 
-          var request = _ref15.request;
+          var request = _ref13.request;
           return new Promise(function (resolve, reject) {
             request.subscribe(function (response) {
               if (response) {
@@ -2747,9 +2728,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "get",
-        value: function get(_ref16) {
-          var api = _ref16.api,
-              hide404 = _ref16.hide404;
+        value: function get(_ref14) {
+          var api = _ref14.api,
+              hide404 = _ref14.hide404;
           var request = this.http.get("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
             observe: 'response'
@@ -2768,9 +2749,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "post",
-        value: function post(_ref17) {
-          var api = _ref17.api,
-              data = _ref17.data;
+        value: function post(_ref15) {
+          var api = _ref15.api,
+              data = _ref15.data;
           var request = this.http.post("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
             observe: 'response'
@@ -2787,8 +2768,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "delete",
-        value: function _delete(_ref18) {
-          var api = _ref18.api;
+        value: function _delete(_ref16) {
+          var api = _ref16.api;
           var request = this.http["delete"]("".concat(this.baseUrl).concat(api), {
             headers: this.headers,
             observe: 'response'
@@ -2806,10 +2787,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       }, {
         key: "put",
-        value: function put(_ref19) {
-          var api = _ref19.api,
-              data = _ref19.data,
-              hide404 = _ref19.hide404;
+        value: function put(_ref17) {
+          var api = _ref17.api,
+              data = _ref17.data,
+              hide404 = _ref17.hide404;
           var request = this.http.put("".concat(this.baseUrl).concat(api), data, {
             headers: this.headers,
             observe: 'response'

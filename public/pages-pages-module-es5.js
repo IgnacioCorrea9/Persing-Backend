@@ -754,9 +754,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             }, {
               name: "Prefiero no decir: ".concat(this.getPercentValue(data.genero.PrefieroNoDecir), "%"),
               value: data.genero.PrefieroNoDecir ? data.genero.PrefieroNoDecir : 0
-            }, {
-              name: "No registra: ".concat(this.getPercentValue(data.genero.noRegistra), "%"),
-              value: data.genero.noRegistra ? data.genero.noRegistra : 0
             }],
             showXAxis: true,
             showYAxis: true,
@@ -851,15 +848,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             colorScheme: this.colorScheme
           };
           this.multi = [{
-            name: 'Género',
-            series: [{
-              name: 'Registra',
-              value: data.totalUsuarios - (data.genero.noRegistra ? data.genero.noRegistra : 0)
-            }, {
-              name: 'No registra',
-              value: data.genero.noRegistra ? data.genero.noRegistra : 0
-            }]
-          }, {
             name: 'Estrato',
             series: [{
               name: 'Registra',

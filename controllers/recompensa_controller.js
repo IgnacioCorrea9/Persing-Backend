@@ -2,6 +2,7 @@
 
 const Recompensa = require("../models/recompensa");
 const User = require("../models/user");
+const Save = require("../models/save");
 var _ = require("lodash");
 
 const viewsValues = [
@@ -212,6 +213,21 @@ exports.sumInteractions = function (req, res) {
             }
             break;
           case "guardar":
+            const notRewardedItems = await Save.getOne({
+              alreadyRewarded: false,
+            });
+
+            if (notRewardedItems === null) {
+              points = 0;
+              credits = 0;
+              break;
+            }
+
+            await Save.updateSave(
+              { alreadyRewarded: false },
+              { alreadyRewarded: true }
+            );
+
             for (var i = 1; i < saveValues[0].length; i++) {
               var split = saveValues[0][i].split("-");
               let lower = parseFloat(split[0]);
@@ -222,16 +238,17 @@ exports.sumInteractions = function (req, res) {
                 break;
               }
             }
+
             break;
           case "compartir":
             for (var i = 1; i < shareValues[0].length; i++) {
               console.log("evaluating column index...");
               var split = shareValues[0][i].split("-");
-              console.log(split);
+
               let lower = parseFloat(split[0]);
-              console.log(lower);
+
               let higher = parseFloat(split[1]);
-              console.log(higher);
+
               if (currentRank >= lower && currentRank <= higher) {
                 console.log("found index: " + i);
                 points = shareValues[1][i];
@@ -242,8 +259,6 @@ exports.sumInteractions = function (req, res) {
             break;
         }
 
-        console.log("points summed for " + interaccion + ": " + points);
-        console.log("credits summed for " + interaccion + ": " + credits);
         let newRankRecompensa = (
           currentRank +
           getEarningsFromInteraction(
