@@ -3,6 +3,7 @@
 const Publicacion = require("../models/publicacion");
 const Like = require("../models/like");
 const User = require("../models/user");
+const Save = require("../models/save");
 const _ = require("lodash");
 
 /** get function to get Publicacion by id. */
@@ -187,6 +188,20 @@ exports.getAllDestacadasForUser = function (req, res) {
 };
 
 exports.toggleSave = function (req, res) {
+  function updatePost(arrayToUpdate) {
+    var toSave = {
+      guardados: arrayToUpdate,
+    };
+
+    Publicacion.updateById(req.params.id, toSave, function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err });
+      }
+    });
+  }
+
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const userId = req.body.user;
@@ -194,25 +209,32 @@ exports.toggleSave = function (req, res) {
       const arraySaves = result._doc.guardados;
 
       if (type === "add") {
-        if (!arraySaves.includes(userId)) {
-          arraySaves.push(userId);
-        }
+        Save.upsert(
+          { publicacion: req.params.id },
+          {
+            usuario: userId,
+            publicacion: req.params.id,
+            alreadyRewarded: false,
+            createdAt: Date.now(),
+          },
+          function (err, result) {
+            if (err) {
+              return res.status(500).send({ success: false, error: err });
+            }
+
+            if (!arraySaves.includes(userId)) {
+              arraySaves.push(userId);
+            }
+            return updatePost(arraySaves);
+          }
+        );
       } else {
         const index = arraySaves.indexOf(userId);
         if (index > -1) {
           arraySaves.splice(index, 1);
         }
+        return updatePost(arraySaves);
       }
-      var toSave = {
-        guardados: arraySaves,
-      };
-      Publicacion.updateById(req.params.id, toSave, function (err, result) {
-        if (!err) {
-          return res.status(200).json({ success: true, data: result });
-        } else {
-          return res.status(500).send({ success: false, error: err }); // 500 error
-        }
-      });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }
