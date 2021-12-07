@@ -29,7 +29,7 @@ const PublicacionSchema = mongoose.Schema({
 	inversion: { type: Number, required: false },
 	destacada: { type: Boolean, required: false, default: false },
 	nueva: { type: Boolean, required: false, default: false },
-	vtr: { type: String, required: false },
+	vtr: { type: Number, required: false },
 	engagement: { type: Number, required: false },
 	cpc: { type: Number, required: false },
 	cpm: { type: Number, required: false },

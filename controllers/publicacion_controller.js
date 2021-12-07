@@ -327,6 +327,28 @@ exports.ctrCalculation = function (req, res) {
   });
 };
 
+exports.vtrCalculation = function (req, res) {
+  Publicacion.get(function (err, result) {
+    if (!err) {
+      const views = result._doc.alcanzados;
+      const vtrReached = result._doc.vtr;
+      let updatedVtr = vtrReached + 1;
+      var toSave = {
+        vtr: updatedVtr,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
 exports.ignoredPost = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
