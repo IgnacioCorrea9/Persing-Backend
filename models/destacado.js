@@ -16,6 +16,13 @@ const DestacadoSchema = mongoose.Schema({
   comentarios: { type: Number, required: false, default: 0 },
   alcanzados: { type: Number, required: false, default: 0 },
   createdAt: { type: Date, required: false, default: Date.now },
+  vtr: { type: Number, required: false, default: 0 },
+  engagement: { type: Number, required: false, default: 0 },
+  cpc: { type: Number, required: false, default: 0 },
+  cpm: { type: Number, required: false, default: 0 },
+  ctr: { type: Number, required: false, default: 0 },
+  ignored: { type: Number, required: false, default: 0 },
+  interacted: { type: Number, required: false, default: 0 },
 });
 
 DestacadoSchema.statics = {
