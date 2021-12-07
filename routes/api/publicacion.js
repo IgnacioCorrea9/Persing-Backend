@@ -83,6 +83,12 @@ module.exports = function (router) {
   );
 
   router.put(
+    "/publicacion/vtr-calculation/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.vtrCalculation
+  );
+
+  router.put(
     "/publicacion/ad-clicked/:id",
     passport.authenticate("jwt", { session: false }), 
     PublicacionController.linkClicked
