@@ -72,6 +72,7 @@ exports.toggleLike = function (req, res) {
             Like.create(like, function (err2, result2) {
               if (!err2) {
                 console.log("created like");
+                console.log('done');
               }
             });
             return res.json({ success: true, data: result });
