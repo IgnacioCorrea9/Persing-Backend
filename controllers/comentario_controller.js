@@ -48,6 +48,7 @@ exports.countByPublicacion = function (req, res) {
 exports.create = function (req, res) {
   Comentario.create(req.body, function (err, result) {
     if (!err) {
+      console.log(req.body.Destacado);
       if (!req.body.isDestacado) {
         Publicacion.get({ _id: req.body.publicacion }, function (err2, result2) {
           if (!err2) {
