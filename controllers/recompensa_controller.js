@@ -3,6 +3,7 @@
 const Recompensa = require("../models/recompensa");
 const User = require("../models/user");
 const Save = require("../models/save");
+const Publicacion = require("../models/publicacion");
 var _ = require("lodash");
 
 const viewsValues = [
@@ -97,7 +98,211 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
 
 exports.sumInteractions = function (req, res) {
   Recompensa.get(
-    { usuario: req.body.usuario, sector: req.body.sector },
+    { usuario: req.body.usuario, sector: req.body.sector,  },
+    async function (err2, result2) {
+      if (!err2) {
+        var recompensa = result2;
+        if (result2 == null || result2 == undefined || result2 == {}) {
+          await Recompensa.create(
+            {
+              usuario: req.body.usuario,
+              sector: req.body.sector,
+              ranking: 0,
+              creditos: 0,
+            },
+            function (err3, result3) {
+              if (!err3) {
+                recompensa = result3;
+              }
+            }
+          );
+        }
+        let currentRank = recompensa.ranking;
+        let currentCreditos = recompensa.creditos;
+        let interaccion = req.body.interaccion;
+        var points;
+        var credits;
+
+        switch (interaccion) {
+          case "dislike":
+          case "disguardar":
+            let dynamicValues =
+              "dislike" === interaccion ? likeValues : saveValues;
+            let dynamicValuesCredits =
+              "dislike" === interaccion
+                ? likeValuesCreditos
+                : saveValuesCreditos;
+
+            for (var i = 1; i < dynamicValues[0].length; i++) {
+              var split = dynamicValues[0][i].split("-");
+
+              let lower = parseFloat(split[0]);
+
+              let higher = parseFloat(split[1]);
+
+              if (currentRank >= lower && currentRank <= higher) {
+                points = dynamicValues[1][i];
+                credits = dynamicValuesCredits[1][i];
+                break;
+              }
+            }
+            let newRankRecompensa = (
+              currentRank -
+              getEarningsFromInteraction(
+                points,
+                currentRank,
+                recompensa.usuario.calificacionApp || 1
+              )
+            ).toFixed(2);
+            let newCreditos = currentCreditos - credits;
+            let total = recompensa.usuario.creditos - credits;
+            console.log(newRankRecompensa, currentCreditos, newCreditos);
+            if (newRankRecompensa > 10) {
+              newRankRecompensa = 10;
+            }
+            if (newRankRecompensa < 0) {
+              newRankRecompensa = 0;
+            }
+            if (newCreditos < 0) {
+              newCreditos = 0;
+            }
+            if (total < 0) {
+              total = 0;
+            }
+            Recompensa.updateById(
+              recompensa._id,
+              { ranking: newRankRecompensa, creditos: newCreditos },
+              await function (error, resultRecompensa) {
+                console.log(resultRecompensa);
+              }
+            );
+            User.updateById(
+              recompensa.usuario._id,
+              { creditos: total },
+              await function (err, resultUsuario) {
+                console.log(resultUsuario);
+              }
+            );
+            return res.status(200).json("saved interaction");
+          case "like":
+            for (var i = 1; i < likeValues[0].length; i++) {
+              var split = likeValues[0][i].split("-");
+              let lower = parseFloat(split[0]);
+              let higher = parseFloat(split[1]);
+              if (currentRank >= lower && currentRank <= higher) {
+                points = likeValues[1][i];
+                credits = likeValuesCreditos[1][i];
+                break;
+              }
+            }
+            break;
+          case "comentario":
+            for (var i = 1; i < commentValues[0].length; i++) {
+              console.log("evaluating column index...");
+              var split = commentValues[0][i].split("-");
+              console.log(split);
+              let lower = parseFloat(split[0]);
+              console.log(lower);
+              console.log(lower);
+              let higher = parseFloat(split[1]);
+              console.log(higher);
+              if (currentRank >= lower && currentRank <= higher) {
+                console.log("found index: " + i);
+                points = commentValues[1][i];
+                credits = commentValuesCreditos[1][i];
+                break;
+              }
+            }
+            break;
+          case "guardar":
+            const notRewardedItems = await Save.getOne({
+              alreadyRewarded: false,
+            });
+
+            if (notRewardedItems === null) {
+              points = 0;
+              credits = 0;
+              break;
+            }
+
+            await Save.updateSave(
+              { alreadyRewarded: false },
+              { alreadyRewarded: true }
+            );
+
+            for (var i = 1; i < saveValues[0].length; i++) {
+              var split = saveValues[0][i].split("-");
+              let lower = parseFloat(split[0]);
+              let higher = parseFloat(split[1]);
+              if (currentRank >= lower && currentRank <= higher) {
+                points = saveValues[1][i];
+                credits = saveValuesCreditos[1][i];
+                break;
+              }
+            }
+
+            break;
+          case "compartir":
+            for (var i = 1; i < shareValues[0].length; i++) {
+              console.log("evaluating column index...");
+              var split = shareValues[0][i].split("-");
+
+              let lower = parseFloat(split[0]);
+
+              let higher = parseFloat(split[1]);
+
+              if (currentRank >= lower && currentRank <= higher) {
+                console.log("found index: " + i);
+                points = shareValues[1][i];
+                credits = shareValuesCreditos[1][i];
+                break;
+              }
+            }
+            break;
+        }
+
+        let newRankRecompensa = (
+          currentRank +
+          getEarningsFromInteraction(
+            points,
+            currentRank,
+            recompensa.usuario.calificacionApp || 1
+          )
+        ).toFixed(2);
+        let newCreditos = currentCreditos + credits;
+        let total = recompensa.usuario.creditos + credits;
+        console.log(newRankRecompensa, currentCreditos, newCreditos);
+        if (newRankRecompensa > 10) {
+          newRankRecompensa = 10;
+        }
+        if (newRankRecompensa < 0) {
+          newRankRecompensa = 0;
+        }
+        Recompensa.updateById(
+          recompensa._id,
+          { ranking: newRankRecompensa, creditos: newCreditos },
+          await function (error, resultRecompensa) {
+            console.log(resultRecompensa);
+          }
+        );
+        User.updateById(
+          recompensa.usuario._id,
+          { creditos: total },
+          await function (err, resultUsuario) {
+            console.log(resultUsuario);
+          }
+        );
+        return res.status(200).json("saved interaction");
+      } else {
+        return res.status(400).send({ error: err }); // 500 error
+      }
+    }
+  );
+};
+
+exports.valorUpdate = function (req, res) {
+  Recompensa.get(
+    { usuario: req.body.usuario, sector: req.body.sector,  },
     async function (err2, result2) {
       if (!err2) {
         var recompensa = result2;
