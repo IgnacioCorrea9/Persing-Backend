@@ -1491,8 +1491,8 @@ class GeneralService {
      * @return number
      */
     getNumber(fromVal) {
-        const valor = parseFloat(`${fromVal || "0"}`).toString();
-        if (valor === "NaN")
+        const valor = parseFloat(`${fromVal || '0'}`).toString();
+        if (valor === 'NaN')
             return 0;
         else
             return parseFloat(valor);
@@ -1504,7 +1504,7 @@ class GeneralService {
      * @return string
      */
     removeWS(x) {
-        return `${x}`.trim().replace(/\s/g, "");
+        return `${x}`.trim().replace(/\s/g, '');
     }
     /**
      * Remueve los diacriticos de una cadena
@@ -1512,7 +1512,7 @@ class GeneralService {
      * @return string
      */
     removeDiacritics(x) {
-        return `${x}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return `${x}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     }
     /**
      * Remueve los diacriticos de una cadena
@@ -1533,7 +1533,7 @@ class GeneralService {
      * @returns void
      */
     showDialog({ dialog }) {
-        return this.dialogService.open(dialog, { context: "" });
+        return this.dialogService.open(dialog, { context: '' });
     }
     // =================================
     // Metodos TOASTR
@@ -1547,8 +1547,8 @@ class GeneralService {
      * @returns void
      */
     showToastr({ position, title, message, status, }) {
-        let realPosition = position ? position : "top-end";
-        let realMessage = message ? message : "";
+        let realPosition = position ? position : 'top-end';
+        let realMessage = message ? message : '';
         let duractionMilisec = 4650;
         this.toastrService.show(`${realMessage}`, `${title}`, {
             position: realPosition,
@@ -1563,9 +1563,9 @@ class GeneralService {
      */
     handleResponseNull({ titulo }) {
         this.showToastr({
-            title: "No se ha establecido una conexión con el servidor.",
-            message: `${titulo || ""}`,
-            status: "basic",
+            title: 'No se ha establecido una conexión con el servidor.',
+            message: `${titulo || ''}`,
+            status: 'basic',
         });
     }
     /**
@@ -1576,18 +1576,16 @@ class GeneralService {
      */
     handleError({ error, titulo }) {
         if (error.ok == false && error.status == 500) {
-            const url = `${error.url}`.split("api/");
-            const domain = url[0].includes("local")
-                ? "Localhost Server"
-                : "Heroku Server";
+            const url = `${error.url}`.split('api/');
+            const domain = url[0].includes('local') ? 'Localhost Server' : 'Heroku Server';
             this.handleResponseNull({
-                titulo: `Servidor: ${domain || "inválido"}. API: ${url[1] || "inválido"}`,
+                titulo: `Servidor: ${domain || 'inválido'}. API: ${url[1] || 'inválido'}`,
             });
             return;
         }
         this.showToastr({
-            title: `${error.message || error.data || error || "404 No Encontrado."}`,
-            status: "warning",
+            title: `${error.message || error.data || error || '404 No Encontrado.'}`,
+            status: 'warning',
         });
     }
     /**
@@ -1598,7 +1596,13 @@ class GeneralService {
     handleSuccess({ text }) {
         this.showToastr({
             title: `${text}`,
-            status: "success",
+            status: 'success',
+        });
+    }
+    handleErrorWithCustomizedText({ text }) {
+        this.showToastr({
+            title: text,
+            status: 'danger',
         });
     }
     /**
@@ -1607,8 +1611,8 @@ class GeneralService {
      */
     on401() {
         this.showToastr({
-            title: "No cuenta con los suficientes permisos.",
-            status: "danger",
+            title: 'No cuenta con los suficientes permisos.',
+            status: 'danger',
         });
     }
     /**
@@ -1617,8 +1621,8 @@ class GeneralService {
      */
     onIncomplete() {
         this.showToastr({
-            title: "Faltan campos por completar.",
-            status: "warning",
+            title: 'Faltan campos por completar.',
+            status: 'warning',
         });
     }
     // =================================
@@ -1658,7 +1662,7 @@ class GeneralService {
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: query || null,
-            queryParamsHandling: "merge",
+            queryParamsHandling: 'merge',
         });
     }
     /**
@@ -1699,11 +1703,11 @@ class GeneralService {
     }
 }
 GeneralService.ɵfac = function GeneralService_Factory(t) { return new (t || GeneralService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_nebular_theme__WEBPACK_IMPORTED_MODULE_1__["NbToastrService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_nebular_theme__WEBPACK_IMPORTED_MODULE_1__["NbDialogService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"])); };
-GeneralService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: GeneralService, factory: GeneralService.ɵfac, providedIn: "root" });
+GeneralService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: GeneralService, factory: GeneralService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](GeneralService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
         args: [{
-                providedIn: "root",
+                providedIn: 'root',
             }]
     }], function () { return [{ type: _nebular_theme__WEBPACK_IMPORTED_MODULE_1__["NbToastrService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] }, { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_1__["NbDialogService"] }, { type: _angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"] }]; }, null); })();
 
@@ -1765,7 +1769,7 @@ class MainService {
             request.subscribe((response) => {
                 if (response) {
                     if (response.status === 200 || response.status === 201) {
-                        if (response.body['data'] !== undefined && response.body['data'] != null)
+                        if (response.body['data'] !== undefined && response.body['data'] !== null)
                             resolve(response.body['data']);
                         else {
                             if (!hide404)
@@ -1794,6 +1798,12 @@ class MainService {
                     this.generalService.handleError({ error });
                 resolve(undefined);
             });
+        });
+    }
+    // Services with observables
+    changePassword({ api, data }) {
+        return this.http.post(`${this.baseUrl}${api}`, data, {
+            headers: this.headers,
         });
     }
     deleteResponseHandler({ request }) {
