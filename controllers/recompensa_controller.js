@@ -203,6 +203,7 @@ exports.sumInteractions = function (req, res) {
               console.log(split);
               let lower = parseFloat(split[0]);
               console.log(lower);
+              console.log(lower);
               let higher = parseFloat(split[1]);
               console.log(higher);
               if (currentRank >= lower && currentRank <= higher) {
