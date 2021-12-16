@@ -83,6 +83,18 @@ module.exports = function (router) {
   );
 
   router.put(
+    "/publicacion/cpm-calculation/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.cpmCalculation
+  );
+
+  router.put(
+    "/publicacion/cpc-calculation/:id",
+    passport.authenticate("jwt", { session: false }), 
+    PublicacionController.cpcCalculation
+  );
+
+  router.put(
     "/publicacion/vtr-calculation/:id",
     passport.authenticate("jwt", { session: false }), 
     PublicacionController.vtrCalculation

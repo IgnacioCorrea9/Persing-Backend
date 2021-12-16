@@ -305,6 +305,49 @@ exports.engagement = function (req, res) {
   });
 };
 
+exports.cpmCalculation = function (req, res) {
+  Publicacion.get(function (err, result) {
+    if (!err) {
+      const inversion = result._doc.inversion;
+      let updateCpm = inversion/1000;
+      var toSave = {
+        cpm: updateCpm,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.cpcCalculation = function (req, res) {
+  Publicacion.get(function (err, result) {
+    if (!err) {
+      const inversion = result._doc.inversion;
+      const clicks = result._doc.linkClicks;
+      let updateCpc = inversion/clicks;
+      var toSave = {
+        cpc: updateCpc,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
 exports.ctrCalculation = function (req, res) {
   Publicacion.get(function (err, result) {
     if (!err) {
