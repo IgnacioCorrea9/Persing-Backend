@@ -284,7 +284,7 @@ exports.interacted = function (req, res) {
 };
 
 exports.engagement = function (req, res) {
-  Publicacion.get(function (err, result) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
       const interacted = result._doc.interacted;
@@ -306,10 +306,10 @@ exports.engagement = function (req, res) {
 };
 
 exports.cpmCalculation = function (req, res) {
-  Publicacion.get(function (err, result) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const inversion = result._doc.inversion;
-      let updateCpm = inversion/1000;
+      let updateCpm = inversion / 1000;
       var toSave = {
         cpm: updateCpm,
       };
@@ -327,11 +327,11 @@ exports.cpmCalculation = function (req, res) {
 };
 
 exports.cpcCalculation = function (req, res) {
-  Publicacion.get(function (err, result) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const inversion = result._doc.inversion;
       const clicks = result._doc.linkClicks;
-      let updateCpc = inversion/clicks;
+      let updateCpc = inversion / clicks;
       var toSave = {
         cpc: updateCpc,
       };
@@ -349,7 +349,7 @@ exports.cpcCalculation = function (req, res) {
 };
 
 exports.ctrCalculation = function (req, res) {
-  Publicacion.get(function (err, result) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
       const clicks = result._doc.linkClicks;
@@ -371,15 +371,15 @@ exports.ctrCalculation = function (req, res) {
 };
 
 exports.vtrCalculation = function (req, res) {
-  Publicacion.get(function (err, result) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
       const vtrReached = result._doc.vtr;
       let updatedVtr = vtrReached + 1;
       var toSave = {
-        vtr: updatedVtr
+        vtr: updatedVtr,
       };
-      console.log('updated vtr');
+      console.log("updated vtr");
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
@@ -401,6 +401,7 @@ exports.ignoredPost = function (req, res) {
       var toSave = {
         ignored: updateIgnored,
       };
+      console.log("ignored");
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
