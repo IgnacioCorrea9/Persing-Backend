@@ -379,7 +379,6 @@ exports.vtrCalculation = function (req, res) {
       var toSave = {
         vtr: updatedVtr,
       };
-      console.log("updated vtr");
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
