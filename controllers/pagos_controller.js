@@ -1,7 +1,5 @@
 'use strict';
 
-const Publicacion = require('../models/publicacion');
-const Empresa = require('../models/empresa');
 const Pagos = require('../models/pagos');
 
 /** get function to get pago by id. */
