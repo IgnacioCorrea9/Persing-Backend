@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-const Publicacion = require("../models/publicacion");
-const Like = require("../models/like");
-const User = require("../models/user");
-const Save = require("../models/save");
-const _ = require("lodash");
+const Publicacion = require('../models/publicacion');
+const Like = require('../models/like');
+const User = require('../models/user');
+const Save = require('../models/save');
+const _ = require('lodash');
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -29,10 +29,10 @@ exports.getAllForUser = function (req, res) {
           if (usuario) {
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
-              element._doc["liked"] = liked;
-              element._doc["likes"] = element.likes.length;
+              element._doc['liked'] = liked;
+              element._doc['likes'] = element.likes.length;
               var saved = element.guardados.includes(userId);
-              element._doc["saved"] = saved;
+              element._doc['saved'] = saved;
             });
             const search = req.query.search;
             if (search) {
@@ -44,10 +44,10 @@ exports.getAllForUser = function (req, res) {
             }
             if (req.query.intereses) {
               const intereses = req.query.intereses
-                .replace(/\s/g, "")
+                .replace(/\s/g, '')
                 .substring(1)
                 .slice(0, -1)
-                .split(",");
+                .split(',');
               usuario.intereses = intereses;
             }
             result = result.filter((p) => {
@@ -115,10 +115,10 @@ exports.getNuevasByUser = function (req, res) {
             if (usuario) {
               result.forEach((element) => {
                 var liked = element.likes.includes(userId);
-                element._doc["liked"] = liked;
-                element._doc["likes"] = element.likes.length;
+                element._doc['liked'] = liked;
+                element._doc['likes'] = element.likes.length;
                 var saved = element.guardados.includes(userId);
-                element._doc["saved"] = saved;
+                element._doc['saved'] = saved;
               });
               const search = req.query.search;
               if (search) {
@@ -130,10 +130,10 @@ exports.getNuevasByUser = function (req, res) {
               }
               if (req.query.intereses) {
                 const intereses = req.query.intereses
-                  .replace(/\s/g, "")
+                  .replace(/\s/g, '')
                   .substring(1)
                   .slice(0, -1)
-                  .split(",");
+                  .split(',');
                 usuario.intereses = intereses;
               }
               result = result.filter((p) => {
@@ -165,10 +165,10 @@ exports.getAllDestacadasForUser = function (req, res) {
         const userId = req.params.user;
         result.forEach((element) => {
           var liked = element.likes.includes(userId);
-          element._doc["liked"] = liked;
-          element._doc["likes"] = element.likes.length;
+          element._doc['liked'] = liked;
+          element._doc['likes'] = element.likes.length;
           var saved = element.guardados.includes(userId);
-          element._doc["saved"] = saved;
+          element._doc['saved'] = saved;
           const search = req.query.search;
           if (search) {
             result = result.filter(
@@ -208,7 +208,7 @@ exports.toggleSave = function (req, res) {
       const type = req.body.type;
       const arraySaves = result._doc.guardados;
 
-      if (type === "add") {
+      if (type === 'add') {
         Save.upsert(
           { publicacion: req.params.id },
           {
@@ -309,7 +309,7 @@ exports.cpmCalculation = function (req, res) {
   Publicacion.get(function (err, result) {
     if (!err) {
       const inversion = result._doc.inversion;
-      let updateCpm = inversion/1000;
+      let updateCpm = inversion / 1000;
       var toSave = {
         cpm: updateCpm,
       };
@@ -331,7 +331,7 @@ exports.cpcCalculation = function (req, res) {
     if (!err) {
       const inversion = result._doc.inversion;
       const clicks = result._doc.linkClicks;
-      let updateCpc = inversion/clicks;
+      let updateCpc = inversion / clicks;
       var toSave = {
         cpc: updateCpc,
       };
@@ -377,7 +377,7 @@ exports.vtrCalculation = function (req, res) {
       const vtrReached = result._doc.vtr;
       let updatedVtr = vtrReached + 1;
       var toSave = {
-        vtr: updatedVtr
+        vtr: updatedVtr,
       };
       console.log('updated vtr');
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
@@ -443,10 +443,10 @@ exports.getAllSavedByUser = function (req, res) {
         const userId = req.params.user;
         result.forEach((element) => {
           var liked = element.likes.includes(userId);
-          element._doc["liked"] = liked;
-          element._doc["likes"] = element.likes.length;
+          element._doc['liked'] = liked;
+          element._doc['likes'] = element.likes.length;
           var saved = element.guardados.includes(userId);
-          element._doc["saved"] = saved;
+          element._doc['saved'] = saved;
         });
         return res.status(200).json({ success: true, data: result });
       } else {
@@ -462,7 +462,7 @@ exports.toggleLike = function (req, res) {
       const userId = req.body.user;
       const type = req.body.type;
       const arrayLikes = result._doc.likes;
-      if (type === "add") {
+      if (type === 'add') {
         if (!arrayLikes.includes(userId)) {
           arrayLikes.push(userId);
         }
@@ -483,7 +483,7 @@ exports.toggleLike = function (req, res) {
           };
           Like.create(like, function (err2, result2) {
             if (!err2) {
-              console.log("created like");
+              console.log('created like');
             }
           });
           return res.status(200).json({ success: true, data: result });
@@ -518,17 +518,17 @@ exports.getAllByEmpresaAndUser = function (req, res) {
           if (usuario) {
             result.forEach((element) => {
               var liked = element.likes.includes(userId);
-              element._doc["liked"] = liked;
-              element._doc["likes"] = element.likes.length;
+              element._doc['liked'] = liked;
+              element._doc['likes'] = element.likes.length;
               var saved = element.guardados.includes(userId);
-              element._doc["saved"] = saved;
+              element._doc['saved'] = saved;
             });
             return res.status(200).json({ success: true, data: result });
           }
         } else {
           return res
             .status(500)
-            .send({ success: false, error: "User not found" });
+            .send({ success: false, error: 'User not found' });
         }
       });
     } else {
@@ -543,7 +543,7 @@ exports.getAllByEmpresa = function (req, res) {
     if (!err) {
       return res.status(200).json({ success: true, data: result });
     } else {
-      return res.status(500).send({ success: false, error: "User not found" });
+      return res.status(500).send({ success: false, error: 'User not found' });
     }
   });
 };
@@ -558,10 +558,10 @@ exports.getAllBySector = function (req, res) {
         const userId = req.params.user;
         result.forEach((element) => {
           var liked = element.likes.includes(userId);
-          element._doc["liked"] = liked;
-          element._doc["likes"] = element.likes.length;
+          element._doc['liked'] = liked;
+          element._doc['likes'] = element.likes.length;
           var saved = element.guardados.includes(userId);
-          element._doc["saved"] = saved;
+          element._doc['saved'] = saved;
         });
         return res.status(200).json({ success: true, data: result });
         return res.status(200).json({ success: true, data: result });
