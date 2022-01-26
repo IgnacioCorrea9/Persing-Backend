@@ -22,13 +22,13 @@ PagosSchema.statics = {
   },
   getEmpresa: function (query, callback) {
     this.find(query)
-      .sort('createdAt')
+      .sort({ createdAt: 'desc' })
       .populate('publicacion empresa')
       .exec(callback);
   },
   getAll: function (query, callback) {
     this.find(query)
-      .sort('createdAt')
+      .sort({ createdAt: 'desc' })
       .populate('publicacion empresa')
       .exec(callback);
   },

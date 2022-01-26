@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   router.get(
     '/publicacion',
-    //passport.authenticate("jwt", { session: false }),
+    passport.authenticate('jwt', { session: false }),
     PublicacionController.getAll
   );
 
