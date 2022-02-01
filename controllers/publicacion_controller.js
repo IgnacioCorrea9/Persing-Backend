@@ -400,7 +400,7 @@ exports.ignoredPost = function (req, res) {
       var toSave = {
         ignored: updateIgnored,
       };
-      console.log("ignored");
+      console.log('ignored');
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
@@ -599,6 +599,28 @@ exports.delete = function (req, res) {
   Publicacion.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
       return res.status(200).json({ success: true, data: result });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.inversionUpdate = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const inversion = result._doc.inversion;
+      console.log(req.body);
+      let inversionUpdate = inversion + req.body.inversion;
+      var toSave = {
+        inversion: inversionUpdate,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }

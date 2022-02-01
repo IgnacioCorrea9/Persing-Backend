@@ -113,6 +113,12 @@ module.exports = function (router) {
   );
 
   router.put(
+    '/publicacion/inversion/:id',
+    //passport.authenticate('jwt', { session: false }),
+    PublicacionController.inversionUpdate
+  );
+
+  router.put(
     '/publicacion/toggle-save/:id',
     passport.authenticate('jwt', { session: false }),
     PublicacionController.toggleSave
