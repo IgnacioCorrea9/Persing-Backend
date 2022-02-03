@@ -6,6 +6,7 @@ const Like = require('../models/like');
 const User = require('../models/user');
 const Save = require('../models/save');
 const _ = require('lodash');
+const Notificaciones = require('../models/notificaciones');
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -97,7 +98,7 @@ exports.getAllForUser = async (req, res) => {
     })
   );
 
-  Publicacion.find(
+  Publicacion.getAll(
     {
       $and: [
         { deletedAt: { $exists: false } },
@@ -347,6 +348,7 @@ exports.addView = async (req, res) => {
   } else if (rango > 9 && rango <= 10) {
     rangoCosto = 60;
   }
+
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
@@ -356,10 +358,24 @@ exports.addView = async (req, res) => {
         alcanzados: updatedViews,
         inversionRestante: inversionRestante,
       };
-      console.log(toSave);
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
-          return res.status(200).json({ success: true, data: result });
+          let notificacion;
+          if (updatedViews % 5 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'View',
+              hito: updatedViews,
+            };
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
+
+          return res
+            .status(200)
+            .json({ success: true, data: result, notificacion: notificacion });
         } else {
           return res.status(500).send({ success: false, error: err }); // 500 error
         }
@@ -380,6 +396,20 @@ exports.interacted = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
+          let notificacion;
+          if (updateInteractions % 10 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'Interaccion',
+              hito: updateInteractions,
+            };
+
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
+
           return res.status(200).json({ success: true, data: result });
         } else {
           return res.status(500).send({ success: false, error: err }); // 500 error
@@ -585,6 +615,18 @@ exports.toggleLike = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
+          let notificacion;
+          if (arrayLikes.length % 5 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'Like',
+              hito: arrayLikes.length,
+            };
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
           const like = {
             publicacion: req.params.id,
             usuario: userId,
