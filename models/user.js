@@ -49,6 +49,7 @@ UserSchema.statics = {
 
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
+      .sort({ createdAt: 'desc' })
       .populate('intereses empresa')
       .exec(callback);
   },

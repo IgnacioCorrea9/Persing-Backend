@@ -25,7 +25,10 @@ EmpresaSchema.statics = {
   },
 
   getAll: function (query, callback) {
-    this.find(query, { password: 0 }).populate('sectores').exec(callback);
+    this.find(query, { password: 0 })
+      .sort({ createdAt: 'desc' })
+      .populate('sectores')
+      .exec(callback);
   },
 
   updateById: function (id, updateData, callback) {

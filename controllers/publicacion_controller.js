@@ -68,18 +68,45 @@ exports.get = function (req, res) {
 }; */
 
 exports.getAllForUser = async (req, res) => {
-  let PubPagas = await Pagos.find();
-  let filtrarPublicaciones = PubPagas.map((elementId) => {
-    return elementId.publicacion;
-  });
+  let rangoSearch = '';
+  let PubPagas = await Pagos.find({});
+  let userData = await User.findById(req.params.user);
+  let idFiltro = [];
+  let rango = userData.calificacionApp;
+
+  if (rango > 0 && rango <= 3) {
+    rangoSearch = 'Principiante';
+  } else if (rango > 3 && rango <= 5) {
+    rangoSearch = 'Bajo';
+  } else if (rango > 5 && rango <= 7) {
+    rangoSearch = 'Medio';
+  } else if (rango > 7 && rango <= 9) {
+    rangoSearch = 'Alto';
+  } else if (rango > 9 && rango <= 10) {
+    rangoSearch = 'Super Alto';
+  }
+
+  Promise.all(
+    PubPagas.map((elementId) => {
+      elementId.porcentajes.forEach((element) => {
+        if (element.rango == rangoSearch && element.porcentaje > 0) {
+          console.log(elementId.publicacion);
+          idFiltro.push(elementId.publicacion);
+        }
+      });
+    })
+  );
 
   Publicacion.find(
     {
       $and: [
         { deletedAt: { $exists: false } },
-        /* {
-          _id: { $in: filtrarPublicaciones },
-        }, */
+        {
+          _id: { $in: idFiltro },
+        },
+        {
+          inversionRestante: { $gt: 0 },
+        },
       ],
     },
     function (err, result) {
@@ -305,12 +332,29 @@ exports.toggleSave = function (req, res) {
 };
 
 exports.addView = function (req, res) {
+  let userData = await User.findById('61f800c376adbe001615b191');
+  let rango = userData.calificacionApp;
+  let rangoCosto = 0;
+
+  if (rango > 0 && rango <= 3) {
+    rangoCosto = 150;
+  } else if (rango > 3 && rango <= 5) {
+    rangoCosto = 120;
+  } else if (rango > 5 && rango <= 7) {
+    rangoCosto = 100;
+  } else if (rango > 7 && rango <= 9) {
+    rangoCosto = 80;
+  } else if (rango > 9 && rango <= 10) {
+    rangoCosto = 60;
+  }
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
+      let inversionRestante = result._doc.inversionRestante - rangoCosto;
       let updatedViews = views + 1;
       var toSave = {
         alcanzados: updatedViews,
+        inversionRestante: inversionRestante,
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
@@ -672,10 +716,11 @@ exports.inversionUpdate = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const inversion = result._doc.inversion;
-      console.log(req.body);
       let inversionUpdate = inversion + req.body.inversion;
+      let inversionRestanteUpdate = inversionRestante + req.body.inversion;
       var toSave = {
         inversion: inversionUpdate,
+        inversionRestante: inversionRestanteUpdate,
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
