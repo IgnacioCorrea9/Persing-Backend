@@ -331,7 +331,7 @@ exports.toggleSave = function (req, res) {
   });
 };
 
-exports.addView = function (req, res) {
+exports.addView = async (req, res) => {
   let userData = await User.findById('61f800c376adbe001615b191');
   let rango = userData.calificacionApp;
   let rangoCosto = 0;
