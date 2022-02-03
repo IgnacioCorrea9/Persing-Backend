@@ -6,7 +6,7 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     '/publicacion/user/:user',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     PublicacionController.getAllForUser
   );
 
@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   router.get(
     '/publicacion',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     PublicacionController.getAll
   );
 
@@ -114,7 +114,7 @@ module.exports = function (router) {
 
   router.put(
     '/publicacion/inversion/:id',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     PublicacionController.inversionUpdate
   );
 
