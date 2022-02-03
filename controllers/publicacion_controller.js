@@ -332,8 +332,8 @@ exports.toggleSave = function (req, res) {
 };
 
 exports.addView = async (req, res) => {
-  let userData = await User.findById('61f800c376adbe001615b191');
-  let rango = userData.calificacionApp;
+  //let userData = await User.findById('61f800c376adbe001615b191');
+  let rango = 2;
   let rangoCosto = 0;
 
   if (rango > 0 && rango <= 3) {
@@ -356,6 +356,7 @@ exports.addView = async (req, res) => {
         alcanzados: updatedViews,
         inversionRestante: inversionRestante,
       };
+      console.log(toSave);
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
