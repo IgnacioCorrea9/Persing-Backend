@@ -52,7 +52,7 @@ PublicacionSchema.statics = {
 
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
-      .sort({ createdAt: 'desc' })
+      .sort('-createdAt')
       .populate('empresa sector')
       .exec(callback);
   },
