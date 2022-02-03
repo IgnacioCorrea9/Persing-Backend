@@ -6,13 +6,13 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     '/empresa',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     EmpresaController.getAll
   );
 
   router.post(
     '/empresa',
-    //passport.authenticate("jwt", { session: false }),
+    passport.authenticate('jwt', { session: false }),
     EmpresaController.create
   );
 
@@ -46,7 +46,7 @@ module.exports = function (router) {
   /** Elimina una empresa */
   router.delete(
     '/empresa/:id',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     EmpresaController.delete
   );
 };

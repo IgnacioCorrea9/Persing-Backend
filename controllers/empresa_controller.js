@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const Empresa = require("../models/empresa");
-const Publicacion = require("../models/publicacion");
-const User = require("../models/user");
-const moment = require("moment");
+const Empresa = require('../models/empresa');
+const Publicacion = require('../models/publicacion');
+const User = require('../models/user');
+const moment = require('moment');
 
 /** get function to get Empresa by id. */
 exports.get = function (req, res) {
@@ -17,22 +17,20 @@ exports.get = function (req, res) {
 };
 
 /** get function to get all Empresa. */
-exports.getAll = function (req, res) {
-  Empresa.getAll({ deletedAt: { $exists: false }},
-    function(err, result) {
-      if (!err) {
-        return res.status(200).json({ success: true, data: result });
-      } else {
-        return res.status(400).send({ success: true, error: err });
-      }
-    },
-  )
+exports.getAll = async (req, res) => {
+  Empresa.getAll({ deletedAt: { $exists: false } }, function (err, result) {
+    if (!err) {
+      return res.status(200).json({ success: true, data: result });
+    } else {
+      return res.status(400).send({ success: true, error: err });
+    }
+  });
 };
 
 /** get empresas count */
 exports.getEmpresasCount = function (req, res) {
   Empresa.getCount(
-    { estado: "aprobado", deletedAt: { $exists: false } },
+    { estado: 'aprobado', deletedAt: { $exists: false } },
     function (err, result) {
       if (!err) {
         return res.status(200).json({ data: result });
@@ -44,19 +42,24 @@ exports.getEmpresasCount = function (req, res) {
 };
 
 /** Get active empresas: 3 months */
-exports.getActiveEmpresasCount = function(req, res){
-  Publicacion.getAll({
-    deletedAt: { $exists: false },
-    createdAt: { $gte: moment().subtract(3, "months"), $lte: moment() }
-  }, function(err, result){
-    if(err){
-      return res.status(400).send(err)
+exports.getActiveEmpresasCount = function (req, res) {
+  Publicacion.getAll(
+    {
+      deletedAt: { $exists: false },
+      createdAt: { $gte: moment().subtract(3, 'months'), $lte: moment() },
+    },
+    function (err, result) {
+      if (err) {
+        return res.status(400).send(err);
+      }
+
+      const activeEmpresas = [
+        ...new Set(result.map((publicacion) => publicacion.empresa._id)),
+      ];
+      return res.status(200).json({ data: activeEmpresas.length });
     }
-    
-    const activeEmpresas = [...new Set(result.map(publicacion => publicacion.empresa._id))];
-    return res.status(200).json({data: activeEmpresas.length})
-  })
-}
+  );
+};
 
 /** get all deleted Empresas */
 exports.getDeletedEmpresas = function (req, res) {
@@ -118,12 +121,10 @@ exports.delete = function (req, res) {
               return res.send(err);
             }
 
-            return res
-              .status(200)
-              .json({
-                success: true,
-                message: "Empresa eliminada correctamente",
-              });
+            return res.status(200).json({
+              success: true,
+              message: 'Empresa eliminada correctamente',
+            });
           }
         );
       }

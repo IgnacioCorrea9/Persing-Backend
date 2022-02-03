@@ -6,7 +6,7 @@ module.exports = function (router) {
   /** Get all users */
   router.get(
     '/user/',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     UserController.getAll
   );
 
