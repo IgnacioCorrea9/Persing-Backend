@@ -27,7 +27,10 @@ NotificacionesSchema.statics = {
       .exec(callback);
   },
   getAll: function (query, callback) {
-    this.find(query).sort({ createdAt: 'desc' }).exec(callback);
+    this.find(query)
+      .populate('publicacion')
+      .sort({ createdAt: 'desc' })
+      .exec(callback);
   },
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(

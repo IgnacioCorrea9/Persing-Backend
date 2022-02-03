@@ -365,7 +365,7 @@ exports.addView = async (req, res) => {
             let dataNotificacion = {
               publicacion: result._doc._id,
               empresa: result._doc.empresa,
-              accion: 'View',
+              accion: 'Vistas',
               hito: updatedViews,
             };
             Notificaciones.create(dataNotificacion, function (err, result) {
@@ -401,7 +401,7 @@ exports.interacted = function (req, res) {
             let dataNotificacion = {
               publicacion: result._doc._id,
               empresa: result._doc.empresa,
-              accion: 'Interaccion',
+              accion: 'Interacciones',
               hito: updateInteractions,
             };
 
@@ -620,7 +620,7 @@ exports.toggleLike = function (req, res) {
             let dataNotificacion = {
               publicacion: result._doc._id,
               empresa: result._doc.empresa,
-              accion: 'Like',
+              accion: 'Likes',
               hito: arrayLikes.length,
             };
             Notificaciones.create(dataNotificacion, function (err, result) {

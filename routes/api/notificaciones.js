@@ -31,7 +31,7 @@ module.exports = function (router) {
   /** Actualiza una notificaciones por id */
   router.put(
     '/notificaciones/:id',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     NotificacionesController.update
   );
 
