@@ -91,7 +91,6 @@ exports.getAllForUser = async (req, res) => {
     PubPagas.map((elementId) => {
       elementId.porcentajes.forEach((element) => {
         if (element.rango == rangoSearch && element.porcentaje > 0) {
-          console.log(elementId.publicacion);
           idFiltro.push(elementId.publicacion);
         }
       });
@@ -538,7 +537,7 @@ exports.ignoredPost = function (req, res) {
       var toSave = {
         ignored: updateIgnored,
       };
-      console.log('ignored');
+
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
@@ -758,9 +757,10 @@ exports.delete = function (req, res) {
 exports.inversionUpdate = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      const inversion = result._doc.inversion;
+      const inversion = result.inversion;
       let inversionUpdate = inversion + req.body.inversion;
-      let inversionRestanteUpdate = inversionRestante + req.body.inversion;
+      let inversionRestanteUpdate =
+        result.inversionRestante + req.body.inversion;
       var toSave = {
         inversion: inversionUpdate,
         inversionRestante: inversionRestanteUpdate,
