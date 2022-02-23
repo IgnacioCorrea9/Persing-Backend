@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   router.get(
     '/publicacion',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.getAll
   );
 
@@ -113,6 +113,12 @@ module.exports = function (router) {
   );
 
   router.put(
+    '/publicacion/delete/:id',
+    //passport.authenticate('jwt', { session: false }),
+    PublicacionController.deletePost
+  );
+
+  router.put(
     '/publicacion/inversion/:id',
     passport.authenticate('jwt', { session: false }),
     PublicacionController.inversionUpdate
@@ -139,7 +145,7 @@ module.exports = function (router) {
 
   router.get(
     '/publicacion-nuevas',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.getAllNuevas
   );
 
