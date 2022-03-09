@@ -125,7 +125,10 @@ module.exports.addUser = function (newUser, callback) {
         if (res.length == 0) {
           newUser.save(callback);
         } else {
-          callback('Usuario Registrado', null);
+          callback(
+            'El correo ingresado ya se encuentra registrado en nuestra plataforma',
+            null
+          );
         }
       });
     });
