@@ -91,7 +91,6 @@ exports.getAllForUser = async (req, res) => {
     PubPagas.map((elementId) => {
       elementId.porcentajes.forEach((element) => {
         if (element.rango == rangoSearch && element.porcentaje > 0) {
-          console.log(elementId.publicacion);
           idFiltro.push(elementId.publicacion);
         }
       });
@@ -180,10 +179,28 @@ exports.getAllDestacadas = function (req, res) {
  * @param {*} req
  * @param {*} res
  */
-exports.getAllNuevas = function (req, res) {
-  Publicacion.getAll({ nueva: true }, function (err, result) {
+exports.getAllNuevas = async (req, res) => {
+  Publicacion.getAll({ nueva: true }, async (err, result) => {
+    let hoy = new Date();
+    let tiempoResta = 1000 * 60 * 60 * 24 * 90;
+    let Resultados = [];
+    await Promise.all(
+      result.map((element) => {
+        if (hoy.getTime() - element.createdAt.getTime() >= tiempoResta) {
+          Publicacion.updateById(
+            element._id,
+            { nueva: false },
+            function (err, result) {}
+          );
+        } else {
+          Resultados.push(element);
+        }
+      })
+    )
+      .then()
+      .catch();
     if (!err) {
-      return res.status(200).json({ success: true, data: result });
+      return res.status(200).json({ success: true, data: Resultados });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }
@@ -538,7 +555,7 @@ exports.ignoredPost = function (req, res) {
       var toSave = {
         ignored: updateIgnored,
       };
-      console.log('ignored');
+
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
@@ -735,7 +752,9 @@ exports.update = function (req, res) {
 
 /** update function to create post */
 exports.create = function (req, res) {
-  Publicacion.create(req.body, function (err, result) {
+  let dataPublicacion = req.body;
+  dataPublicacion.nueva = true;
+  Publicacion.create(dataPublicacion, function (err, result) {
     if (!err) {
       return res.status(201).json({ success: true, data: result });
     } else {
@@ -755,12 +774,27 @@ exports.delete = function (req, res) {
   });
 };
 
+exports.deletePost = function (req, res) {
+  Publicacion.updateById(
+    req.params.id,
+    { habilitada: false },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
+    }
+  );
+};
+
 exports.inversionUpdate = function (req, res) {
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
-      const inversion = result._doc.inversion;
+      const inversion = result.inversion;
       let inversionUpdate = inversion + req.body.inversion;
-      let inversionRestanteUpdate = inversionRestante + req.body.inversion;
+      let inversionRestanteUpdate =
+        result.inversionRestante + req.body.inversion;
       var toSave = {
         inversion: inversionUpdate,
         inversionRestante: inversionRestanteUpdate,

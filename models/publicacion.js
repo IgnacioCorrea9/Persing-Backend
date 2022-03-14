@@ -40,6 +40,7 @@ const PublicacionSchema = mongoose.Schema({
   ctr: { type: Number, required: false, default: 0 },
   ignored: { type: Number, required: false, default: 0 },
   interacted: { type: Number, required: false, default: 0 },
+  habilitada: { type: Boolean, required: false, default: true },
 });
 
 PublicacionSchema.statics = {
@@ -51,7 +52,7 @@ PublicacionSchema.statics = {
   },
 
   getAll: function (query, callback) {
-    this.find(query, { password: 0 })
+    this.find({ $and: [query, { habilitada: true }] }, { password: 0 })
       .sort('-createdAt')
       .populate('empresa sector')
       .exec(callback);

@@ -230,9 +230,7 @@ router.post('/authenticate', (req, res, next) => {
         const token = jwt.sign(
           { user },
           process.env.JWT_SECRET || 'persing8956789',
-          {
-            expiresIn: 604800, // 1 week
-          }
+          {}
         );
 
         User.updateById(user._id, { lastSeen: Date.now() }, (err, result) => {
