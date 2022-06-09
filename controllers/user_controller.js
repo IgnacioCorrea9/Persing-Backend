@@ -38,6 +38,17 @@ exports.getById = function (req, res) {
   });
 };
 
+/** get by business id */
+exports.getByBusinessId = function (req, res) {
+  User.get({ empresa: req.params.id }, function (err, result) {
+    if (!err) {
+      return res.status(200).json({ data: result });
+    } else {
+      return res.status(400).send(err); // 500 error
+    }
+  });
+};
+
 /** get function to get all User. */
 exports.getAll = function (req, res) {
   User.getAll({ deletedAt: { $exists: false } }, function (err, result) {
