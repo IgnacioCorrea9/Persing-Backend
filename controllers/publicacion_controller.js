@@ -1,10 +1,12 @@
 'use strict';
 
 const Publicacion = require('../models/publicacion');
+const Pagos = require('../models/pagos');
 const Like = require('../models/like');
 const User = require('../models/user');
 const Save = require('../models/save');
 const _ = require('lodash');
+const Notificaciones = require('../models/notificaciones');
 
 /** get function to get Publicacion by id. */
 exports.get = function (req, res) {
@@ -20,7 +22,7 @@ exports.get = function (req, res) {
 /** Gets publicaciones and evaluates for each one if user liked it or saved it and modifies model response.
  * FLiters by name and description if query available
  */
-exports.getAllForUser = function (req, res) {
+/* exports.getAllForUser = function (req, res) {
   Publicacion.getAll({ deletedAt: { $exists: false } }, function (err, result) {
     if (!err) {
       const userId = req.params.user;
@@ -64,6 +66,94 @@ exports.getAllForUser = function (req, res) {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }
   });
+}; */
+
+exports.getAllForUser = async (req, res) => {
+  let rangoSearch = '';
+  let PubPagas = await Pagos.find({});
+  let userData = await User.findById(req.params.user);
+  let idFiltro = [];
+  let rango = userData.calificacionApp;
+
+  if (rango > 0 && rango <= 3) {
+    rangoSearch = 'Principiante';
+  } else if (rango > 3 && rango <= 5) {
+    rangoSearch = 'Bajo';
+  } else if (rango > 5 && rango <= 7) {
+    rangoSearch = 'Medio';
+  } else if (rango > 7 && rango <= 9) {
+    rangoSearch = 'Alto';
+  } else if (rango > 9 && rango <= 10) {
+    rangoSearch = 'Super Alto';
+  }
+
+  Promise.all(
+    PubPagas.map((elementId) => {
+      elementId.porcentajes.forEach((element) => {
+        if (element.rango == rangoSearch && element.porcentaje > 0) {
+          idFiltro.push(elementId.publicacion);
+        }
+      });
+    })
+  );
+
+  Publicacion.getAll(
+    {
+      $and: [
+        { deletedAt: { $exists: false } },
+        {
+          _id: { $in: idFiltro },
+        },
+        {
+          inversionRestante: { $gt: 0 },
+        },
+      ],
+    },
+    function (err, result) {
+      if (!err) {
+        const userId = req.params.user;
+        User.get({ _id: userId }, function (err2, usuario) {
+          if (!err) {
+            if (usuario) {
+              result.forEach((element) => {
+                var liked = element.likes.includes(userId);
+                element._doc['liked'] = liked;
+                element._doc['likes'] = element.likes.length;
+                var saved = element.guardados.includes(userId);
+                element._doc['saved'] = saved;
+              });
+              const search = req.query.search;
+              if (search) {
+                result = result.filter(
+                  (p) =>
+                    p.titulo.toLowerCase().includes(search) ||
+                    p.texto.toLowerCase().includes(search)
+                );
+              }
+              if (req.query.intereses) {
+                const intereses = req.query.intereses
+                  .replace(/\s/g, '')
+                  .substring(1)
+                  .slice(0, -1)
+                  .split(',');
+                usuario.intereses = intereses;
+              }
+              result = result.filter((p) => {
+                return (
+                  p.sector &&
+                  usuario.intereses.includes(p.sector._id.toString())
+                );
+              });
+              result = _.shuffle(result);
+              return res.status(200).json({ success: true, data: result });
+            }
+          }
+        });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
+    }
+  );
 };
 
 /**
@@ -89,10 +179,28 @@ exports.getAllDestacadas = function (req, res) {
  * @param {*} req
  * @param {*} res
  */
-exports.getAllNuevas = function (req, res) {
-  Publicacion.getAll({ nueva: true }, function (err, result) {
+exports.getAllNuevas = async (req, res) => {
+  Publicacion.getAll({ nueva: true }, async (err, result) => {
+    let hoy = new Date();
+    let tiempoResta = 1000 * 60 * 60 * 24 * 90;
+    let Resultados = [];
+    await Promise.all(
+      result.map((element) => {
+        if (hoy.getTime() - element.createdAt.getTime() >= tiempoResta) {
+          Publicacion.updateById(
+            element._id,
+            { nueva: false },
+            function (err, result) {}
+          );
+        } else {
+          Resultados.push(element);
+        }
+      })
+    )
+      .then()
+      .catch();
     if (!err) {
-      return res.status(200).json({ success: true, data: result });
+      return res.status(200).json({ success: true, data: Resultados });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }
@@ -241,17 +349,50 @@ exports.toggleSave = function (req, res) {
   });
 };
 
-exports.addView = function (req, res) {
+exports.addView = async (req, res) => {
+  //let userData = await User.findById('61f800c376adbe001615b191');
+  let rango = 2;
+  let rangoCosto = 0;
+
+  if (rango > 0 && rango <= 3) {
+    rangoCosto = 150;
+  } else if (rango > 3 && rango <= 5) {
+    rangoCosto = 120;
+  } else if (rango > 5 && rango <= 7) {
+    rangoCosto = 100;
+  } else if (rango > 7 && rango <= 9) {
+    rangoCosto = 80;
+  } else if (rango > 9 && rango <= 10) {
+    rangoCosto = 60;
+  }
+
   Publicacion.get({ _id: req.params.id }, function (err, result) {
     if (!err) {
       const views = result._doc.alcanzados;
+      let inversionRestante = result._doc.inversionRestante - rangoCosto;
       let updatedViews = views + 1;
       var toSave = {
         alcanzados: updatedViews,
+        inversionRestante: inversionRestante,
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
-          return res.status(200).json({ success: true, data: result });
+          let notificacion;
+          if (updatedViews % 5 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'Vistas',
+              hito: updatedViews,
+            };
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
+
+          return res
+            .status(200)
+            .json({ success: true, data: result, notificacion: notificacion });
         } else {
           return res.status(500).send({ success: false, error: err }); // 500 error
         }
@@ -272,6 +413,20 @@ exports.interacted = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
+          let notificacion;
+          if (updateInteractions % 10 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'Interacciones',
+              hito: updateInteractions,
+            };
+
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
+
           return res.status(200).json({ success: true, data: result });
         } else {
           return res.status(500).send({ success: false, error: err }); // 500 error
@@ -400,7 +555,7 @@ exports.ignoredPost = function (req, res) {
       var toSave = {
         ignored: updateIgnored,
       };
-      console.log("ignored");
+
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
           return res.status(200).json({ success: true, data: result });
@@ -477,6 +632,18 @@ exports.toggleLike = function (req, res) {
       };
       Publicacion.updateById(req.params.id, toSave, function (err, result) {
         if (!err) {
+          let notificacion;
+          if (arrayLikes.length % 5 == 0) {
+            let dataNotificacion = {
+              publicacion: result._doc._id,
+              empresa: result._doc.empresa,
+              accion: 'Likes',
+              hito: arrayLikes.length,
+            };
+            Notificaciones.create(dataNotificacion, function (err, result) {
+              notificacion = result;
+            });
+          }
           const like = {
             publicacion: req.params.id,
             usuario: userId,
@@ -585,7 +752,9 @@ exports.update = function (req, res) {
 
 /** update function to create post */
 exports.create = function (req, res) {
-  Publicacion.create(req.body, function (err, result) {
+  let dataPublicacion = req.body;
+  dataPublicacion.nueva = true;
+  Publicacion.create(dataPublicacion, function (err, result) {
     if (!err) {
       return res.status(201).json({ success: true, data: result });
     } else {
@@ -599,6 +768,44 @@ exports.delete = function (req, res) {
   Publicacion.removeById({ _id: req.params.id }, function (err, result) {
     if (!err) {
       return res.status(200).json({ success: true, data: result });
+    } else {
+      return res.status(500).send({ success: false, error: err }); // 500 error
+    }
+  });
+};
+
+exports.deletePost = function (req, res) {
+  Publicacion.updateById(
+    req.params.id,
+    { habilitada: false },
+    function (err, result) {
+      if (!err) {
+        return res.status(200).json({ success: true, data: result });
+      } else {
+        return res.status(500).send({ success: false, error: err }); // 500 error
+      }
+    }
+  );
+};
+
+exports.inversionUpdate = function (req, res) {
+  Publicacion.get({ _id: req.params.id }, function (err, result) {
+    if (!err) {
+      const inversion = result.inversion;
+      let inversionUpdate = inversion + req.body.inversion;
+      let inversionRestanteUpdate =
+        result.inversionRestante + req.body.inversion;
+      var toSave = {
+        inversion: inversionUpdate,
+        inversionRestante: inversionRestanteUpdate,
+      };
+      Publicacion.updateById(req.params.id, toSave, function (err, result) {
+        if (!err) {
+          return res.status(200).json({ success: true, data: result });
+        } else {
+          return res.status(500).send({ success: false, error: err }); // 500 error
+        }
+      });
     } else {
       return res.status(500).send({ success: false, error: err }); // 500 error
     }

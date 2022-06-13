@@ -6,7 +6,7 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.get(
     '/publicacion/user/:user',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.getAllForUser
   );
 
@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   router.get(
     '/publicacion',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.getAll
   );
 
@@ -113,6 +113,18 @@ module.exports = function (router) {
   );
 
   router.put(
+    '/publicacion/delete/:id',
+    //passport.authenticate('jwt', { session: false }),
+    PublicacionController.deletePost
+  );
+
+  router.put(
+    '/publicacion/inversion/:id',
+    passport.authenticate('jwt', { session: false }),
+    PublicacionController.inversionUpdate
+  );
+
+  router.put(
     '/publicacion/toggle-save/:id',
     passport.authenticate('jwt', { session: false }),
     PublicacionController.toggleSave
@@ -127,13 +139,13 @@ module.exports = function (router) {
   /** Gets publicacion by id */
   router.get(
     '/publicacion/:id',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.get
   );
 
   router.get(
     '/publicacion-nuevas',
-    passport.authenticate('jwt', { session: false }),
+    //passport.authenticate('jwt', { session: false }),
     PublicacionController.getAllNuevas
   );
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-// Schema
 
+// Schema
 const UserSchema = mongoose.Schema({
   nombre: { type: String, required: false },
   apellido: { type: String, required: false },
@@ -49,6 +49,7 @@ UserSchema.statics = {
 
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
+      .sort({ createdAt: 'desc' })
       .populate('intereses empresa')
       .exec(callback);
   },
@@ -124,7 +125,10 @@ module.exports.addUser = function (newUser, callback) {
         if (res.length == 0) {
           newUser.save(callback);
         } else {
-          callback('Usuario Registrado', null);
+          callback(
+            'El correo ingresado ya se encuentra registrado en nuestra plataforma',
+            null
+          );
         }
       });
     });

@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const PublicacionSchema = mongoose.Schema({
   empresa: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Empresa",
+    ref: 'Empresa',
     required: false,
   },
   sector: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Sector",
+    ref: 'Sector',
     required: false,
   },
   firstSaved: { type: String, required: false },
@@ -19,14 +19,15 @@ const PublicacionSchema = mongoose.Schema({
   foto: { type: String, required: false },
   video: { type: String, required: false },
   likes: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   ],
   guardados: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   ],
   comentarios: { type: Number, required: false, default: 0 },
   alcanzados: { type: Number, required: false, default: 0 },
   inversion: { type: Number, required: false, default: 0 },
+  inversionRestante: { type: Number, required: false, default: 0 },
   valor: { type: Number, required: false, default: 0 },
   destacada: { type: Boolean, required: false, default: false },
   nueva: { type: Boolean, required: false, default: false },
@@ -39,20 +40,21 @@ const PublicacionSchema = mongoose.Schema({
   ctr: { type: Number, required: false, default: 0 },
   ignored: { type: Number, required: false, default: 0 },
   interacted: { type: Number, required: false, default: 0 },
+  habilitada: { type: Boolean, required: false, default: true },
 });
 
 PublicacionSchema.statics = {
   get: function (query, callback) {
     this.findOne(query, { password: 0 })
-      .sort("-createdAt")
-      .populate("empresa sector")
+      .sort('-createdAt')
+      .populate('empresa sector')
       .exec(callback);
   },
 
   getAll: function (query, callback) {
-    this.find(query, { password: 0 })
-      .sort("-createdAt")
-      .populate("empresa sector")
+    this.find({ $and: [query, { habilitada: true }] }, { password: 0 })
+      .sort('-createdAt')
+      .populate('empresa sector')
       .exec(callback);
   },
 
@@ -93,6 +95,6 @@ PublicacionSchema.statics = {
 };
 
 const Publicacion = (module.exports = mongoose.model(
-  "Publicacion",
+  'Publicacion',
   PublicacionSchema
 ));
