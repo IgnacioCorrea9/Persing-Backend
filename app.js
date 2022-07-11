@@ -80,7 +80,7 @@ require("./routes/api/producto")(router);
 require("./routes/api/pagos")(router);
 require("./routes/api/notificaciones")(router);
 require("./routes/api/compra_producto")(router);
-
+require("./routes/api/transaction")(router);
 // Import other routes and paths
 const users = require("./routes/users");
 const credentials = require("./routes/credentials");
