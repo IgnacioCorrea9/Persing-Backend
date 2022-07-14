@@ -90,6 +90,7 @@ const getAcceptanceToken = async (url) => {
         "Content-Type": "application/json",
       },
     });
+    console.log(acceptanceResponse);
     return acceptanceResponse.data;
   } catch (err) {}
 };
