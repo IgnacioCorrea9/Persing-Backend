@@ -11,6 +11,8 @@ const create = async (req, res, next) => {
   const public_key = req.body.public_key;
   delete req.body.public_key;
 
+  console.log("aaaaa");
+
   try {
     /// let transaction;
     const transaction = await axios({
@@ -31,9 +33,11 @@ const create = async (req, res, next) => {
     req.transaction_id = transaction.data.data.id;
     next();
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, data: {}, message: "Error al generar el pago" });
+    return res.status(500).json({
+      success: false,
+      data: { err },
+      message: "Error al generar el pago",
+    });
   }
 };
 
@@ -90,9 +94,14 @@ const getAcceptanceToken = async (url) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(acceptanceResponse);
     return acceptanceResponse.data;
-  } catch (err) {}
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      data: { err },
+      message: "Error al generar el pago",
+    });
+  }
 };
 
 const getTokenization = async (data, url, public_key) => {
@@ -107,7 +116,13 @@ const getTokenization = async (data, url, public_key) => {
       data: data,
     });
     return tokenizationResponse.data;
-  } catch (err) {}
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      data: { err },
+      message: "Error al generar el pago",
+    });
+  }
 };
 
 const checkTokenizationStatus = async (url, public_key) => {
@@ -164,7 +179,13 @@ const createGeneralTransaction = async (data, public_key) => {
     if (transactionChecked) {
       return transactionChecked.data;
     }
-  } catch (err) {}
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      data: { err },
+      message: "Error al generar el pago",
+    });
+  }
 };
 
 const createPseTransaction = async (req, res) => {
@@ -193,9 +214,11 @@ const createPseTransaction = async (req, res) => {
       res
     );
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, data: {}, message: "Error al generar el pago" });
+    return res.status(500).json({
+      success: false,
+      data: { err },
+      message: "Error al generar el pago",
+    });
   }
 };
 

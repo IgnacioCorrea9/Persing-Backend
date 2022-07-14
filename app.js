@@ -42,6 +42,8 @@ const port = process.env.PORT || 8081;
 // CORS Middleware
 app.use(cors());
 
+app.use(express.urlencoded({ extended: true }));
+
 // Force SSL
 /* app.use(function (req, res, next) {
   if (!req.secure && req.get("X-Forwarded-Proto") !== "https") {
