@@ -566,7 +566,6 @@ exports.getCreditosByUsuarioBySector = function (req, res) {
     { usuario: req.params.usuario, sector: req.params.sector },
     function (err, result) {
       if (!err) {
-        çç;
         for (let index = 0; index < result.length; index++) {
           if (result[index].sector != null) {
             if (result[index].sector._id == req.params.sector) {
