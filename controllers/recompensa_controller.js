@@ -560,6 +560,28 @@ exports.getcreditosByUsuario = function (req, res) {
   });
 };
 
+/** get function to get creditor por sector por usuario  */
+exports.getCreditosByUsuarioBySector = function (req, res) {
+  Recompensa.getAllSector(
+    { usuario: req.params.usuario, sector: req.params.sector },
+    function (err, result) {
+      if (!err) {
+        çç;
+        for (let index = 0; index < result.length; index++) {
+          if (result[index].sector != null) {
+            if (result[index].sector._id == req.params.sector) {
+              return res.status(200).json({ creditos: result[index].creditos });
+            }
+          }
+        }
+        return res.status(200).json({ creditos: 0 });
+      } else {
+        return res.status(400).send({ error: err });
+      }
+    }
+  );
+};
+
 function getTotalScore(globalScore, scoreAverage) {
   let totalScore = globalScore * 0.4 + scoreAverage * 0.6;
   return totalScore;

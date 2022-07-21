@@ -11,8 +11,6 @@ const create = async (req, res, next) => {
   const public_key = req.body.public_key;
   delete req.body.public_key;
 
-  console.log("aaaaa");
-
   try {
     /// let transaction;
     const transaction = await axios({
