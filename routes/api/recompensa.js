@@ -37,6 +37,13 @@ module.exports = function (router) {
     RecompensaController.getByUsuario
   );
 
+  /** Trae creditos por usuario por sector */
+  router.get(
+    "/recompensa/creditos_sector/user/:sector/:usuario",
+    //  passport.authenticate("jwt", { session: false }),
+    RecompensaController.getCreditosByUsuarioBySector
+  );
+
   /** Trae recompensas por usuario */
   router.get(
     "/recompensa/creditos/user/:usuario",

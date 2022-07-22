@@ -24,6 +24,9 @@ RecompensaSchema.statics = {
   getAll: function (query, callback) {
     this.find(query, { password: 0 }).populate("usuario sector").exec(callback);
   },
+  getAllSector: function (query, callback) {
+    this.find(query, { password: 0 }).populate("sector").exec(callback);
+  },
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(
       { _id: id },
