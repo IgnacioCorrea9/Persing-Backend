@@ -569,7 +569,10 @@ exports.getCreditosByUsuarioBySector = function (req, res) {
         for (let index = 0; index < result.length; index++) {
           if (result[index].sector != null) {
             if (result[index].sector._id == req.params.sector) {
-              return res.status(200).json({ creditos: result[index].creditos });
+              return res.status(200).json({
+                sector: result[index].sector.nombre,
+                creditos: result[index].creditos,
+              });
             }
           }
         }
