@@ -8,7 +8,13 @@ const TransaccionSchema = mongoose.Schema({
   },
   reference: { type: Number, require: true },
   pago: { type: Number, require: true },
-  productos: [[{ type: Object, required: false }]],
+  productos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Producto",
+      required: false,
+    },
+  ],
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
@@ -22,7 +28,24 @@ TransaccionSchema.statics = {
     Transaccion.findOne(query).exec(callback);
   },
   getAll: function (query, callback) {
-    Transaccion.find(query, { password: 0 }).populate("usuario").exec(callback);
+    this.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "usuario",
+          foreignField: "_id",
+          as: "usuario",
+        },
+      },
+      {
+        $lookup: {
+          from: "productos",
+          localField: "productos",
+          foreignField: "_id",
+          as: "productos",
+        },
+      },
+    ]).exec(callback);
   },
   create: function (data, callback) {
     const transaccion = new this(data);

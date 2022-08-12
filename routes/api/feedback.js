@@ -21,7 +21,6 @@ module.exports = function (router) {
   router.post(
     "/feedback",
     passport.authenticate("jwt", { session: false }),
-    middleware.lastSeen,
     FeedbackController.create
   );
 };
