@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const TransaccionSchema = mongoose.Schema({
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   reference: { type: Number, require: true },
@@ -11,7 +11,7 @@ const TransaccionSchema = mongoose.Schema({
   productos: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Producto",
+      ref: 'Producto',
       required: false,
     },
   ],
@@ -21,9 +21,13 @@ const TransaccionSchema = mongoose.Schema({
 TransaccionSchema.statics = {
   get: function (query, callback) {
     Transaccion.findOne(query, { password: 0 })
-      .populate("usuario")
+      .populate('usuario')
       .exec(callback);
   },
+  getById: function (query, callback) {
+    Transaccion.findById(query).populate('productos usuario').exec(callback);
+  },
+
   getByUserId: function (query, callback) {
     Transaccion.findOne(query).exec(callback);
   },
@@ -31,18 +35,18 @@ TransaccionSchema.statics = {
     this.aggregate([
       {
         $lookup: {
-          from: "users",
-          localField: "usuario",
-          foreignField: "_id",
-          as: "usuario",
+          from: 'users',
+          localField: 'usuario',
+          foreignField: '_id',
+          as: 'usuario',
         },
       },
       {
         $lookup: {
-          from: "productos",
-          localField: "productos",
-          foreignField: "_id",
-          as: "productos",
+          from: 'productos',
+          localField: 'productos',
+          foreignField: '_id',
+          as: 'productos',
         },
       },
     ]).exec(callback);
@@ -58,6 +62,6 @@ TransaccionSchema.statics = {
 };
 
 const Transaccion = (module.exports = mongoose.model(
-  "Transaccion",
+  'Transaccion',
   TransaccionSchema
 ));
