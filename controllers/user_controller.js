@@ -157,6 +157,26 @@ exports.update = function (req, res) {
   });
 };
 
+/** Update password function to update user password based on
+ * user id and user current password */
+exports.changePassword = function (req, res) {
+  User.findOne(
+    { id: req.params.id, password: req.body.oldPassword },
+    function (err, user) {
+      if (!err) {
+        user.password = req.body.newPassword;
+        user.save(function (err) {
+          if (err) return res.status(400).send({ success: false, error: err });
+          //user has been updated
+          return res.status(200).json({ success: true });
+        });
+      } else {
+        return res.status(400).send({ success: false, error: err }); // 500 error
+      }
+    }
+  );
+};
+
 /** Disable superadmin */
 exports.disableAdminById = function (req, res) {
   const userId = req.params.id;
