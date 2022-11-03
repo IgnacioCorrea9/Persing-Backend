@@ -67,6 +67,14 @@ module.exports = function (router) {
     UserController.update
   );
 
+  /** Update user password by id */
+  router.put(
+    "/user/password/:id",
+    passport.authenticate("jwt", { session: false }),
+    middleware.lastSeen,
+    UserController.changePassword
+  );
+
   /** Delete user by id */
   router.delete(
     "/user/:id",
