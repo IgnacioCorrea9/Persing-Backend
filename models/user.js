@@ -1,19 +1,19 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 // Schema
 const UserSchema = mongoose.Schema({
   nombre: { type: String, required: false },
   apellido: { type: String, required: false },
-  age: { type: String, required: true, default: ' ' },
+  age: { type: String, required: true, default: " " },
   email: { type: String, required: true },
   password: { type: String, required: true },
   empresa: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Empresa',
+    ref: "Empresa",
     required: false,
   },
-  genero: { type: String, required: true, default: ' ' },
+  genero: { type: String, required: true, default: " " },
   estrato: { type: Number, required: false },
   nivelEducativo: { type: String, required: false },
   ocupacion: { type: String, required: false },
@@ -27,14 +27,14 @@ const UserSchema = mongoose.Schema({
   intereses: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Sector',
+      ref: "Sector",
       required: false,
     },
   ],
   tipo: {
     type: String,
     required: true,
-    enum: ['consumidor', 'administrador', 'superadministrador'],
+    enum: ["consumidor", "administrador", "superadministrador"],
   },
 
   deletedAt: { type: Date, required: false },
@@ -44,13 +44,13 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.statics = {
   get: function (query, callback) {
-    this.findOne(query, { password: 0 }).populate('empresa').exec(callback);
+    this.findOne(query, { password: 0 }).populate("empresa").exec(callback);
   },
 
   getAll: function (query, callback) {
     this.find(query, { password: 0 })
-      .sort({ createdAt: 'desc' })
-      .populate('intereses empresa')
+      .sort({ createdAt: "desc" })
+      .populate("intereses empresa")
       .exec(callback);
   },
 
@@ -96,12 +96,12 @@ UserSchema.statics = {
 
   getDeletedUsers: function (query, callback) {
     this.find(query, { password: 0 })
-      .populate('intereses empresa')
+      .populate("intereses empresa")
       .exec(callback);
   },
 };
 
-const User = (module.exports = mongoose.model('User', UserSchema));
+const User = (module.exports = mongoose.model("User", UserSchema));
 
 // Specific backend methods
 
@@ -111,7 +111,7 @@ module.exports.getUserById = function (id, callback) {
 
 module.exports.getUserByEmail = function (email, callback) {
   const query = { email: email };
-  User.findOne(query).populate('empresa').exec(callback);
+  User.findOne(query).populate("empresa").exec(callback);
 };
 
 module.exports.addUser = function (newUser, callback) {
@@ -120,17 +120,27 @@ module.exports.addUser = function (newUser, callback) {
     bcrypt.hash(newUser.password, salt, (err2, hash) => {
       if (err2) throw err2;
       newUser.password = hash;
-      var UserSchema = mongoose.model('User');
+      var UserSchema = mongoose.model("User");
       UserSchema.find({ email: newUser.email }, (err3, res) => {
         if (res.length == 0) {
           newUser.save(callback);
         } else {
           callback(
-            'El correo ingresado ya se encuentra registrado en nuestra plataforma',
+            "El correo ingresado ya se encuentra registrado en nuestra plataforma",
             null
           );
         }
       });
+    });
+  });
+};
+
+module.exports.hashPassword = function (user, newPassword, callback) {
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) throw err;
+    bcrypt.hash(newPassword, salt, (err2, hash) => {
+      if (err2) throw err2;
+      callback(null, hash);
     });
   });
 };
