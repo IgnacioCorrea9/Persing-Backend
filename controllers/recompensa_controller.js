@@ -90,10 +90,19 @@ exports.get = function (req, res) {
 };
 
 function getEarningsFromInteraction(factor, currentRank, totalRank) {
-  return (
+  const newRank =
     currentRank +
-    factor * (totalRank / 30 - (totalRank / 3000) * Math.pow(currentRank, 2))
-  );
+    factor *
+      (totalRank / 30 - (totalRank / 3000) * Math.pow(currentRank, 2)).toFixed(
+        2
+      );
+  if (newRank > 10) {
+    return 10;
+  }
+  if (newRank < 0) {
+    return 0;
+  }
+  return newRank.toFixed(2);
 }
 
 exports.sumInteractions = function (req, res) {
@@ -150,27 +159,23 @@ exports.sumInteractions = function (req, res) {
               points,
               currentRank,
               recompensa.usuario.calificacionApp || 1
-            ).toFixed(2);
+            );
 
             let total = recompensa.usuario.creditos - credits;
-            if (newRankRecompensa > 10) {
-              newRankRecompensa = 10;
-            }
-            if (newRankRecompensa < 0) {
-              newRankRecompensa = 0;
-            }
+            newCreditos = 5;
+
             if (newCreditos < 0) {
               newCreditos = 0;
             }
             if (total < 0) {
               total = 0;
             }
-            Recompensa.updateById(
+            await Recompensa.updateById(
               recompensa._id,
               { ranking: newRankRecompensa, creditos: newCreditos },
               await function (error, resultRecompensa) {}
             );
-            User.updateById(
+            await User.updateById(
               recompensa.usuario._id,
               { creditos: total },
               await function (err, resultUsuario) {}
@@ -245,13 +250,8 @@ exports.sumInteractions = function (req, res) {
           points,
           currentRank,
           recompensa.usuario.calificacionApp || 1
-        ).toFixed(2);
-        if (newRankRecompensa > 10) {
-          newRankRecompensa = 10;
-        }
-        if (newRankRecompensa < 0) {
-          newRankRecompensa = 0;
-        }
+        );
+
         Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa },
@@ -320,15 +320,10 @@ exports.valorUpdate = function (req, res) {
               points,
               currentRank,
               recompensa.usuario.calificacionApp || 1
-            ).toFixed(2);
+            );
             let newCreditos = currentCreditos - credits;
             let total = recompensa.usuario.creditos - credits;
-            if (newRankRecompensa > 10) {
-              newRankRecompensa = 10;
-            }
-            if (newRankRecompensa < 0) {
-              newRankRecompensa = 0;
-            }
+
             if (newCreditos < 0) {
               newCreditos = 0;
             }
@@ -419,15 +414,11 @@ exports.valorUpdate = function (req, res) {
           points,
           currentRank,
           recompensa.usuario.calificacionApp || 1
-        ).toFixed(2);
+        );
+
         let newCreditos = currentCreditos + credits;
         let total = recompensa.usuario.creditos + credits;
-        if (newRankRecompensa > 10) {
-          newRankRecompensa = 10;
-        }
-        if (newRankRecompensa < 0) {
-          newRankRecompensa = 0;
-        }
+
         Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa, creditos: newCreditos },
@@ -453,7 +444,7 @@ exports.sumWatchTime = function (req, res) {
       async function (err2, result2) {
         if (!err2) {
           var recompensa = result2;
-          if (result2 == null) {
+          if (result2 == null || result2 == undefined || result2 == {}) {
             try {
               recompensa = await createRecompensa({
                 user: req.body.usuario,
@@ -489,15 +480,19 @@ exports.sumWatchTime = function (req, res) {
             }
           }
           const points = viewsValues[rowIndex][colIndex];
-          let newRankRecompensa = (
-            currentRank + getEarningsFromInteraction(points)
-          ).toFixed(2);
-          if (newRankRecompensa > 10) {
-            newRankRecompensa = 10;
+          let newRankRecompensa = getEarningsFromInteraction(
+            points,
+            currentRank,
+            recompensa.usuario.calificacionApp || 1
+          );
+          let newCreditos = 5;
+
+          if (newCreditos < 0) {
+            newCreditos = 0;
           }
-          Recompensa.updateById(
+          await Recompensa.updateById(
             recompensa._id,
-            { ranking: newRankRecompensa },
+            { ranking: newRankRecompensa, creditos: newCreditos },
             await function (error, resultRecompensa) {}
           );
 
