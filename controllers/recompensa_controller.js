@@ -90,10 +90,19 @@ exports.get = function (req, res) {
 };
 
 function getEarningsFromInteraction(factor, currentRank, totalRank) {
-  return (
+  const newRank =
     currentRank +
-    factor * (totalRank / 30 - (totalRank / 3000) * Math.pow(currentRank, 2))
-  );
+    factor *
+      (totalRank / 30 - (totalRank / 3000) * Math.pow(currentRank, 2)).toFixed(
+        2
+      );
+  if (newRank > 10) {
+    return 10;
+  }
+  if (newRank < 0) {
+    return 0;
+  }
+  return newRank.toFixed(2);
 }
 
 exports.sumInteractions = function (req, res) {
@@ -102,8 +111,7 @@ exports.sumInteractions = function (req, res) {
     async function (err2, result2) {
       if (!err2) {
         var recompensa = result2;
-        var nombreSector = result2.sector.nombre;
-        if (result2 == null || result2 == undefined || result2 == {}) {
+        if (result2) {
           await Recompensa.create(
             {
               usuario: req.body.usuario,
@@ -119,7 +127,6 @@ exports.sumInteractions = function (req, res) {
           );
         }
         let currentRank = recompensa.ranking;
-        let currentCreditos = recompensa.creditos;
         let interaccion = req.body.interaccion;
         var points;
         var credits;
@@ -150,31 +157,14 @@ exports.sumInteractions = function (req, res) {
               points,
               currentRank,
               recompensa.usuario.calificacionApp || 1
-            ).toFixed(2);
+            );
 
-            let total = recompensa.usuario.creditos - credits;
-            if (newRankRecompensa > 10) {
-              newRankRecompensa = 10;
-            }
-            if (newRankRecompensa < 0) {
-              newRankRecompensa = 0;
-            }
-            if (newCreditos < 0) {
-              newCreditos = 0;
-            }
-            if (total < 0) {
-              total = 0;
-            }
-            Recompensa.updateById(
+            await Recompensa.updateById(
               recompensa._id,
-              { ranking: newRankRecompensa, creditos: newCreditos },
-              await function (error, resultRecompensa) {}
+              { ranking: newRankRecompensa },
+              function (error, resultRecompensa) {}
             );
-            User.updateById(
-              recompensa.usuario._id,
-              { creditos: total },
-              await function (err, resultUsuario) {}
-            );
+
             return res.status(200).json("saved interaction");
           case "like":
             for (var i = 1; i < likeValues[0].length; i++) {
@@ -245,14 +235,9 @@ exports.sumInteractions = function (req, res) {
           points,
           currentRank,
           recompensa.usuario.calificacionApp || 1
-        ).toFixed(2);
-        if (newRankRecompensa > 10) {
-          newRankRecompensa = 10;
-        }
-        if (newRankRecompensa < 0) {
-          newRankRecompensa = 0;
-        }
-        Recompensa.updateById(
+        );
+
+        await Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa },
           await function (error, resultRecompensa) {
@@ -260,7 +245,7 @@ exports.sumInteractions = function (req, res) {
           }
         );
       } else {
-        return res.status(400).send({ error: err });
+        return res.status(400).send({ error: err2 });
       }
     }
   );
@@ -320,15 +305,10 @@ exports.valorUpdate = function (req, res) {
               points,
               currentRank,
               recompensa.usuario.calificacionApp || 1
-            ).toFixed(2);
+            );
             let newCreditos = currentCreditos - credits;
             let total = recompensa.usuario.creditos - credits;
-            if (newRankRecompensa > 10) {
-              newRankRecompensa = 10;
-            }
-            if (newRankRecompensa < 0) {
-              newRankRecompensa = 0;
-            }
+
             if (newCreditos < 0) {
               newCreditos = 0;
             }
@@ -338,7 +318,7 @@ exports.valorUpdate = function (req, res) {
             Recompensa.updateById(
               recompensa._id,
               { ranking: newRankRecompensa, creditos: newCreditos },
-              await function (error, resultRecompensa) {}
+              function (error, resultRecompensa) {}
             );
             User.updateById(
               recompensa.usuario._id,
@@ -419,15 +399,11 @@ exports.valorUpdate = function (req, res) {
           points,
           currentRank,
           recompensa.usuario.calificacionApp || 1
-        ).toFixed(2);
+        );
+
         let newCreditos = currentCreditos + credits;
         let total = recompensa.usuario.creditos + credits;
-        if (newRankRecompensa > 10) {
-          newRankRecompensa = 10;
-        }
-        if (newRankRecompensa < 0) {
-          newRankRecompensa = 0;
-        }
+
         Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa, creditos: newCreditos },
@@ -453,7 +429,7 @@ exports.sumWatchTime = function (req, res) {
       async function (err2, result2) {
         if (!err2) {
           var recompensa = result2;
-          if (result2 == null) {
+          if (result2) {
             try {
               recompensa = await createRecompensa({
                 user: req.body.usuario,
@@ -489,16 +465,16 @@ exports.sumWatchTime = function (req, res) {
             }
           }
           const points = viewsValues[rowIndex][colIndex];
-          let newRankRecompensa = (
-            currentRank + getEarningsFromInteraction(points)
-          ).toFixed(2);
-          if (newRankRecompensa > 10) {
-            newRankRecompensa = 10;
-          }
-          Recompensa.updateById(
+          let newRankRecompensa = getEarningsFromInteraction(
+            points,
+            currentRank,
+            recompensa.usuario.calificacionApp || 1
+          );
+
+          await Recompensa.updateById(
             recompensa._id,
             { ranking: newRankRecompensa },
-            await function (error, resultRecompensa) {}
+            function (error, resultRecompensa) {}
           );
 
           return res.status(200).json("saved watch time");
