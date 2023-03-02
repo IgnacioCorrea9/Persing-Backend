@@ -136,23 +136,23 @@ exports.create = function (req, res) {
 
             Promise.all(promises).then((_) => {
               shuffleUsuariosPrincipiante = shuffleUsuariosPrincipiante
-                .sort(() => 0.5 - Math.random())
+                .sort(() => 0.5 - crypto.getRandomValues())
                 .slice(0, inversionUsuariosPrincipiante);
 
               shuffleUsuariosBajo = shuffleUsuariosBajo
-                .sort(() => 0.5 - Math.random())
+                .sort(() => 0.5 - crypto.getRandomValues())
                 .slice(0, inversionUsuariosBajo);
 
               shuffleUsuariosMedio = shuffleUsuariosMedio
-                .sort(() => 0.5 - Math.random())
+                .sort(() => 0.5 - crypto.getRandomValues())
                 .slice(0, inversionUsuariosMedio);
 
               shuffleUsuariosAlto = shuffleUsuariosAlto
-                .sort(() => 0.5 - Math.random())
+                .sort(() => 0.5 - crypto.getRandomValues())
                 .slice(0, inversionUsuariosAlto);
 
               shuffleUsuariosSuperAlto = shuffleUsuariosSuperAlto
-                .sort(() => 0.5 - Math.random())
+                .sort(() => 0.5 - crypto.getRandomValues())
                 .slice(0, inversionUsuariosSuperAlto);
 
               let allShuffledUsers = [].concat(
