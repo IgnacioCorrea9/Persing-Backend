@@ -111,8 +111,7 @@ exports.sumInteractions = function (req, res) {
     async function (err2, result2) {
       if (!err2) {
         var recompensa = result2;
-        var nombreSector = result2.sector.nombre;
-        if (result2 == null || result2 == undefined || result2 == {}) {
+        if (result2) {
           await Recompensa.create(
             {
               usuario: req.body.usuario,
@@ -128,7 +127,6 @@ exports.sumInteractions = function (req, res) {
           );
         }
         let currentRank = recompensa.ranking;
-        let currentCreditos = recompensa.creditos;
         let interaccion = req.body.interaccion;
         var points;
         var credits;
@@ -161,25 +159,12 @@ exports.sumInteractions = function (req, res) {
               recompensa.usuario.calificacionApp || 1
             );
 
-            let total = recompensa.usuario.creditos - credits;
-            newCreditos = 5;
-
-            if (newCreditos < 0) {
-              newCreditos = 0;
-            }
-            if (total < 0) {
-              total = 0;
-            }
             await Recompensa.updateById(
               recompensa._id,
-              { ranking: newRankRecompensa, creditos: newCreditos },
-              await function (error, resultRecompensa) {}
+              { ranking: newRankRecompensa },
+              function (error, resultRecompensa) {}
             );
-            await User.updateById(
-              recompensa.usuario._id,
-              { creditos: total },
-              await function (err, resultUsuario) {}
-            );
+
             return res.status(200).json("saved interaction");
           case "like":
             for (var i = 1; i < likeValues[0].length; i++) {
@@ -252,7 +237,7 @@ exports.sumInteractions = function (req, res) {
           recompensa.usuario.calificacionApp || 1
         );
 
-        Recompensa.updateById(
+        await Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa },
           await function (error, resultRecompensa) {
@@ -260,7 +245,7 @@ exports.sumInteractions = function (req, res) {
           }
         );
       } else {
-        return res.status(400).send({ error: err });
+        return res.status(400).send({ error: err2 });
       }
     }
   );
@@ -333,7 +318,7 @@ exports.valorUpdate = function (req, res) {
             Recompensa.updateById(
               recompensa._id,
               { ranking: newRankRecompensa, creditos: newCreditos },
-              await function (error, resultRecompensa) {}
+              function (error, resultRecompensa) {}
             );
             User.updateById(
               recompensa.usuario._id,
@@ -444,7 +429,7 @@ exports.sumWatchTime = function (req, res) {
       async function (err2, result2) {
         if (!err2) {
           var recompensa = result2;
-          if (result2 == null || result2 == undefined || result2 == {}) {
+          if (result2) {
             try {
               recompensa = await createRecompensa({
                 user: req.body.usuario,
@@ -485,15 +470,11 @@ exports.sumWatchTime = function (req, res) {
             currentRank,
             recompensa.usuario.calificacionApp || 1
           );
-          let newCreditos = 5;
 
-          if (newCreditos < 0) {
-            newCreditos = 0;
-          }
           await Recompensa.updateById(
             recompensa._id,
-            { ranking: newRankRecompensa, creditos: newCreditos },
-            await function (error, resultRecompensa) {}
+            { ranking: newRankRecompensa },
+            function (error, resultRecompensa) {}
           );
 
           return res.status(200).json("saved watch time");
