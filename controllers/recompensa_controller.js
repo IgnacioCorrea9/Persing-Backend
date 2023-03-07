@@ -106,85 +106,6 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
   return newRank.toFixed(2);
 }
 
-/**
- * Update user rating
- *
- * Given a user id, calculates new user rating and update it.
- *
- * @param {String} userId
- */
-const newRatingPersing = async (userId) => {
-  const userData = await User.findOne({
-    _id: userId,
-  });
-  if (userData) {
-    const categoryRatings = await Recompensa.find({
-      usuario: userId,
-    });
-
-    var sumCategories = 0;
-    if (categoryRatings.length > 0) {
-      categoryRatings.forEach((categoryRating) => {
-        sumCategories = sumCategories + (categoryRating.ranking ?? 0);
-      });
-
-      try {
-        const C = getUserCValue(userData);
-        const T = C * 0.4 + (sumCategories / categoryRatings.length) * 0.6;
-        userData.calificacionApp = T.toFixed(2);
-        await userData.save();
-      } catch (error) {
-        console.log("Error calculating user new Ranking value::", {
-          error: error,
-          userId: userId,
-        });
-      }
-    }
-  }
-};
-
-/**
- * Given a user's data, return a C value based on user registered data.
- *
- * @param {User} userData
- * @returns {decimal} C
- */
-const getUserCValue = (userData) => {
-  /// Minimum value posible
-  var C = 1.5;
-  if (typeof userData.nombre == "string" && userData.nombre.trim() != "") {
-    C = C + 0.5;
-  }
-  if (typeof userData.estrato == "number") {
-    C = C + 1.0;
-  }
-  if (typeof userData.hijos == "boolean") {
-    C = C + 0.5;
-  }
-  if (typeof userData.cantidadHijos == "number") {
-    C = C + 0.5;
-  }
-  if (typeof userData.mascotas == "boolean") {
-    C = C + 0.5;
-  }
-  if (typeof userData.cantidadMascotas == "number") {
-    C = C + 0.5;
-  }
-  if (
-    typeof userData.estadoCivil == "string" &&
-    userData.estadoCivil.trim() != ""
-  ) {
-    C = C + 1.5;
-  }
-  if (
-    typeof userData.ocupacion == "string" &&
-    userData.ocupacion.trim() != ""
-  ) {
-    C = C + 2;
-  }
-  return C;
-};
-
 exports.sumInteractions = function (req, res) {
   Recompensa.findOne(
     { usuario: req.body.usuario, sector: req.body.sector },
@@ -318,7 +239,6 @@ exports.sumInteractions = function (req, res) {
         );
         recompensa.ranking = newRankRecompensa;
         const resultRecompensa = await recompensa.save();
-        await newRatingPersing(req.body.usuario);
         return res.status(200).json(resultRecompensa);
       } else {
         return res.status(400).send({ error: err2 });
@@ -512,7 +432,12 @@ exports.sumWatchTime = function (req, res) {
                 sector: req.body.sector,
               });
             } catch (error) {
-              console.log(error);
+              res.status(500).json(
+                {
+                  success:false,
+                  message: 'Error on creating Recompensa.'
+                }
+              );
             }
           }
           let currentRank = recompensa.ranking;
@@ -550,8 +475,6 @@ exports.sumWatchTime = function (req, res) {
           );
           recompensa.ranking = newRankRecompensa;
           await recompensa.save();
-
-          await newRatingPersing(req.body.usuario);
 
           return res.status(200).json("saved watch time");
         } else {
@@ -636,17 +559,17 @@ exports.getCreditosByUsuarioBySector = function (req, res) {
   );
 };
 
-function getTotalScore(globalScore, scoreAverage) {
-  let totalScore = globalScore * 0.4 + scoreAverage * 0.6;
-  return totalScore;
+function getTotalScore(C, scoreAverage) {
+  let totalScore = C * 0.4 + scoreAverage * 0.6;
+  return totalScore.toFixed(2);
 }
 
 /** get function to get ranking by id. */
 exports.getRankingByUsuario = function (req, res) {
-  Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
+  Recompensa.find({ usuario: req.params.usuario }, function (err, result) {
     if (!err) {
       let sumRanking = _.sumBy(result, "ranking");
-      let averageRanking = (sumRanking / result.length).toFixed(2);
+      let averageRanking = (sumRanking / result.length);
       let totalScore = getTotalScore(
         result[0].usuario.calificacionApp,
         averageRanking
