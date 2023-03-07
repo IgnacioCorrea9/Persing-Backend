@@ -566,14 +566,14 @@ function getTotalScore(C, scoreAverage) {
 
 /** get function to get ranking by id. */
 exports.getRankingByUsuario = function (req, res) {
-  Recompensa.find({ usuario: req.params.usuario }, function (err, result) {
+  Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
     if (!err) {
       let sumRanking = _.sumBy(result, "ranking");
       let averageRanking = (sumRanking / result.length);
       let totalScore = getTotalScore(
         result[0].usuario.calificacionApp,
         averageRanking
-      );
+        );
       return res.status(200).json({ totalScore: totalScore });
     } else {
       return res.status(400).send({ error: err });
