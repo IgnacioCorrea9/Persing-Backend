@@ -5,6 +5,7 @@ const User = require("../models/user");
 const Save = require("../models/save");
 const Publicacion = require("../models/publicacion");
 var _ = require("lodash");
+const { use } = require("passport");
 
 const viewsValues = [
   ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
@@ -105,13 +106,103 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
   return newRank.toFixed(2);
 }
 
+/**
+ * Update user rating
+ * 
+ * Given a user id, calculates new user rating and update it.
+ * 
+ * @param {String} userId 
+ */
+const newRatingPersing = async (userId) => {
+  const userData = await User.findOne({
+    _id: userId,
+  });
+  if (userData) {
+    const categoryRatings = await Recompensa.find({
+      usuario: userId,
+    });
+
+    var sumCategories = 0;
+    if (categoryRatings.length > 0) {
+      await Promise.all(
+        categoryRatings.map(async (categoryRating) => {
+          sumCategories = sumCategories + (categoryRating.ranking??0);
+        })
+      );
+      try {
+        const C = getUserCValue(userData);
+        const T =
+          (C) * 0.4 +
+          (sumCategories / categoryRatings.length) * 0.6;
+        
+        console.log({
+          userOldRanking : userData.calificacionApp,
+          CValue : C,
+          sumCategories : sumCategories,
+          countCategories : categoryRatings.length,
+          newRanking :T,
+        });
+        userData.calificacionApp = T.toFixed(2);
+        await userData.save();
+      } catch (error) {
+        console.log("Error calculating user new Ranking value::", {
+          error: error,
+          userId: userId,
+        });
+      }
+    }
+  }
+};
+
+/**
+ * Given a user's data, return a C value based on user registered data.
+ *
+ * @param {User} userData
+ * @returns {decimal} C
+ */
+const getUserCValue = (userData) => {
+  /// Minimum value posible
+  var C = 1.5;
+  if (typeof userData.nombre == "string" && userData.nombre.trim() != "") {
+    C = C + 0.5;
+  }
+  if (typeof userData.estrato == "number") {
+    C = C + 1.0;
+  }
+  if (typeof userData.hijos == "boolean") {
+    C = C + 0.5;
+  }
+  if (typeof userData.cantidadHijos == "number") {
+    C = C + 0.5;
+  }
+  if (typeof userData.mascotas == "boolean") {
+    C = C + 0.5;
+  }
+  if (typeof userData.cantidadMascotas == "number") {
+    C = C + 0.5;
+  }
+  if (
+    typeof userData.estadoCivil == "string" &&
+    userData.estadoCivil.trim() != ""
+  ) {
+    C = C + 1.5;
+  }
+  if (
+    typeof userData.ocupacion == "string" &&
+    userData.ocupacion.trim() != ""
+  ) {
+    C = C + 2;
+  }
+  return C;
+};
+
 exports.sumInteractions = function (req, res) {
-  Recompensa.get(
+  Recompensa.findOne(
     { usuario: req.body.usuario, sector: req.body.sector },
     async function (err2, result2) {
       if (!err2) {
         var recompensa = result2;
-        if (result2) {
+        if (!result2) {
           await Recompensa.create(
             {
               usuario: req.body.usuario,
@@ -236,14 +327,10 @@ exports.sumInteractions = function (req, res) {
           currentRank,
           recompensa.usuario.calificacionApp || 1
         );
-
-        await Recompensa.updateById(
-          recompensa._id,
-          { ranking: newRankRecompensa },
-          await function (error, resultRecompensa) {
-            return res.status(200).json(resultRecompensa);
-          }
-        );
+        recompensa.ranking = newRankRecompensa;
+        const resultRecompensa = await recompensa.save();
+        await newRatingPersing(req.body.usuario);
+        return res.status(200).json(resultRecompensa);
       } else {
         return res.status(400).send({ error: err2 });
       }
@@ -424,18 +511,20 @@ exports.valorUpdate = function (req, res) {
 
 exports.sumWatchTime = function (req, res) {
   if (req.body.sector) {
-    Recompensa.get(
+    Recompensa.findOne(
       { usuario: req.body.usuario, sector: req.body.sector },
       async function (err2, result2) {
         if (!err2) {
           var recompensa = result2;
-          if (result2) {
+          if (!result2) {
             try {
               recompensa = await createRecompensa({
                 user: req.body.usuario,
                 sector: req.body.sector,
               });
-            } catch (error) {}
+            } catch (error) {
+              console.log(error);
+            }
           }
           let currentRank = recompensa.ranking;
           if (currentRank > 10) {
@@ -470,12 +559,10 @@ exports.sumWatchTime = function (req, res) {
             currentRank,
             recompensa.usuario.calificacionApp || 1
           );
+          recompensa.ranking = newRankRecompensa;
+          await recompensa.save();
 
-          await Recompensa.updateById(
-            recompensa._id,
-            { ranking: newRankRecompensa },
-            function (error, resultRecompensa) {}
-          );
+          await newRatingPersing(req.body.usuario);
 
           return res.status(200).json("saved watch time");
         } else {
