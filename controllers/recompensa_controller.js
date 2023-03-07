@@ -107,7 +107,7 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
 }
 
 exports.sumInteractions = function (req, res) {
-  Recompensa.findOne(
+  Recompensa.get(
     { usuario: req.body.usuario, sector: req.body.sector },
     async function (err2, result2) {
       if (!err2) {
@@ -420,7 +420,7 @@ exports.valorUpdate = function (req, res) {
 
 exports.sumWatchTime = function (req, res) {
   if (req.body.sector) {
-    Recompensa.findOne(
+    Recompensa.get(
       { usuario: req.body.usuario, sector: req.body.sector },
       async function (err2, result2) {
         if (!err2) {
