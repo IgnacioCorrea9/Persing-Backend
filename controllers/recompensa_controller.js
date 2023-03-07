@@ -108,10 +108,10 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
 
 /**
  * Update user rating
- * 
+ *
  * Given a user id, calculates new user rating and update it.
- * 
- * @param {String} userId 
+ *
+ * @param {String} userId
  */
 const newRatingPersing = async (userId) => {
   const userData = await User.findOne({
@@ -124,16 +124,13 @@ const newRatingPersing = async (userId) => {
 
     var sumCategories = 0;
     if (categoryRatings.length > 0) {
-      await Promise.all(
-        categoryRatings.map(async (categoryRating) => {
-          sumCategories = sumCategories + (categoryRating.ranking??0);
-        })
-      );
+      categoryRatings.forEach((categoryRating) => {
+        sumCategories = sumCategories + (categoryRating.ranking ?? 0);
+      });
+
       try {
         const C = getUserCValue(userData);
-        const T =
-          (C) * 0.4 +
-          (sumCategories / categoryRatings.length) * 0.6;
+        const T = C * 0.4 + (sumCategories / categoryRatings.length) * 0.6;
         userData.calificacionApp = T.toFixed(2);
         await userData.save();
       } catch (error) {
