@@ -20,7 +20,7 @@ module.exports = function (router) {
   /** Trae todos los usuarios por tipo */
   router.post(
     "/recompensa/watch-time",
-    // passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", { session: false }),
     RecompensaController.sumWatchTime
   );
 
