@@ -134,14 +134,6 @@ const newRatingPersing = async (userId) => {
         const T =
           (C) * 0.4 +
           (sumCategories / categoryRatings.length) * 0.6;
-        
-        console.log({
-          userOldRanking : userData.calificacionApp,
-          CValue : C,
-          sumCategories : sumCategories,
-          countCategories : categoryRatings.length,
-          newRanking :T,
-        });
         userData.calificacionApp = T.toFixed(2);
         await userData.save();
       } catch (error) {
