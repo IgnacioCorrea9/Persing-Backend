@@ -5,6 +5,7 @@ const User = require("../models/user");
 const Save = require("../models/save");
 const Publicacion = require("../models/publicacion");
 var _ = require("lodash");
+const { use } = require("passport");
 
 const viewsValues = [
   ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
@@ -111,7 +112,7 @@ exports.sumInteractions = function (req, res) {
     async function (err2, result2) {
       if (!err2) {
         var recompensa = result2;
-        if (result2) {
+        if (!result2) {
           await Recompensa.create(
             {
               usuario: req.body.usuario,
@@ -236,16 +237,13 @@ exports.sumInteractions = function (req, res) {
           currentRank,
           recompensa.usuario.calificacionApp || 1
         );
-
-        await Recompensa.updateById(
-          recompensa._id,
-          { ranking: newRankRecompensa },
-          await function (error, resultRecompensa) {
-            return res.status(200).json(resultRecompensa);
-          }
-        );
+        recompensa.ranking = newRankRecompensa;
+        const resultRecompensa = await recompensa.save();
+        return res
+          .status(200)
+          .json({ success: true, message: resultRecompensa });
       } else {
-        return res.status(400).send({ error: err2 });
+        return res.status(400).send({ success: false, message: err2 });
       }
     }
   );
@@ -429,13 +427,18 @@ exports.sumWatchTime = function (req, res) {
       async function (err2, result2) {
         if (!err2) {
           var recompensa = result2;
-          if (result2) {
+          if (!result2) {
             try {
               recompensa = await createRecompensa({
                 user: req.body.usuario,
                 sector: req.body.sector,
               });
-            } catch (error) {}
+            } catch (error) {
+              res.status(500).json({
+                success: false,
+                message: "Error on creating Recompensa.",
+              });
+            }
           }
           let currentRank = recompensa.ranking;
           if (currentRank > 10) {
@@ -470,16 +473,12 @@ exports.sumWatchTime = function (req, res) {
             currentRank,
             recompensa.usuario.calificacionApp || 1
           );
-
-          await Recompensa.updateById(
-            recompensa._id,
-            { ranking: newRankRecompensa },
-            function (error, resultRecompensa) {}
-          );
+          recompensa.ranking = newRankRecompensa;
+          await recompensa.save();
 
           return res.status(200).json("saved watch time");
         } else {
-          return res.status(400).send({ error: err });
+          return res.status(400).send({ success: false, message: err2 });
         }
       }
     );
@@ -560,9 +559,9 @@ exports.getCreditosByUsuarioBySector = function (req, res) {
   );
 };
 
-function getTotalScore(globalScore, scoreAverage) {
-  let totalScore = globalScore * 0.4 + scoreAverage * 0.6;
-  return totalScore;
+function getTotalScore(C, scoreAverage) {
+  let totalScore = C * 0.4 + scoreAverage * 0.6;
+  return totalScore.toFixed(2);
 }
 
 /** get function to get ranking by id. */
@@ -570,7 +569,7 @@ exports.getRankingByUsuario = function (req, res) {
   Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
     if (!err) {
       let sumRanking = _.sumBy(result, "ranking");
-      let averageRanking = (sumRanking / result.length).toFixed(2);
+      let averageRanking = sumRanking / result.length;
       let totalScore = getTotalScore(
         result[0].usuario.calificacionApp,
         averageRanking

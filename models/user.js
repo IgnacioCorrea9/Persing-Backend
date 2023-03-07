@@ -36,9 +36,9 @@ const UserSchema = mongoose.Schema({
     required: true,
     enum: ["consumidor", "administrador", "superadministrador"],
   },
-
   deletedAt: { type: Date, required: false },
   lastSeen: { type: Date, required: false },
+  lastUpdate: { type: Date, required: false },
   createdAt: { type: Date, required: false, default: Date.now },
 });
 
