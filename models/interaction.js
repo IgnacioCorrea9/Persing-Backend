@@ -15,6 +15,7 @@ const InteractionSchema = mongoose.Schema(
     liked: { type: Boolean, required: false, default: true },
     saved: { type: Boolean, required: false, default: true },
     shared: { type: Boolean, required: false, default: true },
+    unsaved: { type: Boolean, required: false, default: true },
     commented: { type: Boolean, required: false, default: true },
     deletedAt: { type: Boolean, required: false },
   },

@@ -109,7 +109,7 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
 }
 
 exports.sumInteractions = async function (req, res) {
-  var recompensa = await Recompensa.get({
+  var recompensa = await Recompensa.findOne({
     usuario: req.body.usuario,
     sector: req.body.sector,
   });
@@ -160,19 +160,7 @@ exports.sumInteractions = async function (req, res) {
           break;
         }
       }
-      let newRankRecompensa = getEarningsFromInteraction(
-        points,
-        currentRank,
-        recompensa.usuario.calificacionApp || 1
-      );
-
-      await Recompensa.updateById(
-        recompensa._id,
-        { ranking: newRankRecompensa },
-        function (error, resultRecompensa) {}
-      );
-
-      return res.status(200).json("saved interaction");
+      break;
     case "like":
       for (var i = 1; i < likeValues[0].length; i++) {
         var split = likeValues[0][i].split("-");
@@ -235,16 +223,26 @@ exports.sumInteractions = async function (req, res) {
         }
       }
       break;
+    default:
+      return res
+      .status(500)
+      .json({ success: false, message: interaccion+" is not a valid interaction." });
   }
-
-  let newRankRecompensa = getEarningsFromInteraction(
-    points,
-    currentRank,
-    recompensa.usuario.calificacionApp || 1
-  );
-  recompensa.ranking = newRankRecompensa;
-  const resultRecompensa = await recompensa.save();
-  return res.status(200).json({ success: true, message: resultRecompensa });
+  const userData = await User.findOne({ _id: recompensa.usuario });
+  if (userData) {
+    let newRankRecompensa = getEarningsFromInteraction(
+      points,
+      currentRank,
+      userData.calificacionApp || 1
+    );
+    recompensa.ranking = newRankRecompensa;
+    const resultRecompensa = await recompensa.save();
+    return res.status(200).json({ success: true, message: resultRecompensa });
+  } else {
+    return res
+      .status(500)
+      .json({ success: true, message: "User data not found." });
+  }
 };
 
 /**
@@ -283,6 +281,12 @@ const checkIfAlreadyInteracted = async (userId, publicationId, interaction) => {
         }
         interactionData.saved = true;
         break;
+      case "disguardar":
+        if (interactionData.unsaved == true) {
+          return true;
+        }
+        interactionData.unsaved = true;
+        break;
       case "compartir":
         if (interactionData.shared == true) {
           return true;
@@ -299,6 +303,8 @@ const checkIfAlreadyInteracted = async (userId, publicationId, interaction) => {
       user: userId,
       publication: publicationId,
       liked: false,
+      unsaved: false,
+      shared: false,
       saved: false,
       commented: false,
     });
@@ -525,18 +531,27 @@ exports.sumWatchTime = async function (req, res) {
       }
     }
     const points = viewsValues[rowIndex][colIndex];
-    let newRankRecompensa = getEarningsFromInteraction(
-      points,
-      currentRank,
-      recompensa.usuario.calificacionApp || 1
-    );
-    recompensa.ranking = newRankRecompensa;
-    await recompensa.save();
-    return res.status(200).json({ success: true, message: "saved watch time" });
+    const userData = await User.findOne({ _id: recompensa.usuario });
+    if (userData) {
+      let newRankRecompensa = getEarningsFromInteraction(
+        points,
+        currentRank,
+        userData.calificacionApp || 1
+      );
+      recompensa.ranking = newRankRecompensa;
+      await recompensa.save();
+      return res
+        .status(200)
+        .json({ success: true, message: "saved watch time" });
+    } else {
+      return res
+        .status(500)
+        .json({ success: true, message: "User data not found." });
+    }
   } else {
     return res
       .status(400)
-      .json({ success: true, message: "sector not defined" });
+      .json({ success: true, message: "Sector not defined" });
   }
 };
 
