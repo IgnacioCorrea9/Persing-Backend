@@ -108,155 +108,143 @@ function getEarningsFromInteraction(factor, currentRank, totalRank) {
   return newRank.toFixed(2);
 }
 
-exports.sumInteractions = function (req, res) {
-  Recompensa.get(
-    { usuario: req.body.usuario, sector: req.body.sector },
-    async function (err2, result2) {
-      if (!err2) {
-        var recompensa = result2;
-        if (!result2) {
-          await Recompensa.create(
-            {
-              usuario: req.body.usuario,
-              sector: req.body.sector,
-              ranking: 0,
-              creditos: 0,
-            },
-            function (err3, result3) {
-              if (!err3) {
-                recompensa = result3;
-              }
-            }
-          );
-        }
-        let currentRank = recompensa.ranking;
-        let interaccion = req.body.interaccion;
-        var points;
-
-        const alreadyInteracted = await checkIfAlreadyInteracted(
-          req.body.usuario,
-          req.body.publication,
-          req.body.interaccion
-        );
-        if (alreadyInteracted) {
-          return res
-          .status(200)
-          .json({ success: true, message: 'User has already interacted with publication.' });
-        }
-        switch (interaccion) {
-          case "dislike":
-          case "disguardar":
-            let dynamicValues =
-              "dislike" === interaccion ? likeValues : saveValues;
-            let dynamicValuesCredits =
-              "dislike" === interaccion
-                ? likeValuesCreditos
-                : saveValuesCreditos;
-
-            for (var i = 1; i < dynamicValues[0].length; i++) {
-              var split = dynamicValues[0][i].split("-");
-
-              let lower = parseFloat(split[0]);
-
-              let higher = parseFloat(split[1]);
-
-              if (currentRank >= lower && currentRank <= higher) {
-                points = dynamicValues[1][i];
-                break;
-              }
-            }
-            let newRankRecompensa = getEarningsFromInteraction(
-              points,
-              currentRank,
-              recompensa.usuario.calificacionApp || 1
-            );
-
-            await Recompensa.updateById(
-              recompensa._id,
-              { ranking: newRankRecompensa },
-              function (error, resultRecompensa) {}
-            );
-
-            return res.status(200).json("saved interaction");
-          case "like":
-            for (var i = 1; i < likeValues[0].length; i++) {
-              var split = likeValues[0][i].split("-");
-              let lower = parseFloat(split[0]);
-              let higher = parseFloat(split[1]);
-              if (currentRank >= lower && currentRank <= higher) {
-                points = likeValues[1][i];
-                break;
-              }
-            }
-            break;
-          case "comentario":
-            for (var i = 1; i < commentValues[0].length; i++) {
-              var split = commentValues[0][i].split("-");
-              let lower = parseFloat(split[0]);
-              let higher = parseFloat(split[1]);
-              if (currentRank >= lower && currentRank <= higher) {
-                points = commentValues[1][i];
-                break;
-              }
-            }
-            break;
-          case "guardar":
-            const notRewardedItems = await Save.getOne({
-              alreadyRewarded: false,
-            });
-
-            if (notRewardedItems === null) {
-              points = 0;
-              break;
-            }
-
-            await Save.updateSave(
-              { alreadyRewarded: false },
-              { alreadyRewarded: true }
-            );
-
-            for (var i = 1; i < saveValues[0].length; i++) {
-              var split = saveValues[0][i].split("-");
-              let lower = parseFloat(split[0]);
-              let higher = parseFloat(split[1]);
-              if (currentRank >= lower && currentRank <= higher) {
-                points = saveValues[1][i];
-                break;
-              }
-            }
-
-            break;
-          case "compartir":
-            for (var i = 1; i < shareValues[0].length; i++) {
-              var split = shareValues[0][i].split("-");
-
-              let lower = parseFloat(split[0]);
-
-              let higher = parseFloat(split[1]);
-
-              if (currentRank >= lower && currentRank <= higher) {
-                points = shareValues[1][i];
-                break;
-              }
-            }
-            break;
-        }
-
-        let newRankRecompensa = getEarningsFromInteraction(
-          points,
-          currentRank,
-          recompensa.usuario.calificacionApp || 1
-        );
-        recompensa.ranking = newRankRecompensa;
-        const resultRecompensa = await recompensa.save();
-        return res
-          .status(200)
-          .json({ success: true, message: resultRecompensa });
-      } else {
-        return res.status(400).send({ success: false, message: err2 });
-      }
+exports.sumInteractions = async function (req, res) {
+  var recompensa = await Recompensa.get({
+    usuario: req.body.usuario,
+    sector: req.body.sector,
+  });
+  if (!recompensa) {
+    recompensa = await Recompensa({
+      usuario: req.body.usuario,
+      sector: req.body.sector,
+      ranking: 0,
+      creditos: 0,
+    });
+    try {
+      await recompensa.save();
+    } catch (error) {
+      return res.status(500).json({ success: true, message: error });
     }
+  }
+  let currentRank = recompensa.ranking;
+  let interaccion = req.body.interaccion;
+  var points;
+
+  const alreadyInteracted = await checkIfAlreadyInteracted(
+    req.body.usuario,
+    req.body.publication,
+    req.body.interaccion
   );
+  if (alreadyInteracted) {
+    return res.status(200).json({
+      success: true,
+      message: "User has already interacted with publication.",
+    });
+  }
+  switch (interaccion) {
+    case "dislike":
+    case "disguardar":
+      let dynamicValues = "dislike" === interaccion ? likeValues : saveValues;
+      let dynamicValuesCredits =
+        "dislike" === interaccion ? likeValuesCreditos : saveValuesCreditos;
+
+      for (var i = 1; i < dynamicValues[0].length; i++) {
+        var split = dynamicValues[0][i].split("-");
+
+        let lower = parseFloat(split[0]);
+
+        let higher = parseFloat(split[1]);
+
+        if (currentRank >= lower && currentRank <= higher) {
+          points = dynamicValues[1][i];
+          break;
+        }
+      }
+      let newRankRecompensa = getEarningsFromInteraction(
+        points,
+        currentRank,
+        recompensa.usuario.calificacionApp || 1
+      );
+
+      await Recompensa.updateById(
+        recompensa._id,
+        { ranking: newRankRecompensa },
+        function (error, resultRecompensa) {}
+      );
+
+      return res.status(200).json("saved interaction");
+    case "like":
+      for (var i = 1; i < likeValues[0].length; i++) {
+        var split = likeValues[0][i].split("-");
+        let lower = parseFloat(split[0]);
+        let higher = parseFloat(split[1]);
+        if (currentRank >= lower && currentRank <= higher) {
+          points = likeValues[1][i];
+          break;
+        }
+      }
+      break;
+    case "comentario":
+      for (var i = 1; i < commentValues[0].length; i++) {
+        var split = commentValues[0][i].split("-");
+        let lower = parseFloat(split[0]);
+        let higher = parseFloat(split[1]);
+        if (currentRank >= lower && currentRank <= higher) {
+          points = commentValues[1][i];
+          break;
+        }
+      }
+      break;
+    case "guardar":
+      const notRewardedItems = await Save.getOne({
+        alreadyRewarded: false,
+      });
+
+      if (notRewardedItems === null) {
+        points = 0;
+        break;
+      }
+
+      await Save.updateSave(
+        { alreadyRewarded: false },
+        { alreadyRewarded: true }
+      );
+
+      for (var i = 1; i < saveValues[0].length; i++) {
+        var split = saveValues[0][i].split("-");
+        let lower = parseFloat(split[0]);
+        let higher = parseFloat(split[1]);
+        if (currentRank >= lower && currentRank <= higher) {
+          points = saveValues[1][i];
+          break;
+        }
+      }
+
+      break;
+    case "compartir":
+      for (var i = 1; i < shareValues[0].length; i++) {
+        var split = shareValues[0][i].split("-");
+
+        let lower = parseFloat(split[0]);
+
+        let higher = parseFloat(split[1]);
+
+        if (currentRank >= lower && currentRank <= higher) {
+          points = shareValues[1][i];
+          break;
+        }
+      }
+      break;
+  }
+
+  let newRankRecompensa = getEarningsFromInteraction(
+    points,
+    currentRank,
+    recompensa.usuario.calificacionApp || 1
+  );
+  recompensa.ranking = newRankRecompensa;
+  const resultRecompensa = await recompensa.save();
+  return res.status(200).json({ success: true, message: resultRecompensa });
 };
 
 /**
@@ -307,14 +295,15 @@ const checkIfAlreadyInteracted = async (userId, publicationId, interaction) => {
     await interactionData.save();
     return false;
   } else {
-    interactionData = await Interaction.create({
+    const result = await Interaction.create({
       user: userId,
       publication: publicationId,
       liked: false,
       saved: false,
       commented: false,
     });
-    return false;
+
+    return await checkIfAlreadyInteracted(userId, publicationId, interaction);
   }
 };
 
@@ -489,70 +478,65 @@ exports.valorUpdate = function (req, res) {
   );
 };
 
-exports.sumWatchTime = function (req, res) {
+exports.sumWatchTime = async function (req, res) {
   if (req.body.sector) {
-    Recompensa.get(
-      { usuario: req.body.usuario, sector: req.body.sector },
-      async function (err2, result2) {
-        if (!err2) {
-          var recompensa = result2;
-          if (!result2) {
-            try {
-              recompensa = await createRecompensa({
-                user: req.body.usuario,
-                sector: req.body.sector,
-              });
-            } catch (error) {
-              res.status(500).json({
-                success: false,
-                message: "Error on creating Recompensa.",
-              });
-            }
-          }
-          let currentRank = recompensa.ranking;
-          if (currentRank > 10) {
-            currentRank = 10;
-          }
-          let time = req.body.tiempo;
-          var colIndex;
-          var rowIndex;
-
-          for (var i = 1; i < viewsValues[0].length; i++) {
-            var split = viewsValues[0][i].split("-");
-            let lower = parseFloat(split[0]);
-            let higher = parseFloat(split[1]);
-            if (currentRank >= lower && currentRank <= higher) {
-              colIndex = i;
-              break;
-            }
-          }
-
-          for (var i = 1; i < viewsValues.length; i++) {
-            var split = viewsValues[i][0].split("-");
-            let lower = parseFloat(split[0]);
-            let higher = parseFloat(split[1]);
-            if (time >= lower && time <= higher) {
-              rowIndex = i;
-              break;
-            }
-          }
-          const points = viewsValues[rowIndex][colIndex];
-          let newRankRecompensa = getEarningsFromInteraction(
-            points,
-            currentRank,
-            recompensa.usuario.calificacionApp || 1
-          );
-          recompensa.ranking = newRankRecompensa;
-          await recompensa.save();
-
-          return res.status(200).json("saved watch time");
-        } else {
-          return res.status(400).send({ success: false, message: err2 });
-        }
+    var recompensa = await Recompensa.findOne({
+      usuario: req.body.usuario,
+      sector: req.body.sector,
+    });
+    if (!recompensa) {
+      recompensa = await Recompensa({
+        usuario: req.body.usuario,
+        sector: req.body.sector,
+        ranking: 0,
+        creditos: 0,
+      });
+      try {
+        await recompensa.save();
+      } catch (error) {
+        return res.status(500).json({ success: true, message: error });
       }
+    }
+    let currentRank = recompensa.ranking;
+    if (currentRank > 10) {
+      currentRank = 10;
+    }
+    let time = req.body.tiempo;
+    var colIndex;
+    var rowIndex;
+
+    for (var i = 1; i < viewsValues[0].length; i++) {
+      var split = viewsValues[0][i].split("-");
+      let lower = parseFloat(split[0]);
+      let higher = parseFloat(split[1]);
+      if (currentRank >= lower && currentRank <= higher) {
+        colIndex = i;
+        break;
+      }
+    }
+
+    for (var i = 1; i < viewsValues.length; i++) {
+      var split = viewsValues[i][0].split("-");
+      let lower = parseFloat(split[0]);
+      let higher = parseFloat(split[1]);
+      if (time >= lower && time <= higher) {
+        rowIndex = i;
+        break;
+      }
+    }
+    const points = viewsValues[rowIndex][colIndex];
+    let newRankRecompensa = getEarningsFromInteraction(
+      points,
+      currentRank,
+      recompensa.usuario.calificacionApp || 1
     );
+    recompensa.ranking = newRankRecompensa;
+    await recompensa.save();
+    return res.status(200).json({ success: true, message: "saved watch time" });
   } else {
-    return res.status(200).json("sector not defined");
+    return res
+      .status(400)
+      .json({ success: true, message: "sector not defined" });
   }
 };
 
