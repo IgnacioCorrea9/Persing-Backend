@@ -1,8 +1,10 @@
 "use strict";
 
 const Recompensa = require("../models/recompensa");
+const Sector = require("../models/sector");
 const User = require("../models/user");
 const Save = require("../models/save");
+const Interaction = require("../models/interaction");
 const Publicacion = require("../models/publicacion");
 var _ = require("lodash");
 const { use } = require("passport");
@@ -130,8 +132,17 @@ exports.sumInteractions = function (req, res) {
         let currentRank = recompensa.ranking;
         let interaccion = req.body.interaccion;
         var points;
-        var credits;
 
+        const alreadyInteracted = await checkIfAlreadyInteracted(
+          req.body.usuario,
+          req.body.publication,
+          req.body.interaccion
+        );
+        if (alreadyInteracted) {
+          return res
+          .status(200)
+          .json({ success: true, message: 'User has already interacted with publication.' });
+        }
         switch (interaccion) {
           case "dislike":
           case "disguardar":
@@ -196,7 +207,6 @@ exports.sumInteractions = function (req, res) {
 
             if (notRewardedItems === null) {
               points = 0;
-              credits = 0;
               break;
             }
 
@@ -247,6 +257,65 @@ exports.sumInteractions = function (req, res) {
       }
     }
   );
+};
+
+/**
+ * Check user interaction.
+ *
+ * Checks if user had already interacted with publication with the selected
+ * [interaction].
+ *
+ * @param {String} userId
+ * @param {String} publicationId
+ * @param {String} interaction
+ * @returns {bool} result
+ */
+const checkIfAlreadyInteracted = async (userId, publicationId, interaction) => {
+  var interactionData = await Interaction.findOne({
+    publication: publicationId,
+    user: userId,
+  });
+  if (interactionData) {
+    switch (interaction) {
+      case "like":
+        if (interactionData.liked == true) {
+          return true;
+        }
+        interactionData.liked = true;
+        break;
+      case "comentario":
+        if (interactionData.commented == true) {
+          return true;
+        }
+        interactionData.commented = true;
+        break;
+      case "guardar":
+        if (interactionData.saved == true) {
+          return true;
+        }
+        interactionData.saved = true;
+        break;
+      case "compartir":
+        if (interactionData.shared == true) {
+          return true;
+        }
+        interactionData.shared = true;
+        break;
+      default:
+        break;
+    }
+    await interactionData.save();
+    return false;
+  } else {
+    interactionData = await Interaction.create({
+      user: userId,
+      publication: publicationId,
+      liked: false,
+      saved: false,
+      commented: false,
+    });
+    return false;
+  }
 };
 
 exports.valorUpdate = function (req, res) {
@@ -566,19 +635,23 @@ function getTotalScore(C, scoreAverage) {
 
 /** get function to get ranking by id. */
 exports.getRankingByUsuario = function (req, res) {
-  Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
-    if (!err) {
-      let sumRanking = _.sumBy(result, "ranking");
-      let averageRanking = sumRanking / result.length;
-      let totalScore = getTotalScore(
-        result[0].usuario.calificacionApp,
-        averageRanking
-      );
-      return res.status(200).json({ totalScore: totalScore });
-    } else {
-      return res.status(400).send({ error: err });
+  Recompensa.getAll(
+    { usuario: req.params.usuario },
+    async function (err, result) {
+      if (!err) {
+        let sumRanking = _.sumBy(result, "ranking");
+        let totalSectors = await Sector.find({});
+        let averageRanking = sumRanking / (totalSectors.length ?? 1);
+        let totalScore = getTotalScore(
+          result[0].usuario.calificacionApp,
+          averageRanking
+        );
+        return res.status(200).json({ totalScore: totalScore });
+      } else {
+        return res.status(400).send({ error: err });
+      }
     }
-  });
+  );
 };
 
 /** get function to get all Recompensa. */
