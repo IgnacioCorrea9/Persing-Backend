@@ -133,7 +133,7 @@ exports.create = function (req, res) {
                 })
               );
             }
-
+            /*asignacion de creditos a los ususarios*/
             Promise.all(promises).then((_) => {
               shuffleUsuariosPrincipiante = shuffleUsuariosPrincipiante
                 .sort(() => 0.5 - Math.random())
