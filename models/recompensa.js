@@ -1,19 +1,24 @@
 const mongoose = require("mongoose");
 
-const RecompensaSchema = mongoose.Schema({
-  usuario: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const RecompensaSchema = mongoose.Schema(
+  {
+    usuario: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    sector: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Sector",
+      required: true,
+    },
+    ranking: { type: Number, required: false, default: 0 },
+    creditos: { type: Number, required: false, default: 0 },
   },
-  sector: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Sector",
-    required: true,
-  },
-  ranking: { type: Number, required: false, default: 0 },
-  creditos: { type: Number, required: false, default: 0 },
-});
+  {
+    timestamps: true,
+  }
+);
 
 RecompensaSchema.statics = {
   get: function (query, callback) {
@@ -23,6 +28,9 @@ RecompensaSchema.statics = {
   },
   getAll: function (query, callback) {
     this.find(query, { password: 0 }).populate("usuario sector").exec(callback);
+  },
+  getAllSector: function (query, callback) {
+    this.find(query, { password: 0 }).populate("sector").exec(callback);
   },
   updateById: function (id, updateData, callback) {
     this.findOneAndUpdate(

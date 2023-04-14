@@ -42,6 +42,8 @@ const port = process.env.PORT || 8081;
 // CORS Middleware
 app.use(cors());
 
+app.use(express.urlencoded({ extended: true }));
+
 // Force SSL
 /* app.use(function (req, res, next) {
   if (!req.secure && req.get("X-Forwarded-Proto") !== "https") {
@@ -80,7 +82,7 @@ require("./routes/api/producto")(router);
 require("./routes/api/pagos")(router);
 require("./routes/api/notificaciones")(router);
 require("./routes/api/compra_producto")(router);
-
+require("./routes/api/transaccion")(router);
 // Import other routes and paths
 const users = require("./routes/users");
 const credentials = require("./routes/credentials");

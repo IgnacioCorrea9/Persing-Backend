@@ -4,6 +4,7 @@ var User = require("../models/user");
 var Comentario = require("../models/comentario");
 var Like = require("../models/like");
 var moment = require("moment");
+const Recompensa = require("../models/recompensa");
 
 /** get function to get User by id. */
 exports.get = function (req, res) {
@@ -29,8 +30,20 @@ exports.getByEmail = function (req, res) {
 
 /** get function to get User by id. */
 exports.getById = function (req, res) {
-  User.get({ _id: req.params.id }, function (err, result) {
+  User.get({ _id: req.params.id }, async function (err, result) {
     if (!err) {
+      const rewards = await Recompensa.find({
+        usuario : result['_id'],
+      });
+      if(rewards.length>0){
+        var credits = 0;
+        rewards.forEach((reward)=>{
+          credits += reward['creditos'];
+        });
+        if(credits>0){
+          result['creditos'] = credits;
+        }
+      }
       return res.status(200).json({ data: result });
     } else {
       return res.status(400).send(err); // 500 error
@@ -155,6 +168,39 @@ exports.update = function (req, res) {
       return res.status(400).send({ error: err }); // 500 error
     }
   });
+};
+
+/** Update password function to update user password based on
+ * user id and user current password */
+exports.changePassword = function (req, res) {
+  try {
+    User.getUserById(req.params.id, function (error, user) {
+      if (error) throw error;
+      User.comparePassword(
+        req.body.oldPassword,
+        user.password,
+        (err, isMatch) => {
+          if (err) throw err;
+          if (isMatch) {
+            User.hashPassword(user, req.body.newPassword, (error, hash) => {
+              user.password = hash;
+              user.lastSeen = Date.now();
+              user.save(function (err3) {
+                if (err3) throw err3;
+              });
+            });
+            return res.status(200).json({ success: true });
+          } else {
+            return res
+              .status(400)
+              .json({ success: false, error: "Credenciales incorrectas" });
+          }
+        }
+      );
+    });
+  } catch (err) {
+    return res.status(400).send({ success: false, error: err });
+  }
 };
 
 /** Disable superadmin */

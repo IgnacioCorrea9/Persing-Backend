@@ -16,7 +16,7 @@ FeedbackSchema.statics = {
     this.findOne(query).exec(callback);
   },
   getAll: function (query, callback) {
-    this.find(query).exec(callback);
+    this.find(query).populate("usuario").exec(callback);
   },
   create: function (data, callback) {
     const Feedback = new this(data);
