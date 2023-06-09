@@ -13,7 +13,7 @@ const FeedbackSchema = mongoose.Schema({
 
 FeedbackSchema.statics = {
   getByUserId: function (query, callback) {
-    this.findOne(query).exec(callback);
+    this.findOne(query, {}, { sort:{ createdAt: -1 }}).exec(callback);
   },
   getAll: function (query, callback) {
     this.find(query).populate("usuario").exec(callback);
