@@ -16,7 +16,9 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const database = process.env.MONGODB_URI;
+const database =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://persing:persing2021@persing.nsfrd.mongodb.net/persing?retryWrites=true&w=majority";
 
 // Connect to database
 mongoose.connect(database, {
