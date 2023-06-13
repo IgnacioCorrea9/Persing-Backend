@@ -5,7 +5,7 @@ function feedback(data) {
   return {
     to: user.email,
     from: {
-      email: 'persinglatam@gmail.com',
+      email: process.env.FROM_EMAIL,
       name: 'Persing',
     },
     subject: '¡Se te ha realizado un feedback!',
