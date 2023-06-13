@@ -1,10 +1,17 @@
 'use strict';
 
-var Feedback = require('../models/feedback');
+const Feedback = require('../models/feedback');
+const User = require('../models/user')
+
+const emailService = require('../services/email/index')
 
 exports.create = function (req, res) {
-  Feedback.create(req.body, function (err, result) {
+  Feedback.create(req.body, async function (err, result) {
     if (!err) {
+      const user = await User.findById(result.usuario)
+      const templateEmail = emailService.templatesEmailEnums.FEEDBACK
+      emailService.sendEmail(templateEmail, { user,  feedback: result})
+      
       res.status(201).json({
         success: true,
         message: 'Feedback creado correctamente',
