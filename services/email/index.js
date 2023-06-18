@@ -5,7 +5,8 @@ const templatesGenerator = require('./templates')
 sendgrid.setApiKey(sendGridCredentials.apiKey);
 
 const templatesEmailEnums = {
-  FEEDBACK: 'feedback'
+  FEEDBACK: 'feedback',
+  TRANSACCION: 'transaccion'
 }
 
 const templatesEmail = {

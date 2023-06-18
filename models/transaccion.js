@@ -8,7 +8,20 @@ const TransaccionSchema = mongoose.Schema({
   },
   reference: { type: Number, require: true },
   pago: { type: Number, require: true },
-  userAddress: { type: String, require: true },
+  location: {
+    country: {
+      type: String,
+      require: true
+    },
+    city: {
+      type: String,
+      require: true
+    },
+    address: {
+      type: String,
+      require: true
+    },
+  },
   productos: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -66,3 +79,5 @@ const Transaccion = (module.exports = mongoose.model(
   "Transaccion",
   TransaccionSchema
 ));
+
+// pais ciudad direccion
