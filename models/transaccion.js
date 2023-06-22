@@ -6,20 +6,20 @@ const TransaccionSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  reference: { type: Number, require: true },
-  pago: { type: Number, require: true },
+  reference: { type: Number, required: true },
+  pago: { type: Number, required: true },
   location: {
     country: {
       type: String,
-      require: true
+      required: true,
     },
     city: {
       type: String,
-      require: true
+      required: true,
     },
     address: {
       type: String,
-      require: true
+      required: true,
     },
   },
   productos: [
