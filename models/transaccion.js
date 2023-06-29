@@ -6,7 +6,7 @@ const TransaccionSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  reference: { type: Number, required: true },
+  reference: { type: String, required: true, unique: true },
   pago: { type: Number, required: true },
   location: {
     country: {
