@@ -10,7 +10,8 @@ const templatesEmailEnums = {
 }
 
 const templatesEmail = {
-  feedback: templatesGenerator.feedback
+  feedback: templatesGenerator.feedback,
+  transaccion: templatesGenerator.transaccion
 }
 
 function sendEmail(templateSelected, data) {
