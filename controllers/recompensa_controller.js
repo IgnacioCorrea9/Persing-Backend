@@ -8,6 +8,7 @@ const Interaction = require("../models/interaction");
 const Publicacion = require("../models/publicacion");
 var _ = require("lodash");
 const { use } = require("passport");
+const historial = require("../models/historial");
 
 const viewsValues = [
   ["na", "0-2.99", "3-4.99", "5-6.99", "7-8.99", "9-10"],
@@ -224,9 +225,10 @@ exports.sumInteractions = async function (req, res) {
       }
       break;
     default:
-      return res
-      .status(500)
-      .json({ success: false, message: interaccion+" is not a valid interaction." });
+      return res.status(500).json({
+        success: false,
+        message: interaccion + " is not a valid interaction.",
+      });
   }
   const userData = await User.findOne({ _id: recompensa.usuario });
   if (userData) {
@@ -236,6 +238,12 @@ exports.sumInteractions = async function (req, res) {
       userData.calificacionApp || 1
     );
     recompensa.ranking = newRankRecompensa;
+    /* const resulHistorial = await historial.create({
+      usuario: recompensa.usuario,
+      accion: interaccion, 
+      creditos: points
+    }) */
+
     const resultRecompensa = await recompensa.save();
     return res.status(200).json({ success: true, message: resultRecompensa });
   } else {
@@ -334,11 +342,25 @@ exports.valorUpdate = function (req, res) {
             }
           );
         }
+
         let currentRank = recompensa.ranking;
         let currentCreditos = recompensa.creditos;
         let interaccion = req.body.interaccion;
         var points;
         var credits;
+        ///Cambio
+
+        const alreadyInteracted = await checkIfAlreadyInteracted(
+          req.body.usuario,
+          req.body.publication,
+          req.body.interaccion
+        );
+        if (alreadyInteracted) {
+          return res.status(200).json({
+            success: true,
+            message: "User has already interacted with publication.",
+          });
+        }
 
         switch (interaccion) {
           case "dislike":
@@ -377,15 +399,26 @@ exports.valorUpdate = function (req, res) {
             if (total < 0) {
               total = 0;
             }
-            Recompensa.updateById(
+
+            await Recompensa.updateById(
               recompensa._id,
               { ranking: newRankRecompensa, creditos: newCreditos },
               function (error, resultRecompensa) {}
             );
-            User.updateById(
+
+            await historial.create(
+              {
+                usuario: recompensa.usuario,
+                accion: interaccion,
+                creditos: newCreditos,
+              },
+              function (error, resultHistorial) {}
+            );
+
+            await User.updateById(
               recompensa.usuario._id,
               { creditos: total },
-              await function (err, resultUsuario) {}
+              function (err, resultUsuario) {}
             );
             return res.status(200).json("saved interaction");
           case "like":
@@ -466,15 +499,25 @@ exports.valorUpdate = function (req, res) {
         let newCreditos = currentCreditos + credits;
         let total = recompensa.usuario.creditos + credits;
 
-        Recompensa.updateById(
+        await Recompensa.updateById(
           recompensa._id,
           { ranking: newRankRecompensa, creditos: newCreditos },
-          await function (error, resultRecompensa) {}
+          function (error, resultRecompensa) {}
         );
-        User.updateById(
+
+        await historial.create(
+          {
+            usuario: recompensa.usuario,
+            accion: interaccion,
+            creditos: credits,
+          },
+          function (error, resultHistorial) {}
+        );
+
+        await User.updateById(
           recompensa.usuario._id,
           { creditos: total },
-          await function (err, resultUsuario) {}
+          function (err, resultUsuario) {}
         );
         return res.status(200).json("saved interaction");
       } else {
@@ -595,12 +638,39 @@ exports.getByUsuario = function (req, res) {
 exports.getcreditosByUsuario = function (req, res) {
   Recompensa.getAll({ usuario: req.params.usuario }, function (err, result) {
     if (!err) {
-      let creditos = _.sumBy(result, "creditos");
+      let creditos = _.sumBy(result, "creditos"); //Suma propiedad
       return res.status(200).json({ data: creditos });
     } else {
       return res.status(400).send({ error: err });
     }
   });
+};
+
+///Cambio
+
+exports.getcreditosByUsuarioByID = function (req, res) {
+  User.get({ _id: req.params.usuario }, function (err, result) {
+    if (!err) {
+      /* let creditos = _.sumBy(result, "creditos"); */ //Suma propiedad
+      return res.status(200).json({ data: result.creditos });
+    } else {
+      return res.status(400).send({ error: err });
+    }
+  });
+};
+
+exports.getcreditosByUsuarioByIDAdmin = function (req, res) {
+  historial.getAll(
+    { usuario: req.params.usuario, accion: "admin" },
+    function (err, result) {
+      if (!err) {
+        let creditos = _.sumBy(result, "creditos"); //Suma propiedad
+        return res.status(200).json({ data: creditos });
+      } else {
+        return res.status(400).send({ error: err });
+      }
+    }
+  );
 };
 
 /** get function to get creditor por sector por usuario  */
@@ -640,7 +710,7 @@ exports.getRankingByUsuario = function (req, res) {
       if (!err) {
         let sumRanking = _.sumBy(result, "ranking");
         let totalSectors = await Sector.find({});
-        let averageRanking = sumRanking / (totalSectors.length ?? 1);
+        let averageRanking = sumRanking / (totalSectors.length || 1);
         let totalScore = getTotalScore(
           result[0].usuario.calificacionApp,
           averageRanking
@@ -693,6 +763,35 @@ exports.delete = function (req, res) {
       return res.json(result);
     } else {
       return res.send(err);
+    }
+  });
+};
+
+exports.addCreditsAdmin = function (req, res) {
+  User.get({ _id: req.params.user }, function (err, result4) {
+    if (!err) {
+      historial.create(
+        {
+          usuario: req.params.user,
+          accion: "admin",
+          creditos: req.body.creditos,
+        },
+        function (error, resultHistorial) {}
+      );
+
+      User.updateById(
+        req.params.user,
+        { creditos: result4.creditos + req.body.creditos },
+        function (err, resultUsuario) {}
+      );
+
+      return res.status(201).json({
+        success: true,
+        message: "Creditos otorgados correctamente correctamente",
+        data: result4,
+      });
+    } else {
+      return res.status(400).send({ error: err });
     }
   });
 };

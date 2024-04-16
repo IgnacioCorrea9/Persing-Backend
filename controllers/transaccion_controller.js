@@ -1,23 +1,44 @@
-'use strict';
+"use strict";
 
-const Transaccion = require('../models/transaccion');
-const emailService = require('../services/email');
+const Transaccion = require("../models/transaccion");
+const emailService = require("../services/email");
+const User = require("../models/user");
 
 exports.create = function (req, res) {
   Transaccion.create(req.body, function (err, result) {
     if (!err) {
-      const templateEmail = emailService.templatesEmailEnums.TRANSACCION
-      emailService.sendEmail(templateEmail, {})
+      User.get({ _id: req.body.usuario }, function (err, result4) {
+        if (!err) {
+          historial.create(
+            {
+              usuario: req.body.usuario,
+              accion: "compra",
+              creditos: -result4.creditos,
+            },
+            function (error, resultHistorial) {}
+          );
 
-      res.status(201).json({
-        success: true,
-        message: 'Transaccion creada correctamente',
-        data: result,
+          User.updateById(
+            req.body.usuario,
+            { creditos: -result4.creditos },
+            function (err, resultUsuario) {}
+          );
+          const templateEmail = emailService.templatesEmailEnums.TRANSACCION;
+          emailService.sendEmail(templateEmail, {});
+
+          return res.status(201).json({
+            success: true,
+            message: "Transaccion creada correctamente",
+            data: result,
+          });
+        } else {
+          return res.status(400).send({ error: err });
+        }
       });
     } else {
       res.status(400).json({
         success: false,
-        message: 'Error al registrar la transaccion',
+        message: "Error al registrar la transaccion",
         data: err,
       });
     }

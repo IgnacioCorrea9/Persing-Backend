@@ -26,29 +26,35 @@ module.exports = function (router) {
 
   router.post(
     "/recompensa/interaction",
-    passport.authenticate("jwt", { session: false }),
-    RecompensaController.sumInteractions
+    /* passport.authenticate("jwt", { session: false }), */
+    RecompensaController.valorUpdate
   );
 
   /** Trae recompensas por usuario */
   router.get(
     "/recompensa/user/:usuario",
-    passport.authenticate("jwt", { session: false }),
+    /* passport.authenticate("jwt", { session: false }), */
     RecompensaController.getByUsuario
   );
 
   /** Trae creditos por usuario por sector */
   router.get(
     "/recompensa/creditos_sector/user/:sector/:usuario",
-     passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", { session: false }),
     RecompensaController.getCreditosByUsuarioBySector
   );
 
   /** Trae recompensas por usuario */
   router.get(
     "/recompensa/creditos/user/:usuario",
-    passport.authenticate("jwt", { session: false }),
-    RecompensaController.getcreditosByUsuario
+    /* passport.authenticate("jwt", { session: false }), */
+    RecompensaController.getcreditosByUsuarioByID
+  );
+
+  router.get(
+    "/recompensa/creditos/user/admin/:usuario",
+    /* passport.authenticate("jwt", { session: false }), */
+    RecompensaController.getcreditosByUsuarioByIDAdmin
   );
 
   /** Trae ranking total por usuario */
@@ -77,5 +83,11 @@ module.exports = function (router) {
     "/recompensa/:id",
     passport.authenticate("jwt", { session: false }),
     RecompensaController.delete
+  );
+
+  router.post(
+    "/recompensa/addcredits/:user",
+    /* passport.authenticate("jwt", { session: false }), */
+    RecompensaController.addCreditsAdmin
   );
 };
