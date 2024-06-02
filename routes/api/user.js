@@ -48,7 +48,7 @@ module.exports = function (router) {
   /** Get user by id */
   router.get(
     "/user/:id",
-    passport.authenticate("jwt", { session: false }),
+    /* passport.authenticate("jwt", { session: false }), */
     UserController.getById
   );
 

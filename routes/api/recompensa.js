@@ -67,7 +67,7 @@ module.exports = function (router) {
   /** Gets recompensa by id */
   router.get(
     "/recompensa/:id",
-    passport.authenticate("jwt", { session: false }),
+    /* passport.authenticate("jwt", { session: false }), */
     RecompensaController.get
   );
 

@@ -30,7 +30,7 @@ module.exports = function (router) {
 
   router.get(
     "/producto-descuento",
-    passport.authenticate("jwt", { session: false }),
+    /* passport.authenticate("jwt", { session: false }), */
     ProductoController.getAllBDescuento
   );
 
